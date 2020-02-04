@@ -1,13 +1,17 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# senshuRmd
+# jpaRmd
 
 <!-- badges: start -->
 
 <!-- badges: end -->
 
 jpaRmdは，日本心理学会の「心理学研究」への投稿論文をRmarkdownで作成するためのパッケージです。
+
+以下の日本心理学会の「執筆・投稿の手びき(2015年版)」に基づいています。
+
+<https://psych.or.jp/manual/>
 
 まだ全く完成していません・・・使用
 
