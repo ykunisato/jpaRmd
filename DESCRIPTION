@@ -1,0 +1,12 @@
+Package: jpaRmd
+Type: Package
+Title: Rmarkdown template for paper format at Japanese Psychological Association
+Version: 0.0.1
+Author: Yoshihiko Kunisato
+Maintainer: Yoshihiko Kunisato <ykunisato@psy.senshu-u.ac.jp>
+Description: Rmarkdown template for paper format at Japanese Psychological Association
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.0.2
