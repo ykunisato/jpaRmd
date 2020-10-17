@@ -120,7 +120,7 @@ gender <- data.frame(table(bfi$gender)) %>%
 ## 記述統計
 
 
-
+(Table 1)
 
 
 ## メインの解析の前提となる解析
