@@ -376,14 +376,18 @@ $if(has-frontmatter)$
 \frontmatter
 $endif$
 
-\begin{flushleft}
+
 $if(title)$
 $if(beamer)$
+\begin{flushleft}
 \frame{\titlepage}
-$else$
-\maketitle
-$endif$
 \end{flushleft}
+$else$
+\begin{flushleft}
+\maketitle
+\end{flushleft}
+$endif$
+
 
 $if(abstract)$
 \begin{abstract}
