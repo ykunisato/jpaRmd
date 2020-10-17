@@ -1,7 +1,6 @@
 ---
-title: 'RMarkdownで心理学研究は書けるのか？ Can we write a paper of the Japanses Journal of psychology with RMarkdown?'
-abstract: |
-Can we write a paper of the Japanses Journal of psychology with RMarkdown? Yes, we can.
+title: "RMarkdownで心理学研究の論文は書けるのか？"
+subtitle: "Can we write a paper of the Japanses Journal of psychology with RMarkdown?"
 bibliography:  reference.bib
 csl: apa-6th-edition.csl
 output: jpaRmd::jpa_jjp
@@ -20,6 +19,12 @@ output: jpaRmd::jpa_jjp
 　削除しても問題はないので，邪魔になったら削除してもいいです。
 -->
 
+
+# Abstract
+Can we write a paper of the Japanses Journal of psychology with RMarkdown? Yes, we can.
+
+**Key words**: RMarkdown, Reproducibility, The Japanese Journal of Psychology
+
 <!--　このRmdファイル内で使用するRパッケージを以下に追加してください-->
 ```{r message=FALSE, warning=FALSE, include=FALSE}
 library(kableExtra)
@@ -27,19 +32,9 @@ library(knitr)
 library(tidyverse)
 library(psych)
 ```
-# Abstract
-Can we write a paper of the Japanses Journal of psychology with RMarkdown? Yes, we can.
-
-**Key words**: RMarkdown, Reproducibility, The Japanese Journal of Psychology
-
-
 
 
 \clearpage
-
-<!-- 本文 -->
-
-
 <!-- 
 <<< 文献の引用について >>>
 bibファイルが用意されていれば，参照名（ラベル）を使って，以下のように簡単に引用できます。
@@ -55,7 +50,7 @@ https://kunisatolab.github.io/main/how-to-write-with-rstudio.html
 
 まず，@Kunisato2012 のように，すると，bibファイル内のKunisatoの2012年の論文が引用されます。そして，次のように，[]でくくると文末の引用スタイルになります[@kunisato2019]。また，文末に複数引用する場合は，こういう感じにします[@kunisato2019; @Machino2014]。
 
-<!-- 以下は1頁が800字になっているかのチェック用です。
+<!-- 以下は1頁が25字*32行で800字になっているかのチェック用です。
 ご自身の環境でちゃんと1頁が800字になっているか確認をしてから，削除してください。-->
 \clearpage
 
@@ -73,8 +68,7 @@ https://kunisatolab.github.io/main/how-to-write-with-rstudio.html
 ## 本研究の目的
 
 
-# 方法
-
+# 方 法
 ## 参加者
 
 <!--　論文内の数値は手で打ち込まずにRから引っ張ってきてください。
@@ -115,25 +109,14 @@ gender <- data.frame(table(bfi$gender)) %>%
 
 
 ## 統計解析
-<!-- 実施する予定の統計解析の計画を記述してください（解析計画まではデータ収集前に記載します）。
-使用したソフト，パッケージのバージョンも記載してください。
-Rしか使わないのであれば，以下のように，sessionInfoで示すのが楽かと思います。
--->
 
-```{r echo=FALSE, results='asis'}
-session_info <- sessionInfo()
-toLatex(session_info,locale = FALSE)
-```
-
-
-\clearpage 
 <!-- 
 <<< 結果の書き方 >>>
 解析計画に合わせて，何を明らかにする解析をしているのか書いてから，結果を書いてください。
 結果から言えること（考察）は，結果に書かないようにしてください
 （結果は序論と方法を受けて書くもので，結果には考察を書かない）。
 -->
-# 結果
+# 結 果
 ## 記述統計
 <!-- ↑この見出しは，内容に合わせて変更ください-->
 
@@ -165,9 +148,8 @@ toLatex(session_info,locale = FALSE)
 なお，その解析が事前に計画したものでない場合は，
 必ずデータ取得後に追加した探索的な解析であるとわかるように記載してください。  -->
 
-\clearpage 
 
-# 考察
+# 考 察
 ## 主要な発見の概要
 <!-- ↑この見出しは，内容に合わせて変更ください-->
 
@@ -234,11 +216,13 @@ toLatex(session_info,locale = FALSE)
 # 引用文献
 <div id="refs"></div>
 
+\clearpage 
+# 脚注（必要に応じて）
+
 
 \clearpage 
 
-# 付録(必要に応じて)
-
+# 表
 
 ```{r echo=FALSE}
 # bfiの各Big Five因子を合計して，describe関数で記述統計を計算する。不要なものは除外。
@@ -263,3 +247,11 @@ kable(summary_bfi,
   kable_styling(latex_options = c("striped", "hold_position"),full_width = F) %>%
   add_footnote(c("脚注も書けます"))
 ```
+
+\clearpage 
+
+# 図
+
+\clearpage 
+
+# 付録(必要に応じて)
