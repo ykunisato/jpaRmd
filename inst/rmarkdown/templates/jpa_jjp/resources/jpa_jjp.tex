@@ -381,7 +381,6 @@ $if(beamer)$
 $else$
 \maketitle
 $endif$
-\clearpage
 $if(abstract)$
 \begin{abstract}
 $abstract$
@@ -391,27 +390,6 @@ $endif$
 $for(include-before)$
 $include-before$
 $endfor$
-$if(toc)$
-$if(toc-title)$
-\renewcommand*\contentsname{$toc-title$}
-$endif$
-$if(beamer)$
-\begin{frame}[allowframebreaks]
-$if(toc-title)$
-  \frametitle{$toc-title$}
-$endif$
-  \tableofcontents[hideallsubsections]
-\end{frame}
-$else$
-{
-$if(colorlinks)$
-\hypersetup{linkcolor=$if(toccolor)$$toccolor$$else$$endif$}
-$endif$
-\setcounter{tocdepth}{$toc-depth$}
-\tableofcontents
-}
-$endif$
-$endif$
 $if(lot)$
 \listoftables
 $endif$
@@ -424,7 +402,6 @@ $endif$
 $if(has-frontmatter)$
 \mainmatter
 $endif$
-\clearpage
 \pagestyle{plain}
 \setcounter{page}{1}
 
