@@ -4,7 +4,7 @@ author: '学籍番号: 氏名:'
 
 bibliography:  reference.bib
 csl: apa-6th-edition.csl
-output: senshuRmd::senshu_thesis
+output: jpaRmd::jpa_jjp
 ---
 
 <!-- 
