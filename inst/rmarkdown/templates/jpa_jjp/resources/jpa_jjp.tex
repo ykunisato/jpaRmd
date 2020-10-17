@@ -340,7 +340,6 @@ $if(csl-refs)$
   \everypar{\setlength{\hangindent}{\cslhangindent}}\ignorespaces$endif$}%
   {\par}
 $endif$
-
 $if(title)$
 \title{$title$}
 $endif$
@@ -370,6 +369,7 @@ $if(logo)$
 $endif$
 $endif$
 \usepackage{marginnote}
+
 \begin{document}
 \pagestyle{empty}
 $if(has-frontmatter)$
@@ -377,7 +377,9 @@ $if(has-frontmatter)$
 $endif$
 $if(title)$
 $if(beamer)$
+\begin{flushleft}
 \frame{\titlepage}
+\end{flushleft}
 $else$
 \maketitle
 $endif$
@@ -442,6 +444,5 @@ $endif$
 $endif$
 $for(include-after)$
 $include-after$
-
 $endfor$
 \end{document}
