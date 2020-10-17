@@ -322,7 +322,6 @@ $if(dir)$
 $endif$
 $if(natbib)$
 \usepackage[$natbiboptions$]{natbib}
-\setlength{\bibhang}{2em}
 \bibliographystyle{$if(biblio-style)$$biblio-style$$else$plainnat$endif$}
 $endif$
 $if(biblatex)$
@@ -411,6 +410,7 @@ $if(has-frontmatter)$
 \backmatter
 $endif$
 
+\setlength{\bibhang}{2em}
 $if(natbib)$
 $if(bibliography)$
 $if(biblio-title)$
