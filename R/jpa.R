@@ -1,7 +1,7 @@
 #' R Markdown template for paper of the Japanese Journal of Psychology
 #' @export
 jpa_jjp <- function(){
-  template_tex_file <- system.file("rmarkdown/templates/thesis_senshu/resources/jap_jjp.tex",
+  template_tex_file <- system.file("rmarkdown/templates/jpa_jjp/resources/jap_jjp.tex",
                              package = 'jpaRmd')
   format_pdf <- rmarkdown::pdf_document(latex_engine = "xelatex",
                                         template = template_tex_file,
