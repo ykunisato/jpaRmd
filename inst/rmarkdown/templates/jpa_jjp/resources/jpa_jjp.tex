@@ -1,7 +1,6 @@
 % Template for paper format at JPA
 \documentclass[11pt,a4paper,xelatex,ja=standard]{bxjsarticle}
 \geometry{left = 5.4cm, right = 5.4cm, top = 4.0cm, bottom = 3.5cm}
-
 $if(beamer)$
 $if(background-image)$
 \usebackgroundtemplate{%
@@ -319,19 +318,16 @@ $if(dir)$
   \newenvironment{LTR}{\beginL}{\endL}
 \fi
 $endif$
-
 $if(natbib)$
 \usepackage[$natbiboptions$]{natbib}
 \bibliographystyle{$if(biblio-style)$$biblio-style$$else$plainnat$endif$}
 $endif$
-
 $if(biblatex)$
 \usepackage[$if(biblio-style)$style=$biblio-style$,$endif$$for(biblatexoptions)$$biblatexoptions$$sep$,$endfor$]{biblatex}
 $for(bibliography)$
 \addbibresource{$bibliography$}
 $endfor$
 $endif$
-
 $if(csl-refs)$
 \newlength{\cslhangindent}
 \setlength{\cslhangindent}{1.5em}
@@ -369,6 +365,8 @@ $if(logo)$
 $endif$
 $endif$
 \usepackage{marginnote}
+\usepackage{titlesec}
+\titleformat{\section}{\filcenter}
 
 \begin{document}
 \pagestyle{empty}

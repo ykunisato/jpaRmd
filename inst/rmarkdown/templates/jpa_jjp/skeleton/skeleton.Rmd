@@ -186,4 +186,6 @@ kable(summary_bfi,
 
 \clearpage 
 
-# 付録(必要に応じて)
+# 付録
+
+<!-- 必要に応じて付録を追加ください。不要ならclearpageから削除ください-->
