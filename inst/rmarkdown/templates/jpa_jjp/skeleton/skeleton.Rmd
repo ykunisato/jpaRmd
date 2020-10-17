@@ -1,23 +1,24 @@
 ---
 title: 'RMarkdownで心理学研究は書けるのか？'
 author:
-  - name: Alice Anonymous
-    email: alice@example.com
-    affiliation: Some Institute of Technology
-    corresponding: alice@example.com
-  - name: Bob Security
-    email: bob@example.com
+  - name: 国里愛彦
+    email: yk@example.com
+    affiliation:
+      - 専修大学
+      - 国里心理行動科学研究所
+    corresponding: yk@example.com
+  - name: 竹林由武
+    email: yt@example.com
     affiliation: 
-      - Another University
-      - Some Institute of Technology
+      - 福島県立医科大学
+      - 国里心理行動科学研究所
 address:
-  - code: Some Institute of Technology
-    address: Department 1, Street, City, State, Zip
-  - code: Another University
-    address: Department 2, Street, City, State, Zip
-abstract: |
-  アブストはべつかな？
-
+  - code: 専修大学
+    address: 〒XXX-XXXX 神奈川県のどこか
+  - code: 福島県立医科大学
+    address: 〒XXX-XXXX 福島県のどこか
+　- code: 国里心理行動科学研究所
+    address: 〒XXX-XXXX 東京都のどこか
 bibliography:  reference.bib
 csl: apa-6th-edition.csl
 output: jpaRmd::jpa_jjp
@@ -67,27 +68,15 @@ library(knitr)
 library(tidyverse)
 library(psych)
 ```
+# Abstract
 
 
-<!-- 
-<<< 序文で書くこと >>>
-なぜこの研究を行うのか，その重要性を述べるのが序論(Introduction)です。
-序論では，それを以下のような順番で書いていきます。
-1.その研究領域全体における大きな問題点や事実の指摘
-2.少し専門領域にしぼりこんだ上で，先行研究を整理する（何が既にわかっているか？）
-3.先行研究の問題点の指摘（何が分かってないか？）
-4.本研究での解決策の提案（先行研究で分かってないことをどう調べるか？）
-5.本研究の目的
--->
+キーワード:
 
-# 序文
-## はじめに
 
-<!-- 
-「はじめに」で，1.その研究領域全体における大きな問題点や事実の指摘をします。
-臨床的問題の場合は，疫学的なデータや疾患による障害度など一般的な背景知識を提示しつつ，
-多くの読者が知っている知識から始めて，段々と論点を絞ってください。 
--->
+\clearpage
+
+<!-- 本文 -->
 
 
 <!-- 

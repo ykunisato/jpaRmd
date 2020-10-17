@@ -381,6 +381,17 @@ $if(beamer)$
 $else$
 \maketitle
 $endif$
+$for(author)$
+$author.name$\textsuperscript{$for(author.affiliation)$\getAff{$author.affiliation$}$sep$, $endfor$}$if(author.corresponding)$\textsuperscript{*}$endif$$sep$,
+$endfor$
+$for(address)$
+\textbf{\getAff{$address.code$}}$address.address$\\
+$endfor$
+$for(author)$
+$if(author.corresponding)$
+* Corresponding author: $author.email$\\
+$endif$
+$endfor$
 \clearpage
 $if(abstract)$
 \begin{abstract}
