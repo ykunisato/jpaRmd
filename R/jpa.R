@@ -27,7 +27,6 @@ set_rc_jpa <- function (file_name = "paper"){
     file.create(file.path(path, "README.md"), showWarnings = FALSE)
     writeLines("## README\n\n- analysis:\n- data:\n- function:\n- materials:", "README.md")
   }
-
   # make RMarkdown file and directory
   if(!file.exists(file.path(path, paste0(file_name,".Rmd")))){
     rmarkdown::draft(paste0(file_name,".Rmd"), template = "jpa_jjp", package = "jpaRmd", edit = FALSE)
