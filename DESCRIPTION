@@ -1,7 +1,7 @@
 Package: jpaRmd
 Type: Package
 Title: Rmarkdown template for paper format at Japanese Psychological Association
-Version: 0.4.2
+Version: 0.4.3
 Author: Yoshihiko Kunisato
 Maintainer: Yoshihiko Kunisato <ykunisato@psy.senshu-u.ac.jp>
 Description: Rmarkdown template for paper format at Japanese Psychological Association
