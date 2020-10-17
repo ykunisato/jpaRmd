@@ -381,17 +381,6 @@ $if(beamer)$
 $else$
 \maketitle
 $endif$
-$for(author)$
-$author.name$\textsuperscript{$for(author.affiliation)$\getAff{$author.affiliation$}$sep$, $endfor$}$if(author.corresponding)$\textsuperscript{*}$endif$$sep$,
-$endfor$
-$for(address)$
-\textbf{\getAff{$address.code$}}$address.address$\\
-$endfor$
-$for(author)$
-$if(author.corresponding)$
-* Corresponding author: $author.email$\\
-$endif$
-$endfor$
 \clearpage
 $if(abstract)$
 \begin{abstract}
@@ -402,27 +391,6 @@ $endif$
 $for(include-before)$
 $include-before$
 $endfor$
-$if(toc)$
-$if(toc-title)$
-\renewcommand*\contentsname{$toc-title$}
-$endif$
-$if(beamer)$
-\begin{frame}[allowframebreaks]
-$if(toc-title)$
-  \frametitle{$toc-title$}
-$endif$
-  \tableofcontents[hideallsubsections]
-\end{frame}
-$else$
-{
-$if(colorlinks)$
-\hypersetup{linkcolor=$if(toccolor)$$toccolor$$else$$endif$}
-$endif$
-\setcounter{tocdepth}{$toc-depth$}
-\tableofcontents
-}
-$endif$
-$endif$
 $if(lot)$
 \listoftables
 $endif$
@@ -438,7 +406,6 @@ $endif$
 \clearpage
 \pagestyle{plain}
 \setcounter{page}{1}
-
 $body$
 $if(has-frontmatter)$
 \backmatter
