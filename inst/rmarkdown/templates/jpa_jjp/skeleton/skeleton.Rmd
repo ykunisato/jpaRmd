@@ -126,8 +126,7 @@ gender <- data.frame(table(bfi$gender)) %>%
 ## メインの解析の前提となる解析
 
 
-
-# <center>考 察<\center>
+# 考 察
 
 
 \clearpage 
