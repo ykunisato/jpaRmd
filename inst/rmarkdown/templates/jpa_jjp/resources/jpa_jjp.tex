@@ -202,7 +202,7 @@ $if(beamer)$
 \geometry{$for(geometry)$$geometry$$sep$,$endfor$}
 $else$
 %\usepackage[$for(geometry)$$geometry$$sep$,$endfor$]{geometry}
-\geometry{left = 3.5cm, right = 3.5cm, top = 4.5cm, bottom = 4.5cm}
+\geometry{left = 5.4cm, right = 5.4cm, top = 4.0cm, bottom = 3.5cm}
 $endif$
 $endif$
 $if(beamer)$
@@ -342,7 +342,9 @@ $if(csl-refs)$
 $endif$
 
 $if(title)$
+\begin{flushright}
 \title{$title$$if(thanks)$\thanks{$thanks$}$endif$}
+\end{flushright}
 $endif$
 $if(subtitle)$
 $if(beamer)$
