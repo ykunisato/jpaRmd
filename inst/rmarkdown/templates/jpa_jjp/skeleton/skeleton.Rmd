@@ -164,7 +164,7 @@ summary_bfi <- bfi %>%
           E = E1 + E2 + E3 + E4 + E5,
           N = N1 + N2 + N3 + N4 + N5,
           O = O1 + O2 + O3 + O4 + O5) %>% 
-   select(A,C,E,O,A) %>% 
+   select(E,N,C,A,O) %>% 
    describe() %>% 
    select(-vars, -trimmed, -mad, -range, -se)
 
