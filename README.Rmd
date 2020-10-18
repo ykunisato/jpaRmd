@@ -37,5 +37,13 @@ devtools::install_github("ykunisato/jpaRmd")
 ```
 ## 使用法
 
-RStudioで，「File」 -> 「New File」 -> 「R Markdown...」 をクリックする。以下の画面がでてきたら，「From Template」から「... {jpaRmd}」を選んで，OKをクリックする。
+- RStudioで，「File」 -> 「New File」 -> 「R Markdown...」 をクリックする。以下の画面がでてきたら，「From Template」から「... {jpaRmd}」を選んで，OKをクリックする。開かれた.RmdファイルをKnitください。
+
+- Research Compendiumの関数も用意していて，以下のようにset_rc_jpa()関数を使って，引数にプロジェクト名をいれると（なおスペースは避けてください），『心理学研究』用のRmdや解析，データを配置するフォルダなども準備されます。
+
+```
+library(jpaRmd)
+set_rc_jpa("rmarkdown_for_reproducibility")
+```
+
 

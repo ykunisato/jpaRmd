@@ -31,6 +31,9 @@ library(kableExtra)
 library(knitr)
 library(tidyverse)
 library(psych)
+library(gridExtra)
+library(jtools)
+library(ggsignif)
 ```
 
 \clearpage
@@ -178,14 +181,33 @@ kable(summary_bfi,
 \clearpage 
 # 図
 
-![rmarkdownの仕組み](fig1.png "R Markdownの仕組み")
+![How R Markdown works](fig1.png)
 
+\clearpage 
+<!-- Rのggplotで論文の図を作った場合　
+Rチャンクの指定において，\\label{fig:figs}以降に図のタイトルを書きます。
+-->
+```{r figs, echo=FALSE, message=FALSE, warning=FALSE, fig.width=7,fig.height=4,fig.cap="\\label{fig:figs}Examples of bar plot and scatter plot "}
+# 相関係数の算出で使ったと同じデータを使う(genderは因子型にする)
+summary_bfi_fig2 <- summary_bfi_fig %>% 
+   mutate(gender = ifelse(gender=="1", "Male","Female"))
 
-```{r echo=FALSE, message=FALSE, warning=FALSE}
-# 相関係数の算出で使ったと同じデータを使う
-ggplot(summary_bfi_fig,aes(x = Extraversion, y = Neuroticism)) +
-   geom_point()
+p1 <- ggplot(summary_bfi_fig2,aes(x = gender, y = Neuroticism)) +
+   stat_summary(aes(fill=gender),fun.y=mean,geom="bar",alpha=0.8, colour="black", position="dodge", show.legend = F) +
+   stat_summary(aes(group=gender),fun.data=mean_sdl,geom="errorbar",size=0.5,width=0.2,position=position_dodge(.9)) +
+   scale_fill_manual(values=c("gray10","white")) +
+   theme(panel.background = element_blank()) +
+   xlab("Gender") +
+   theme_apa() + 
+   geom_signif(stat = "identity",data = data.frame(x = c(1),xend = c(2),y = c(30),annotation = c("***")),
+              aes(x = x, xend = xend, y = y, yend = y, annotation = annotation)) +
+   scale_y_continuous(expand = c(0,0),limits = c(0,33))
 
+p2 <- ggplot(summary_bfi_fig2,aes(x = Extraversion, y = Neuroticism)) +
+   geom_point() +
+   theme_apa()
+
+gridExtra::grid.arrange(p1, p2, nrow = 1)
 ```
 
 

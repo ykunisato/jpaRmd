@@ -24,6 +24,14 @@ jpaRmdは，日本心理学会の「心理学研究」への投稿論文をRmark
 
 ## 使用法
 
-RStudioで，「File」 -\> 「New File」 -\> 「R Markdown…」
-をクリックする。以下の画面がでてきたら，「From
-Template」から「… {jpaRmd}」を選んで，OKをクリックする。
+  - RStudioで，「File」 -\> 「New File」 -\> 「R Markdown…」
+    をクリックする。以下の画面がでてきたら，「From
+    Template」から「… {jpaRmd}」を選んで，OKをクリックする。開かれた.RmdファイルをKnitください。
+
+  - Research
+    Compendiumの関数も用意していて，以下のようにset\_rc\_jpa()関数を使って，引数にプロジェクト名をいれると（なおスペースは避けてください），『心理学研究』用のRmdや解析，データを配置するフォルダなども準備されます。
+
+<!-- end list -->
+
+    library(jpaRmd)
+    set_rc_jpa("rmarkdown_for_reproducibility")
