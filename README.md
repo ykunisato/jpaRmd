@@ -34,3 +34,12 @@ jpaRmdは，日本心理学会の『心理学研究』への投稿用PDF原稿�
 
     library(jpaRmd)
     set_rc_jpa("rmarkdown_for_reproducibility")
+
+上記を実行すると“rmarkdown\_for\_reproducibility”という名前のディレクトリーの下に以下の下位ディレクトリーができます。paperディでクトリ内のpaper.Rmdを開いて，Knitを押してください。PDFが生成されます。
+
+  - analysis: 分析用ファイルを置く場所
+  - data：　データを置く場所
+  - function：　分析で使う汎用関数を定義したりした場合にそのファイルを置く場所
+  - materials：　研究で使ったマテリアルを置く場所
+  - paper：　論文原稿を置く場所
+  - README.md
