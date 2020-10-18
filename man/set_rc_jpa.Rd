@@ -16,5 +16,5 @@ Make directories for Research Compendium of JPA and R Markdown file
 Set Research Compendium for JPA
 }
 \examples{
-# set_rc_jpa("yoshihiko_kunisato")
+# set_rc_jpa("rmarkdown_for_reproducibility")
 }
