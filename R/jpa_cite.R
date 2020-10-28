@@ -1,7 +1,49 @@
 rm(list = ls())
 library(tidyverse)
-setwd("/Users/napier/Dropbox/Git/jpaRmd/develop")
-tmp <- readLines("skeleton.Rmd", warn = F) %>% as_tibble()
+setwd("develop/")
+
+
+## help functions
+extract_values <- function(string) {
+  content <- string %>%
+    ### delete escape-sequence, \"
+    stringr::str_replace_all(pattern = '\\\"', replacement = "") %>%
+    ### delete curly-bracket
+    stringr::str_replace_all(pattern = "\\{", replacement = "") %>%
+    stringr::str_replace_all(pattern = "\\}", replacement = "") %>%
+    str_trim()
+  ### if the last character is , then delete
+  for(i in 1:length(content)){
+    Ln <- stringr::str_length(content[i])
+    lastChar <- stringr::str_sub(content[i],start=Ln,end=Ln)
+    if(!is.na(lastChar) & lastChar==","){
+      content[i] <- str_sub(content[i],start=1,end=Ln-1)
+    }
+  }
+  return(content)
+}
+
+
+
+name_spliter <- function(dat) {
+  dat %>%
+    stringr::str_split(pattern = " and ") %>%
+    unlist() %>%
+    data.frame(Names = .) %>%
+    dplyr::mutate(authors_name_split = purrr::map(.x = Names, ~ humaniformat::format_reverse(.x))) %>%
+    dplyr::mutate(
+      first_name = purrr::map(authors_name_split, ~ humaniformat::first_name(.x)),
+      middle_name = purrr::map(authors_name_split, ~ humaniformat::middle_name(.x)),
+      last_name = purrr::map(authors_name_split, ~ humaniformat::last_name(.x))
+    ) %>%
+    return()
+}
+
+
+
+# main --------------------------------------------------------------------
+
+tmp <- readLines("testRMD2.Rmd", warn = F) %>% as_tibble()
 # Bibfile name(from YMAL header)
 bibfile <- tmp$value %>%
   stringr::str_extract(".*\\.bib") %>%
@@ -19,8 +61,8 @@ refAll <- tmp %>%
 bibfile <- "sample.bib"
 # readBib file as tibble
 bib <- readLines(bibfile, warn = F) %>%
-  str_trim() %>%
-  print()
+  str_trim()
+
 ## Delete commented out records
 for (i in 1:length(bib)) {
   if (stringr::str_sub(bib[[i]], 1, 1) == "%") {
@@ -30,7 +72,7 @@ for (i in 1:length(bib)) {
 ## Delete record which has no containts
 bib <- bib[-which(sapply(bib, function(x) x == ""))]
 
-## Lies which don't have the `key` of records(if the line has the `key`,
+## Lines which don't have the `key` of records(if the line has the `key`,
 ## the line must have '=' or '@') are continuation of the previous line.
 for (i in 1:length(bib)) {
   ## check the key
@@ -50,13 +92,9 @@ bib <- bib[which(stringr::str_detect(bib, pattern = "=|@"))]
 from <- which(str_extract(bib, "[:graph:]") == "@")
 ## LineID to read stop
 to <- c(from[-1] - 1, length(bib))
-## prepared function
-text_between_brackets <- function(string) {
-  min <- min(gregexpr(pattern = "\\{|\\\"", string)[[1]])
-  max <- max(gregexpr(pattern = "\\}|\\\"", string)[[1]])
-  content <- substring(string, min + 1, max - 1)
-  return(content)
-}
+
+
+
 
 ## data list
 ls <- mapply(
@@ -64,7 +102,7 @@ ls <- mapply(
     return(bib[x:y])
   },
   x = from,
-  y = to - 1,
+  y = to,
   SIMPLIFY = T
 )
 
@@ -72,50 +110,45 @@ ls <- mapply(
 keys <- lapply(
   ls,
   function(x) {
-    str_extract(x[1], "(?<=\\{)[^,]+")
+    stringr::str_extract(x[1], "(?<=\\{)[^,]+")
   }
 )
 fields <- lapply(ls, function(x) {
-  str_extract(x[1], "(?<=@)[^\\{]+")
+  stringr::str_extract(x[1], "(?<=@)[^\\{]+") %>% stringr::str_to_upper()
 })
-fields <- lapply(fields, toupper)
 
 categories <- lapply(
   ls,
   function(x) {
-    str_extract(x, "[[:alnum:]_-]+")
+    stringr::str_extract(x, "[[:alnum:]_-]+") %>% stringr::str_to_upper()
   }
 )
 
 values <- lapply(
   ls,
+  ## delete first record which has Key and Category
   function(x) {
-    str_extract(x, "(?<==).*")
+    stringr::str_extract(x, "(?<==).*") %>% 
+      extract_values() %>% 
+      stringr::str_trim()
   }
 )
-
-values <- lapply(
-  values,
-  function(x) {
-    sapply(x, text_between_brackets, simplify = TRUE, USE.NAMES = FALSE)
-  }
-)
-
-values <- lapply(values, trimws)
 
 items <- mapply(cbind, categories, values, SIMPLIFY = FALSE)
 items <- lapply(
   items,
   function(x) {
-    x <- cbind(toupper(x[, 1]), x[, 2])
+    x <- cbind(stringr::str_to_upper(x[, 1]), x[, 2])
   }
 )
+
 items <- lapply(
   items,
   function(x) {
     x[complete.cases(x), ]
   }
 )
+
 items <- mapply(function(x, y) {
   rbind(x, c("CATEGORY", y))
 },
@@ -169,7 +202,42 @@ empty <- data.frame(
   YEAR = character(0L),
   stringsAsFactors = FALSE
 )
-dat <- bind_rows(c(list(empty), items))
-dat <- as_tibble(dat)
-dat$BIBTEXKEY <- unlist(keys)
-dat
+
+bib.df <- bind_rows(c(list(empty), items)) %>%
+  as_tibble() %>%
+  rowid_to_column("ID") %>%
+  group_by(ID)
+bib.df$BIBTEXKEY <- unlist(keys)
+
+bib.df <- bib.df %>%
+  ## Split name into First,Middle,Last Name
+  dplyr::mutate(
+    AUTHORs = purrr::map(AUTHOR, ~ name_spliter(.x)),
+    EDITORs = purrr::map(EDITOR, ~ name_spliter(.x)),
+    JAUTHORs = purrr::map(JAUTHOR, ~ name_spliter(.x))
+  ) %>% 
+  ## detect Languate --- not Complete
+  dplyr::mutate(
+    langFLG = purrr::map(AUTHOR,~franc::franc(.x))
+  )
+
+
+## Filtering to only actually cited
+refKey <- bib.df$BIBTEXKEY %>% paste0("@",.)
+refFLG <- vector(length=length(refKey))
+for(i in 1:NROW(refAll)){
+  refFLG <- refFLG | refAll[i,]$refs %>% str_detect(pattern = refKey)
+}
+bib.df <- bib.df[refFLG,]
+
+
+
+# 引用型式を出力する(事実上のスタイルファイル） -------------------------------------------------
+
+## 刊行年には（　）．を付ける。
+bib.df %>% dplyr::mutate(pYEAR = purrr::map(.x=YEAR,~paste0("(",.x,").")))
+### 著者名は，姓を先に書き，カンマ（，）をおき，ファースト・ネーム，ミドル・ネームのイニシャルの順で書く。
+### イニシャルのあとにはピリオド（.）を付ける。もし同姓で，イニシャルも同じ著者があるときは，名も略さずに書く。
+### 著者名の表記法は，原著者のそれに従う。
+
+#　文献種を検出する必要がある
