@@ -13,11 +13,11 @@ extract_values <- function(string) {
     stringr::str_replace_all(pattern = "\\}", replacement = "") %>%
     str_trim()
   ### if the last character is , then delete
-  for(i in 1:length(content)){
+  for (i in 1:length(content)) {
     Ln <- stringr::str_length(content[i])
-    lastChar <- stringr::str_sub(content[i],start=Ln,end=Ln)
-    if(!is.na(lastChar) & lastChar==","){
-      content[i] <- str_sub(content[i],start=1,end=Ln-1)
+    lastChar <- stringr::str_sub(content[i], start = Ln, end = Ln)
+    if (!is.na(lastChar) & lastChar == ",") {
+      content[i] <- str_sub(content[i], start = 1, end = Ln - 1)
     }
   }
   return(content)
@@ -34,7 +34,9 @@ name_spliter <- function(dat) {
     dplyr::mutate(
       first_name = purrr::map(authors_name_split, ~ humaniformat::first_name(.x)),
       middle_name = purrr::map(authors_name_split, ~ humaniformat::middle_name(.x)),
-      last_name = purrr::map(authors_name_split, ~ humaniformat::last_name(.x))
+      last_name = purrr::map(authors_name_split, ~ humaniformat::last_name(.x)),
+      initial_first = purrr::map(first_name, ~ str_sub(.x, start = 1, end = 1) %>% str_to_upper()),
+      initial_middle = purrr::map(middle_name, ~ str_sub(.x, start = 1, end = 1) %>% str_to_upper()),
     ) %>%
     return()
 }
@@ -128,8 +130,8 @@ values <- lapply(
   ls,
   ## delete first record which has Key and Category
   function(x) {
-    stringr::str_extract(x, "(?<==).*") %>% 
-      extract_values() %>% 
+    stringr::str_extract(x, "(?<==).*") %>%
+      extract_values() %>%
       stringr::str_trim()
   }
 )
@@ -215,29 +217,72 @@ bib.df <- bib.df %>%
     AUTHORs = purrr::map(AUTHOR, ~ name_spliter(.x)),
     EDITORs = purrr::map(EDITOR, ~ name_spliter(.x)),
     JAUTHORs = purrr::map(JAUTHOR, ~ name_spliter(.x))
-  ) %>% 
+  ) %>%
   ## detect Languate --- not Complete
   dplyr::mutate(
-    langFLG = purrr::map(AUTHOR,~franc::franc(.x))
+    langFLG = purrr::map_lgl(AUTHOR, ~ stringi::stri_enc_isascii(.x))
   )
 
 
 ## Filtering to only actually cited
-refKey <- bib.df$BIBTEXKEY %>% paste0("@",.)
-refFLG <- vector(length=length(refKey))
-for(i in 1:NROW(refAll)){
-  refFLG <- refFLG | refAll[i,]$refs %>% str_detect(pattern = refKey)
+refKey <- bib.df$BIBTEXKEY %>% paste0("@", .)
+refFLG <- vector(length = length(refKey))
+for (i in 1:NROW(refAll)) {
+  refFLG <- refFLG | refAll[i, ]$refs %>% str_detect(pattern = refKey)
 }
-bib.df <- bib.df[refFLG,]
+bib.df <- bib.df[refFLG, ]
 
 
 
 # 引用型式を出力する(事実上のスタイルファイル） -------------------------------------------------
 
 ## 刊行年には（　）．を付ける。
-bib.df %>% dplyr::mutate(pYEAR = purrr::map(.x=YEAR,~paste0("(",.x,").")))
+bib.df %>% dplyr::mutate(pYEAR = purrr::map(.x = YEAR, ~ paste0("(", .x, ").")))
 ### 著者名は，姓を先に書き，カンマ（，）をおき，ファースト・ネーム，ミドル・ネームのイニシャルの順で書く。
 ### イニシャルのあとにはピリオド（.）を付ける。もし同姓で，イニシャルも同じ著者があるときは，名も略さずに書く。
 ### 著者名の表記法は，原著者のそれに従う。
+bib.df$AUTHORs[[1]] %>% print_Name() %>% print
 
-#　文献種を検出する必要がある
+print_Name <- function(str){
+  str %>% 
+  dplyr::mutate(
+    initial_first = purrr::map(initial_first, ~ paste0(.x, ".")),
+    initial_middle = purrr::map(initial_middle, ~ paste0(.x, ".")),
+    initial_name = purrr::map2(
+      .x = initial_first, .y = initial_middle,
+      ~ paste0(.x, if_else(.y == "NA.", "", .y))
+    )
+  ) %>%
+  dplyr::mutate(
+    pName = purrr::map2(last_name,initial_name,
+                        ~paste0(.x,",",.y))
+  ) -> tmp
+  #もし同姓で，イニシャルも同じ著者があるときは，名も略さずに書く。
+  pName.tmp <- tmp$pName %>%  unlist
+  duplicated.name <- which(table(pName.tmp)>1) %>% names()
+  for(i in 1:NROW(tmp)){
+    if(str_detect(tmp$pName[i],pattern=duplicated.name) %>% sum){
+      tmp$pName[i] <- paste0(tmp$last_name[i],",",tmp$first_name[i])
+    }
+  }
+  nameList <- tmp$pName %>% unlist
+  if(length(nameList)==1){
+    ## 単著
+    pName <- nameList
+  }else{
+    ## 共著（著者が8名以上）
+    if(NROW(tmp)>7){
+      ## 著者が8名以上の場合は，第1から第6著者まで書き，
+      ## 途中の著者は“...”で省略表記し，最後の著者を書く。
+      pName <- paste0(nameList[1:6] %>% str_flatten(collapse = ", "),
+                      "...",
+                      nameList[length(nameList)])
+    }else{
+      #すべての著者を書き，最後の著者の前にカンマ（，）と＆をおく。
+      # andと綴らぬこと。
+      pName <- stringr::str_flatten(nameList[1:(length(nameList)-1)],collapse=", ")
+      pName <- paste(pName,"&",nameList[length(nameList)])
+    }
+  }
+}
+
