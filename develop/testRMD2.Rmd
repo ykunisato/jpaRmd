@@ -1,0 +1,56 @@
+---
+title: "RMarkdownで『心理学研究』の論文は書けるのか？"
+subtitle: "Can we write a paper of the Japanses Journal of psychology with RMarkdown?"
+bibliography:  sample.bib
+output: jpaRmd::jpa_jjp
+---
+
+<!-- 
+投稿原稿には含めないですが，投稿にあたって以下の情報が必要です。
+・著者名（日本語とローマ字）
+・所属（日本語とローマ字）
+・脚注（研究費や研究に関わった方への謝辞，学会などでの発表，責任著者の英語の連絡先）
+
+<<< このRmdテンプレートを使う際の注意事項 >>>
+1.以下に色々と説明が書いてあるので，それにしたがって，書き足していってください。
+　作業が進んだら，上の「Knit」を押すと，Rmd→TeX→PDFの変換が自動的になされます。
+2.この<!　 >で囲われた部分は，TeXやPDFには反映されないので，削除しなくても大丈夫です。
+　削除しても問題はないので，邪魔になったら削除してもいいです。
+-->
+
+
+# Abstract
+Can we write a paper of the Japanses Journal of psychology with RMarkdown? To solve this mystery we headed deep into the Amazon. At the end of our long journey we found some great documents about RMarkdown and finally said, "Yes, we can". ... Well, we'll write a abstract like this.
+
+**Key words**: RMarkdown, Reproducibility, The Japanese Journal of Psychology
+
+<!--　このRmdファイル内で使用するRパッケージを以下に追加してください-->
+```{r message=FALSE, warning=FALSE, include=FALSE}
+library(kableExtra)
+library(knitr)
+library(tidyverse)
+library(psych)
+library(gridExtra)
+library(jtools)
+library(ggsignif)
+```
+
+\clearpage
+
+　はじめに，ここから文章を書き始めます。以降が論文の本文になります。どんどん書いていきましょう！
+
+## 心理学における再現可能性
+
+　心理学の再現可能性はとってもまずい状況なのですが，それはちょっとおいておいて，文献の引用の仕方を説明します。まず，@Kunisato2012 のように，すると，bibファイル内のKunisatoの2012年の論文が引用されます。そして，次のように，[]でくくると文末の引用スタイルになります[@kunisato2019]。また，文末に複数引用する場合は，こういう感じにします[@kunisato2019; @Machino2014]。以下に詳しく書いているのでご確認ください。
+
+　心理学の再現可能性はとってもまずい状況なのですが，それはちょっとおいておいて，文献の引用の仕方を説明します。まず，@Kunisato2012 のように，すると，bibファイル内のKunisatoの2012年の論文が引用されます。そして，次のように，[]でくくると文末の引用スタイルになります[@kunisato2019]。また，文末に複数引用する場合は，こういう感じにします[@kunisato2019; @Machino2014]。以下に詳しく書いているのでご確認ください。
+　
+
+　そしてまさかの@Lewinからの@Ekman1969ですよ。[@坂野雄二1994,@lerner2015handbook]
+　
+
+# 引用文献
+<div id="refs"></div>
+```{r}
+source("jpa_cite.R")
+```

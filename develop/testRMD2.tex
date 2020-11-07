@@ -1,0 +1,217 @@
+% Template for paper format at JPA
+\documentclass[11pt,a4paper,xelatex,ja=standard]{bxjsarticle}
+\geometry{left = 5.4cm, right = 5.4cm, top = 4.0cm, bottom = 3.5cm}
+\renewcommand{\figurename}{Figure}
+\renewcommand{\tablename}{Table}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={RMarkdownで『心理学研究』の論文は書けるのか？},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
+\title{RMarkdownで『心理学研究』の論文は書けるのか？}
+\usepackage{etoolbox}
+\makeatletter
+\providecommand{\subtitle}[1]{% add subtitle to \maketitle
+  \apptocmd{\@title}{\par {\large #1 \par}}{}{}
+}
+\makeatother
+\subtitle{Can we write a paper of the Japanses Journal of psychology with
+RMarkdown?}
+\author{}
+\date{}
+\usepackage{marginnote}
+\usepackage{titlesec}
+\titleformat{\section}[hang]{\large\filcenter\bfseries}{\thesection}{1zw}{}
+
+\begin{document}
+\pagestyle{empty}
+\maketitle
+\pagestyle{plain}
+\setcounter{page}{1}
+
+\hypertarget{abstract}{%
+\section{Abstract}\label{abstract}}
+
+Can we write a paper of the Japanses Journal of psychology with
+RMarkdown? To solve this mystery we headed deep into the Amazon. At the
+end of our long journey we found some great documents about RMarkdown
+and finally said, ``Yes, we can''. \ldots{} Well, we'll write a abstract
+like this.
+
+\textbf{Key words}: RMarkdown, Reproducibility, The Japanese Journal of
+Psychology
+
+\clearpage
+
+　はじめに，ここから文章を書き始めます。以降が論文の本文になります。どんどん書いていきましょう！
+
+\hypertarget{ux5fc3ux7406ux5b66ux306bux304aux3051ux308bux518dux73feux53efux80fdux6027}{%
+\subsection{心理学における再現可能性}\label{ux5fc3ux7406ux5b66ux306bux304aux3051ux308bux518dux73feux53efux80fdux6027}}
+
+　心理学の再現可能性はとってもまずい状況なのですが，それはちょっとおいておいて，文献の引用の仕方を説明します。まず，Kunisato
+et al. (2012)
+のように，すると，bibファイル内のKunisatoの2012年の論文が引用されます。そして，次のように，{[}{]}でくくると文末の引用スタイルになります(国里
+et al. 2019)。また，文末に複数引用する場合は，こういう感じにします(国里
+et al. 2019; Machino et al.
+2014)。以下に詳しく書いているのでご確認ください。
+
+　心理学の再現可能性はとってもまずい状況なのですが，それはちょっとおいておいて，文献の引用の仕方を説明します。まず，Kunisato
+et al. (2012)
+のように，すると，bibファイル内のKunisatoの2012年の論文が引用されます。そして，次のように，{[}{]}でくくると文末の引用スタイルになります(国里
+et al. 2019)。また，文末に複数引用する場合は，こういう感じにします(国里
+et al. 2019; Machino et al.
+2014)。以下に詳しく書いているのでご確認ください。 　
+
+　\href{mailto:そしてまさかの@Lewinからの@Ekman1969ですよ}{\nolinkurl{そしてまさかの@Lewinからの@Ekman1969ですよ}}。(坂野
+et al. 1994, @lerner2015handbook) 　
+
+\hypertarget{ux5f15ux7528ux6587ux732e}{%
+\section{引用文献}\label{ux5f15ux7528ux6587ux732e}}
+
+\hypertarget{refs}{}
+\leavevmode\hypertarget{ref-Kunisato2012}{}%
+Kunisato, Yoshihiko, Yasumasa Okamoto, Kazutaka Ueda, Keiichi Onoda, Go
+Okada, Shinpei Yoshimura, Shin-Ichi Suzuki, et al. 2012. ``Effects of
+Depression on Reward-Based Decision Making and Variability of Action in
+Probabilistic Learning.'' \emph{Journal of Behavior Therapy and
+Experimental Psychiatry} 43 (4): 1088--94.
+
+\leavevmode\hypertarget{ref-lerner2015handbook}{}%
+Lerner, Richard, M, S. Lynn Liben, and Ulrich Mueller. 2015.
+\emph{Handbook of Child Psychology and Developmental Science, Cognitive
+Processes}. John Wiley \& Sons.
+
+\leavevmode\hypertarget{ref-Machino2014}{}%
+Machino, Akihiko, Yoshihiko Kunisato, Tomoya Matsumoto, Shinpei
+Yoshimura, Kazutaka Ueda, Yosuke Yamawaki, Go Okada, Yasumasa Okamoto,
+and Shigeto Yamawaki. 2014. ``Possible Involvement of Rumination in Gray
+Matter Abnormalities in Persistent Symptoms of Major Depression: An
+Exploratory Magnetic Resonance Imaging Voxel-Based Morphometry Study.''
+\emph{Journal of Affective Disorders} 168 (October): 229--35.
+
+\leavevmode\hypertarget{ref-kunisato2019}{}%
+国里愛彦, 片平健太郎, 沖村宰, and 山下祐一. 2019.
+``うつに対する計算論的アプローチ:―強化学習モデルの観点から―.''
+\emph{心理学評論} 62 (1): 88--103.
+\url{https://doi.org/10.24602/sjpr.62.1_88}.
+
+\leavevmode\hypertarget{ref-ux5742ux91ceux96c4ux4e8c1994}{}%
+坂野雄二, 福井知美, 熊野宏昭, 堀江はるみ, 川原健資, 山本晴義, 野村忍,
+and 末松弘行. 1994.
+``新しい気分調査票の開発とその信頼性・妥当性の検討.'' \emph{心身医学} 34
+(8): 629--36.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{source}\NormalTok{(}\StringTok{"jpa_cite.R"}\NormalTok{)}
+\KeywordTok{paste}\NormalTok{(}\KeywordTok{readLines}\NormalTok{(}\StringTok{"tmp_bibfile.tex"}\NormalTok{), }\DataTypeTok{collapse =} \StringTok{"}\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{cat}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Lerner,R.M., Liben,S.L. & Mueller,U. (2015). Handbook of child psychology and developmental science, cognitive processes , NA : John Wiley \& Sons
+\end{verbatim}
+
+\hypertarget{refs}{}
+\leavevmode\hypertarget{ref-Kunisato2012}{}
+
+Kunisato, Yoshihiko, Yasumasa Okamoto, Kazutaka Ueda, Keiichi Onoda, Go
+Okada, Shinpei Yoshimura, Shin-Ichi Suzuki, et al.~2012. ``Effects of
+Depression on Reward-Based Decision Making and Variability of Action in
+Probabilistic Learning.'' \emph{Journal of Behavior Therapy and
+Experimental Psychiatry} 43 (4): 1088--94.
+
+Ekman,P. (1965).
+\emph{ Differential communication of affect by head and body cues},
+Journal of Personality and Social Psychology, 2, 726--735.
+
+\end{document}
