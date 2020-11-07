@@ -1,0 +1,223 @@
+---
+title: "RMarkdownで『心理学研究』の論文は書けるのか？"
+subtitle: "Can we write a paper of the Japanses Journal of psychology with RMarkdown?"
+bibliography:  reference.bib
+csl: apa-6th-edition.csl
+output: jpaRmd::jpa_jjp2
+---
+
+<!-- 
+投稿原稿には含めないですが，投稿にあたって以下の情報が必要です。
+・著者名（日本語とローマ字）
+・所属（日本語とローマ字）
+・脚注（研究費や研究に関わった方への謝辞，学会などでの発表，責任著者の英語の連絡先）
+
+<<< このRmdテンプレートを使う際の注意事項 >>>
+1.以下に色々と説明が書いてあるので，それにしたがって，書き足していってください。
+　作業が進んだら，上の「Knit」を押すと，Rmd→TeX→PDFの変換が自動的になされます。
+2.この<!　 >で囲われた部分は，TeXやPDFには反映されないので，削除しなくても大丈夫です。
+　削除しても問題はないので，邪魔になったら削除してもいいです。
+-->
+
+
+# Abstract
+Can we write a paper of the Japanses Journal of psychology with RMarkdown? To solve this mystery we headed deep into the Amazon. At the end of our long journey we found some great documents about RMarkdown and finally said, "Yes, we can". ... Well, we'll write a abstract like this.
+
+**Key words**: RMarkdown, Reproducibility, The Japanese Journal of Psychology
+
+<!--　このRmdファイル内で使用するRパッケージを以下に追加してください-->
+```{r message=FALSE, warning=FALSE, include=FALSE}
+library(kableExtra)
+library(knitr)
+library(tidyverse)
+library(psych)
+library(gridExtra)
+library(jtools)
+library(ggsignif)
+```
+
+\clearpage
+
+　はじめに，ここから文章を書き始めます。以降が論文の本文になります。どんどん書いていきましょう！
+
+## 心理学における再現可能性
+
+　心理学の再現可能性はとってもまずい状況なのですが，それはちょっとおいておいて，文献の引用の仕方を説明します。まず，@Kunisato2012 のように，すると，bibファイル内のKunisatoの2012年の論文が引用されます。そして，次のように，[]でくくると文末の引用スタイルになります[@kunisato2019]。また，文末に複数引用する場合は，こういう感じにします[@kunisato2019; @Machino2014]。以下に詳しく書いているのでご確認ください。
+　
+<!-- 
+<<< 文献の引用について >>>
+bibファイルが用意されていれば，参照名（ラベル）を使って，以下のように簡単に引用できます。
+引用は，参照名（ラベル）をコピペしてもいいですが，Addinsにcitrをいれていれば，
+"Insert citations"をクリックすると，より簡単に参照名が挿入できます。
+また，bibファイルで引用しておくと，このRmdの後ろの方の引用文献セクションにAPA形式になった
+引用文献がリスト化されます。
+
+bibファイルの準備に関しては，以下を参照ください。
+特に日本語文献は少しややこしい手続きをふむ必要があります。
+https://kunisatolab.github.io/main/how-to-write-with-rstudio.html
+-->
+
+　続いて，論文では脚注をつけることがあります。その場合は，このように上付き文字をつけます${}^1$。心理学研究では，引用文献の後ろに脚注をつけることになっているので，ここでつけた上付き文字に対応したものを書き込んでおきます。まあ，こんなに短い距離で２つも脚注とかつけないわけですが，練習のために，もう一つつけます${}^2$。
+
+<!-- 以下は1頁が25字*32行で800字になっているかのチェック用です。
+ご自身の環境でちゃんと1頁が800字になっているか確認をしてから，削除してください。-->
+\clearpage
+１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０<!-- ここまで削除-->
+
+## RMarkdownとは
+
+　RMarkdownは，RとMarkdownが合体したもので，Markdownは簡単に言うとLaTeXよりも簡単にかけるやつです。RMarkdownで書いてPDF出力する際には，LaTeXを経由します。でも，数式を書いたり，ちょっと特殊なことをしない限りは，ユーザーはLaTeXを意識せずにきれいな論文を書くことができます。
+
+## 本研究の目的
+　
+　RMarkdownでちゃんと『心理学研究』に投稿できる原稿PDFファイルが作れるか検証した。
+
+# 方 法
+## 参加者
+
+
+<!--　論文内の数値は手で打ち込まずにRから引っ張ってきましょう。
+例えば，以下では，Psychパッケージのbfiデータの数値をひっぱっています。
+まず，rで性別と年齢のデータを用意して，用意したものを`r sprintf('%.0f',nrow(bfi))`という感じで，
+挿入しています。これで，数値のコピペミスがなくなります-->
+
+```{r include=FALSE}
+# bfiデータを読み込み
+data(bfi)
+# bfiの性別(gender)をtableで集計して，データフレーム化，その後ワイド化して，変数名を変更
+gender <- data.frame(table(bfi$gender)) %>% 
+   tidyr::spread(Var1, Freq) %>% 
+   rename(male=1,female = 2)
+```
+
+　神奈川県内の私立大学生`r sprintf('%.0f',nrow(bfi))`名(男性`r sprintf('%.0f',gender$male)`名，女性`r sprintf('%.0f',gender$female)`名)が調査に参加した。参加者の平均年齢 (標準偏差) は，`r sprintf('%.2f',mean(bfi$age))`歳(`r sprintf('%.2f',sd(bfi$age))`)であった。
+
+<!--　もし，研究脱落者や調査において欠測値がある場合は，何名がデータから脱落し，
+結果として何名を分析対象にしたか述べてください  -->
+
+
+## 使用変数
+<!-- ↑この見出しは，内容に合わせて変更ください-->
+
+**心理学再現性確認尺度**　心理学研究の場合，見出しじゃなくて太字にしたい時というがあると思います。左の心理学再現性確認尺度のように，アスタリスク２つではさむとそれができます。
+
+　論文では，図を挿入したりするのですが，その図の挿入箇所の指示を余白ですることが多いです。例えば，Figure 1をこの辺に挿入しようかなというときは，\marginpar{\fbox{Figure 1}}こういう感じでLatexのmarginparパッケージとfboxを活用して，Figure 1を線で囲ったものを作ります。
+
+
+## 調査手続き
+
+　見出しは適当につけているので，調査手続きにしたり，実験手続きにしたり変更ください。
+
+## 統計解析
+　統計解析について必要に応じて記載ください。Rパッケージなどのオープンソースソフトウェアは無料ですが，だからこそ，その公開した方の科学への貢献に感謝し，適切に引用しましょう。
+
+# 結 果
+
+　論文では，表を挿入したりするのですが，その表の挿入箇所の指示を余白ですることが多いです。例えば，Table1をこの辺に挿入しようかなというときは，\marginpar{\fbox{Table1}}こういう感じでLatexのmarginparパッケージとfboxを活用して，Table1を線で囲ったものを作ります。
+
+## 外向性と神経症傾向の関連
+
+```{r include=FALSE}
+# bfiの外向性と神経症傾向の相関を出します
+summary_bfi_fig <- bfi %>% 
+   mutate(Agreeableness = A1 + A2 + A3 + A4 + A5,
+          Conscientiousness = C1 + C2 + C3 + C4 + C5,
+          Extraversion = E1 + E2 + E3 + E4 + E5,
+          Neuroticism = N1 + N2 + N3 + N4 + N5,
+          Openness = O1 + O2 + O3 + O4 + O5)
+
+cor_result <- cor.test(summary_bfi_fig$Extraversion,summary_bfi_fig$Neuroticism)
+```
+
+　練習で，psychパッケージのbfiを用いて，外向性と神経症傾向を算出してみましょう。外向性と神経症傾向のPearsonの積率相違関係数は，`r sprintf('%.3f',cor_result$estimate)`であり(*t*(`r sprintf('%.0f',cor_result$parameter)`) = `r sprintf('%.3f',cor_result$statistic)`, *p* = `r sprintf('%.3f',cor_result$p.value)`，その95%信頼区間は，`r sprintf('%.3f',cor_result$conf.int[1])`から`r sprintf('%.3f',cor_result$conf.int[2])`です。
+　散布図は，Figure 2に示す\marginpar{\fbox{Figure 2}}。
+
+# 考 察
+
+　本研究では，RMarkdownで『心理学研究論文』がかけるのかを検証した。それ用のテンプレートも用意したので，あとは解析と内容を書くだけで結構いい感じのものができる。ただし，引用文献については，まだ完全とはいえず，共にこのテンプレートを磨く有志を心待ちしている。
+
+\clearpage 
+
+# 引用文献
+<div id="refs"></div>
+```{r}
+source("jpa_cite.R")
+```
+
+
+\clearpage 
+# 脚注
+
+<!-- 必要に応じて脚注を追加ください。不要ならclearpageから削除ください-->
+
+${}^1$脚注の例１です。論文の補足をどうぞ。
+
+${}^2$脚注の例2です。
+
+
+\clearpage 
+\newgeometry{left = 3cm, right = 3cm, top = 3cm, bottom = 3cm}
+# 表
+
+```{r echo=FALSE}
+# bfiの各Big Five因子を合計して，describe関数で記述統計を計算する。不要なものは除外。
+summary_bfi <- bfi %>% 
+   mutate(Agreeableness = A1 + A2 + A3 + A4 + A5,
+          Conscientiousness = C1 + C2 + C3 + C4 + C5,
+          Extraversion = E1 + E2 + E3 + E4 + E5,
+          Neuroticism = N1 + N2 + N3 + N4 + N5,
+          Openness = O1 + O2 + O3 + O4 + O5) %>% 
+   select(Extraversion,Neuroticism,Conscientiousness,Agreeableness,Openness) %>% 
+   describe() %>% 
+   select(-vars, -trimmed, -mad, -range, -se)
+
+# kableを使って表を作る（以下のようにやると結構きれいになります）
+kable(summary_bfi, 
+      format = "latex", 
+      booktabs = T, 
+      caption = "Descriptive Statistics of bfi",
+      digits = 2,
+      col.names = c("n","Mean","SD","Median","Min","Max","Skewness","kurtosis")) %>%
+  kable_styling(latex_options = c("striped", "hold_position"),full_width = F) %>%
+  add_footnote(c("Note. SD=standard deviation"))
+```
+
+\clearpage 
+# 図
+
+![How R Markdown works](fig1.png)
+
+\clearpage 
+<!-- Rのggplotで論文の図を作った場合　
+Rチャンクの指定において，\\label{fig:figs}以降に図のタイトルを書きます。
+-->
+```{r figs, echo=FALSE, message=FALSE, warning=FALSE, fig.width=7,fig.height=4,fig.cap="\\label{fig:figs}Examples of bar plot and scatter plot "}
+# 相関係数の算出で使ったと同じデータを使う(genderは因子型にする)
+summary_bfi_fig2 <- summary_bfi_fig %>% 
+   mutate(gender = ifelse(gender=="1", "Male","Female"))
+
+p1 <- ggplot(summary_bfi_fig2,aes(x = gender, y = Neuroticism)) +
+   stat_summary(aes(fill=gender),fun.y=mean,geom="bar",alpha=0.8, colour="black", position="dodge", show.legend = F) +
+   stat_summary(aes(group=gender),fun.data=mean_sdl,geom="errorbar",size=0.5,width=0.2,position=position_dodge(.9)) +
+   scale_fill_manual(values=c("gray10","white")) +
+   theme(panel.background = element_blank()) +
+   xlab("Gender") +
+   theme_apa() + 
+   geom_signif(stat = "identity",data = data.frame(x = c(1),xend = c(2),y = c(30),annotation = c("***")),
+              aes(x = x, xend = xend, y = y, yend = y, annotation = annotation)) +
+   scale_y_continuous(expand = c(0,0),limits = c(0,33))
+
+p2 <- ggplot(summary_bfi_fig2,aes(x = Extraversion, y = Neuroticism)) +
+   geom_point() +
+   theme_apa()
+
+gridExtra::grid.arrange(p1, p2, nrow = 1)
+```
+
+
+\clearpage 
+# 付録
+
+新たに質問紙を作成したら，どこかで使った質問票を公開してほしい・・・
+
+<!-- 必要に応じて付録を追加ください。不要ならclearpageから削除ください-->

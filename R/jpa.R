@@ -13,6 +13,22 @@ jpa_jjp <- function(){
   format_pdf
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #' Set Research Compendium for JPA
 #'
 #' @param file_name file name and directory name of RMarkdown
