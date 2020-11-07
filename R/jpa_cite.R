@@ -209,10 +209,11 @@ for (i in 1:NROW(bib.df)) {
   pBib <- case_when(
     langFLG==TRUE && tmp$CATEGORY == "BOOK" ~ print_English_book(tmp),
     langFLG==FALSE && tmp$CATEGORY == "BOOK" ~ print_Japanese_book(tmp),
-    tmp$CATEGORY == "ARTICLE" ~ print_article(tmp),
-    tmp$CATEGORY == "INCOLLECTION" ~ print_incollection(tmp),
+    langFLG==TRUE && tmp$CATEGORY == "ARTICLE" ~ print_English_article(tmp),
+    langFLG==FALSE && tmp$CATEGORY == "ARTICLE" ~ print_Japanese_article(tmp),
     # iv ）編集書中の特定章
-    tmp$CATEGORY == "INBOOK" ~ print_inbook(tmp)
+    tmp$CATEGORY == "INBOOK" ~ print_inbook(tmp),
+    tmp$CATEGORY == "INCOLLECTION" ~ print_incollection(tmp)
   )
   print(pBib)
 }

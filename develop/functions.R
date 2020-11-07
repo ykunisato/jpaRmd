@@ -127,7 +127,7 @@ print_JName <- function(st) {
 
 print_English_book <- function(df) {
   name.tmp <- df$pName
-  title.tmp <- df$TITLE
+  title.tmp <- paste0("{\\it ",df$TITLE,"}")
   # i ）一般的な例  （著者名），（刊行年），（書籍名），（出版地：出版社）
   # ii ）新版：初版以外は必ず版数を明記しておく。版（edition）はed. と省略表記する。
   if (!is.na(df$EDITION)) {
@@ -169,24 +169,46 @@ print_Japanese_book <- function(df) {
   
   # vii）翻訳書
   if(!is.na(df$JTITLE)){
-    print("やくほん")
     E.part = print_English_book(df)
     J.part = paste(df$GENCHOKANA,df$pYear,df$JTITLE,df$JPUBLISHER)
     #Jauthor か Jeditor
-    pBib <- paste(E.part,"(",J.part,")")
+    pBib <- paste0(E.part,"(",J.part,")")
   }else{
-    pBib <- paste(df$pName, df$pYear, df$TITLE, df$PUBLISHER)
+    pBib <- paste0(df$pName, df$pYear, df$TITLE, df$PUBLISHER)
   }
   
   return(pBib)
 }
 
-print_article <- function(df) {
-  return("論文はまだ")
+print_English_article <- function(df) {
+  #（著者名），（刊行年），（表題），（誌名），（巻数），（引用ページ）
+  TITLE.tmp <-  title.tmp <- paste0("{\\it ",df$TITLE,"},")
+  JOURNAL.tmp <- paste0(df$JOURNAL,",")
+  if(!is.na(df$NUMBER)){
+    Vol_and_Num.tmp <- paste0(df$VOLUME,"(",df$NUMBER,"),")
+  }else{
+    Vol_and_Num.tmp <- paste0(df$VOLUME,",")
+  }
+  PAGES.tmp <- paste0(df$PAGES,".")
+  pBib <- paste(df$pName,df$pYear,TITLE.tmp,JOURNAL.tmp,Vol_and_Num.tmp,PAGES.tmp)
+  return(pBib)
+}
+
+print_Japanese_article <- function(df) {
+  #（著者名），（刊行年），（表題），（誌名），（巻数），（引用ページ）
+  JOURNAL.tmp <- paste0(df$JOURNAL,",")
+  if(!is.na(df$NUMBER)){
+    Vol_and_Num.tmp <- paste0("{\\it ",df$VOLUME,"}","(",df$NUMBER,"),")
+  }else{
+    Vol_and_Num.tmp <- paste0("{\\it ",df$VOLUME,"},")
+  }  
+  PAGES.tmp <- paste0(df$PAGES,".")
+  pBib <- paste(df$pName,df$pYear,df$TITLE,JOURNAL.tmp,Vol_and_Num.tmp,PAGES.tmp)
+  return(pBib)
 }
 
 print_incollection <- function(df) {
-  return("部分はまだ")
+  return("incollectionはまだ")
 }
 
 print_others <- function(df) {
