@@ -51,5 +51,6 @@ library(ggsignif)
 
 # 引用文献
 <div id="refs"></div>
-
-Ekman,P. (1965). {\\it Differential communication of affect by head and body cues}, Journal of Personality and Social Psychology, 2, 726--735.
+```{r}
+source("jpa_cite.R")
+```

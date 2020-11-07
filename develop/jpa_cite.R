@@ -1,6 +1,6 @@
-rm(list = ls())
-library(tidyverse)
-setwd("develop/")
+# rm(list = ls())
+# library(tidyverse)
+# setwd("develop/")
 source("functions.R")
 
 
@@ -215,5 +215,7 @@ for (i in 1:NROW(bib.df)) {
     tmp$CATEGORY == "INBOOK" ~ print_inbook(tmp),
     tmp$CATEGORY == "INCOLLECTION" ~ print_incollection(tmp)
   )
-  print(pBib)
+  #print(pBib)
 }
+
+write(pBib,file="tmp_bibfile.tex")

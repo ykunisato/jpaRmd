@@ -127,7 +127,7 @@ print_JName <- function(st) {
 
 print_English_book <- function(df) {
   name.tmp <- df$pName
-  title.tmp <- paste0("{\\it ",df$TITLE,"}")
+  title.tmp <- paste0("{\\emph ",df$TITLE,"}")
   # i ）一般的な例  （著者名），（刊行年），（書籍名），（出版地：出版社）
   # ii ）新版：初版以外は必ず版数を明記しておく。版（edition）はed. と省略表記する。
   if (!is.na(df$EDITION)) {
@@ -182,7 +182,7 @@ print_Japanese_book <- function(df) {
 
 print_English_article <- function(df) {
   #（著者名），（刊行年），（表題），（誌名），（巻数），（引用ページ）
-  TITLE.tmp <-  title.tmp <- paste0("{\\it ",df$TITLE,"},")
+  TITLE.tmp <-  title.tmp <- paste0("{\\emph ",df$TITLE,"},")
   JOURNAL.tmp <- paste0(df$JOURNAL,",")
   if(!is.na(df$NUMBER)){
     Vol_and_Num.tmp <- paste0(df$VOLUME,"(",df$NUMBER,"),")
@@ -198,9 +198,9 @@ print_Japanese_article <- function(df) {
   #（著者名），（刊行年），（表題），（誌名），（巻数），（引用ページ）
   JOURNAL.tmp <- paste0(df$JOURNAL,",")
   if(!is.na(df$NUMBER)){
-    Vol_and_Num.tmp <- paste0("{\\it ",df$VOLUME,"}","(",df$NUMBER,"),")
+    Vol_and_Num.tmp <- paste0("{\\emph ",df$VOLUME,"}","(",df$NUMBER,"),")
   }else{
-    Vol_and_Num.tmp <- paste0("{\\it ",df$VOLUME,"},")
+    Vol_and_Num.tmp <- paste0("{\\emph ",df$VOLUME,"},")
   }  
   PAGES.tmp <- paste0(df$PAGES,".")
   pBib <- paste(df$pName,df$pYear,df$TITLE,JOURNAL.tmp,Vol_and_Num.tmp,PAGES.tmp)
@@ -218,3 +218,8 @@ print_others <- function(df) {
 print_inbook <- function(df) {
   return("inBookはまだ")
 }
+
+
+# ### hyperrefをつける
+# ### %% ux5742ux91ceux96c4ux4e8c1994 >stringi::stri_escape_unicode
+
