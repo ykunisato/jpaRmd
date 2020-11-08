@@ -51,6 +51,7 @@ library(ggsignif)
 
 # 引用文献
 <div id="refs"></div>
-```{r}
-source("jpa_cite.R")
+
+```{r echo=FALSE}
+jpa_cite("testRmd2.Rmd")
 ```
