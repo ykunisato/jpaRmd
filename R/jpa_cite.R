@@ -12,13 +12,14 @@
 #' @importFrom stringr str_to_upper
 #' @importFrom stringi stri_enc_isascii
 #' @importFrom purrr map
-#' @param file_name file name of R Markdown file
+#' @param Rmd_file file name of R Markdown file
+#' @param Bib_file file name of bib file
 #' @return Make reference list and add it to R Markdown file
 #' @examples # jpa_cite("template.Rmd")
 #' @export
 
-jpa_cite <- function(file_name){
-  tmp <- readLines(file_name, warn = F) %>% as_tibble()
+jpa_cite <- function(Rmd_file, Bib_file){
+  tmp <- readLines(Rmd_file, warn = F) %>% as_tibble()
   # Bibfile name(from YMAL header)
   bibfile <- tmp$value %>%
     str_extract(".*\\.bib") %>%
@@ -32,8 +33,7 @@ jpa_cite <- function(file_name){
     mutate(refs = str_extract(.$value, "\\@.*")) %>%
     na.omit()
 
-  # bibfile <- 'reference.bib'
-  bibfile <- "sample.bib"
+  bibfile <- Bib_file
   # readBib file as tibble
   bib <- readLines(bibfile, warn = F) %>%
     str_trim()
