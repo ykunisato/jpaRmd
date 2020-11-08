@@ -12,3 +12,16 @@ jpa_jjp <- function(){
   format_pdf$inherits <- "pdf_document"
   format_pdf
 }
+
+jpa_jjp2 <- function(){
+  template_tex_file <- system.file("rmarkdown/templates/jpa_jjp2/resources/jpa_jjp2.tex",
+                                   package = 'jpaRmd')
+  format_pdf <- rmarkdown::pdf_document(latex_engine = "xelatex",
+                                        template = template_tex_file,
+                                        keep_tex = TRUE,
+                                        toc = TRUE,
+                                        toc_depth = 3,
+                                        highlight = 'tango')
+  format_pdf$inherits <- "pdf_document"
+  format_pdf
+}
