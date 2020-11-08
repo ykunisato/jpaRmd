@@ -3,6 +3,7 @@
 #' @importFrom tibble as_tibble
 #' @importFrom dplyr mutate
 #' @importFrom dplyr group_by
+#' @importFrom dplyr bind_rows
 #' @importFrom stringr str_extract
 #' @importFrom stringr str_replace
 #' @importFrom stringr str_trim
@@ -11,7 +12,6 @@
 #' @importFrom stringr str_to_upper
 #' @importFrom stringi stri_enc_isascii
 #' @importFrom purrr map
-#' @importFrom dplyr bind_rows
 #' @param Rmd_file file name of R Markdown file
 #' @param Bib_file file name of bib file
 #' @return Make reference list and add it to R Markdown file
