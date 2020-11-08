@@ -11,6 +11,7 @@
 #' @importFrom stringr str_to_upper
 #' @importFrom stringi stri_enc_isascii
 #' @importFrom purrr map
+#' @importFrom dplyr bind_rows
 #' @param Rmd_file file name of R Markdown file
 #' @param Bib_file file name of bib file
 #' @return Make reference list and add it to R Markdown file
