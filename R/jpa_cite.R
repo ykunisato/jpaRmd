@@ -157,6 +157,7 @@ jpa_cite <- function(Rmd_file, Bib_file){
     ADDRESS = character(0L),
     ANNOTE = character(0L),
     AUTHOR = character(0L),
+    JAUTHOR = character(0L),
     BOOKTITLE = character(0L),
     CHAPTER = character(0L),
     CROSSREF = character(0L),
