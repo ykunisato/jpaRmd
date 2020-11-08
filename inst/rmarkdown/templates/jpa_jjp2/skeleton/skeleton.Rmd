@@ -141,7 +141,7 @@ cor_result <- cor.test(summary_bfi_fig$Extraversion,summary_bfi_fig$Neuroticism)
 # 引用文献
 <div id="refs"></div>
 ```{r}
-source("jpa_cite.R")
+jpaRmd::jpa_cite()
 ```
 
 
