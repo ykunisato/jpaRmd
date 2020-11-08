@@ -1,5 +1,4 @@
 #' Add citation function
-#'
 #' @importFrom magrittr %>%
 #' @importFrom tibble as_tibble
 #' @importFrom dplyr mutate
@@ -15,10 +14,18 @@
 #' @param Rmd_file file name of R Markdown file
 #' @param Bib_file file name of bib file
 #' @return Make reference list and add it to R Markdown file
-#' @examples # jpa_cite("template.Rmd","reference.bib")
+#' @examples # jpa_cite(Rmd_file = "template.Rmd", Bib_file = "reference.bib")
 #' @export
 
 jpa_cite <- function(Rmd_file, Bib_file){
+  # check argument
+  if (missing(Rmd_file)) {
+    stop("Please set the name of RMarkdown file")
+  }
+  if (missing(Bib_file)) {
+    stop("Please set the name of Bib file")
+  }
+  
   tmp <- readLines(Rmd_file, warn = F) %>% as_tibble()
   # Bibfile name(from YMAL header)
   bibfile <- tmp$value %>%
