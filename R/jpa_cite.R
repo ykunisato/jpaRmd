@@ -1,6 +1,7 @@
 #' Add citation function
 #' @importFrom magrittr %>%
 #' @importFrom tibble as_tibble
+#' @importFrom tibble rowid_to_column
 #' @importFrom dplyr mutate
 #' @importFrom dplyr group_by
 #' @importFrom dplyr bind_rows
