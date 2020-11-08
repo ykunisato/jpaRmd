@@ -5,6 +5,7 @@
 #' @importFrom dplyr mutate
 #' @importFrom dplyr group_by
 #' @importFrom dplyr bind_rows
+#' @importFrom dplyr case_when
 #' @importFrom stringr str_extract
 #' @importFrom stringr str_replace
 #' @importFrom stringr str_trim
