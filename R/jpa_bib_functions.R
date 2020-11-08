@@ -55,6 +55,7 @@ name_spliter <- function(dat) {
 #' Print name function(English)
 #' @importFrom magrittr %>%
 #' @importFrom dplyr mutate
+#' @importFrom dplyr if_else
 #' @importFrom purrr map
 #' @importFrom purrr map2
 #' @importFrom stringr str_flatten
