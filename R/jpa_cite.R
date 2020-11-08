@@ -15,7 +15,7 @@
 #' @param Rmd_file file name of R Markdown file
 #' @param Bib_file file name of bib file
 #' @return Make reference list and add it to R Markdown file
-#' @examples # jpa_cite("template.Rmd")
+#' @examples # jpa_cite("template.Rmd","reference.bib")
 #' @export
 
 jpa_cite <- function(Rmd_file, Bib_file){
@@ -33,9 +33,8 @@ jpa_cite <- function(Rmd_file, Bib_file){
     mutate(refs = str_extract(.$value, "\\@.*")) %>%
     na.omit()
 
-  bibfile <- Bib_file
   # readBib file as tibble
-  bib <- readLines(bibfile, warn = F) %>%
+  bib <- readLines(Bib_file, warn = F) %>%
     str_trim()
 
   ## Delete commented out records
