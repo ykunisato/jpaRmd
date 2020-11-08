@@ -177,6 +177,7 @@ jpa_cite <- function(Rmd_file, Bib_file){
     SCHOOL = character(0L),
     SERIES = character(0L),
     TITLE = character(0L),
+    JTITLE = character(0L),
     TYPE = character(0L),
     VOLUME = character(0L),
     YEAR = character(0L),
