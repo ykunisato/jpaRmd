@@ -252,6 +252,6 @@ jpa_cite <- function(Rmd_file, Bib_file){
     )
     pBib_list <- c(pBib_list,pBib)
   }
-  
+  write(pBib_list,file="tmpbib.tex")
   return(pBib_list)
 }
