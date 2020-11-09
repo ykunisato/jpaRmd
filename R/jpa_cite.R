@@ -4,6 +4,7 @@
 #' @importFrom stringr str_trim
 #' @importFrom stringr str_length
 #' @importFrom stringr str_sub
+#' @param string
 #' @export
 value_extractor <- function(string) {
   content <- string %>%
