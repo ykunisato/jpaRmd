@@ -1,29 +1,3 @@
-#' Extractor function
-#' @importFrom magrittr %>%
-#' @importFrom stringr str_replace_all
-#' @importFrom stringr str_trim
-#' @importFrom stringr str_length
-#' @importFrom stringr str_sub
-#' @export
-extract_values <- function(string) {
-  content <- string %>%
-    ### delete escape-sequence, \"
-    str_replace_all(pattern = '\\\"', replacement = "") %>%
-    ### delete curly-bracket
-    str_replace_all(pattern = "\\{", replacement = "") %>%
-    str_replace_all(pattern = "\\}", replacement = "") %>%
-    str_trim()
-  ### if the last character is , then delete
-  for (i in 1:length(content)) {
-    Ln <- str_length(content[i])
-    lastChar <- str_sub(content[i], start = Ln, end = Ln)
-    if (!is.na(lastChar) & lastChar == ",") {
-      content[i] <- str_sub(content[i], start = 1, end = Ln - 1)
-    }
-  }
-  return(content)
-}
-
 #' Name spliter function
 #' @importFrom magrittr %>%
 #' @importFrom stringr str_split

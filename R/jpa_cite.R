@@ -1,3 +1,29 @@
+#' Extractor function
+#' @importFrom magrittr %>%
+#' @importFrom stringr str_replace_all
+#' @importFrom stringr str_trim
+#' @importFrom stringr str_length
+#' @importFrom stringr str_sub
+#' @export
+value_extractor <- function(string) {
+  content <- string %>%
+    ### delete escape-sequence, \"
+    str_replace_all(pattern = '\\\"', replacement = "") %>%
+    ### delete curly-bracket
+    str_replace_all(pattern = "\\{", replacement = "") %>%
+    str_replace_all(pattern = "\\}", replacement = "") %>%
+    str_trim()
+  ### if the last character is , then delete
+  for (i in 1:length(content)) {
+    Ln <- str_length(content[i])
+    lastChar <- str_sub(content[i], start = Ln, end = Ln)
+    if (!is.na(lastChar) & lastChar == ",") {
+      content[i] <- str_sub(content[i], start = 1, end = Ln - 1)
+    }
+  }
+  return(content)
+}
+
 #' Add citation function
 #' @importFrom magrittr %>%
 #' @importFrom tibble as_tibble
@@ -31,12 +57,7 @@ jpa_cite <- function(Rmd_file, Bib_file){
   
   tmp <- readLines(Rmd_file, warn = F) %>% as_tibble()
   # Bibfile name(from YMAL header)
-  bibfile <- tmp$value %>%
-    str_extract(".*\\.bib") %>%
-    as.vector() %>%
-    na.omit() %>%
-    str_replace(pattern = "bibliography:", "") %>%
-    str_trim()
+  bibfile <- Bib_file
 
   # reference pick-up
   refAll <- tmp %>%
@@ -110,7 +131,7 @@ jpa_cite <- function(Rmd_file, Bib_file){
     ## delete first record which has Key and Category
     function(x) {
       str_extract(x, "(?<==).*") %>%
-        extract_values() %>%
+        value_extractor() %>% 
         str_trim()
     }
   )
@@ -206,9 +227,10 @@ jpa_cite <- function(Rmd_file, Bib_file){
   for (i in 1:NROW(refAll)) {
     refFLG <- refFLG | refAll[i, ]$refs %>% str_detect(pattern = refKey)
   }
-  #bib.df <- bib.df[refFLG, ]
+  bib.df <- bib.df[refFLG, ]
 
   # output reference
+  pBib_list <- NULL
   for (i in 1:NROW(bib.df)) {
     tmp <- bib.df[i, ]
     # If the AUTHOR is Japanese or has a JTITLE field such as translation
@@ -228,8 +250,8 @@ jpa_cite <- function(Rmd_file, Bib_file){
       tmp$CATEGORY == "INBOOK" ~ print_inbook(tmp),
       tmp$CATEGORY == "INCOLLECTION" ~ print_incollection(tmp)
     )
-    print(pBib)
+    pBib_list <- c(pBib_list,pBib)
   }
-
-  #write(pBib,file="tmp_bibfile.tex")
+  
+  return(pBib_list)
 }

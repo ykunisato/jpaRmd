@@ -2,7 +2,7 @@
 title: "RMarkdownで『心理学研究』の論文は書けるのか？"
 subtitle: "Can we write a paper of the Japanses Journal of psychology with RMarkdown?"
 bibliography:  sample.bib
-output: jpaRmd::jpa_jjp
+output: jpaRmd::jpa_jjp2
 ---
 
 <!-- 
@@ -52,5 +52,5 @@ library(ggsignif)
 # 引用文献
 <div id="refs"></div>
 ```{r}
-source("jpa_cite.R")
+jpa_cite("testRMD2.Rmd","sample.bib")
 ```
