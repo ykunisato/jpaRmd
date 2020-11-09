@@ -6,6 +6,9 @@
 \usage{
 print_others(df)
 }
+\arguments{
+\item{df}{Strings of Bib info}
+}
 \description{
 Print bib info function(other)
 }

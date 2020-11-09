@@ -4,7 +4,7 @@
 #' @importFrom stringr str_trim
 #' @importFrom stringr str_length
 #' @importFrom stringr str_sub
-#' @param string
+#' @param string string which contains \{ or \"
 #' @export
 value_extractor <- function(string) {
   content <- string %>%
@@ -41,6 +41,7 @@ value_extractor <- function(string) {
 #' @importFrom stringr str_to_upper
 #' @importFrom stringi stri_enc_isascii
 #' @importFrom purrr map
+#' @importFrom stats complete.cases na.omit
 #' @param Rmd_file file name of R Markdown file
 #' @param Bib_file file name of bib file
 #' @return Make reference list and add it to R Markdown file

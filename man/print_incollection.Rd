@@ -6,6 +6,9 @@
 \usage{
 print_incollection(df)
 }
+\arguments{
+\item{df}{Strings of Bib info}
+}
 \description{
 Print bib info function(in collection)
 }

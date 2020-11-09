@@ -33,6 +33,7 @@ library(psych)
 library(gridExtra)
 library(jtools)
 library(ggsignif)
+library(jpaRmd)
 ```
 
 \clearpage

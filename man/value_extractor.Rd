@@ -6,6 +6,9 @@
 \usage{
 value_extractor(string)
 }
+\arguments{
+\item{string}{string which contains \{ or \"}
+}
 \description{
 Extractor function
 }

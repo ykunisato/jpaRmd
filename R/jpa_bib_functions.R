@@ -9,6 +9,7 @@
 #' @importFrom humaniformat last_name
 #' @importFrom stringr str_sub
 #' @importFrom stringr str_to_upper
+#' @param dat elements of data.frame contains NAME
 #' @export
 name_spliter <- function(dat) {
   dat %>%
@@ -33,6 +34,7 @@ name_spliter <- function(dat) {
 #' @importFrom purrr map
 #' @importFrom purrr map2
 #' @importFrom stringr str_flatten
+#' @param st Strings of name
 #' @export
 print_EName <- function(st) {
   st <- as.data.frame(st)
@@ -84,6 +86,7 @@ print_EName <- function(st) {
 }
 
 #' Print name function(Jpanese)
+#' @param st Strings of Japanese name
 #' @export
 print_JName <- function(st) {
   st <- as.data.frame(st)
@@ -115,6 +118,7 @@ print_JName <- function(st) {
 }
 
 #' Print bib info function(English book)
+#' @param df Strings of Bib info
 #' @export
 print_English_book <- function(df) {
   name.tmp <- df$pName
@@ -147,6 +151,7 @@ print_English_book <- function(df) {
 }
 
 #' Print bib info function(Japanese book)
+#' @param df Strings of Bib info
 #' @export
 print_Japanese_book <- function(df) {
   name.tmp <- df$pName
@@ -175,6 +180,7 @@ print_Japanese_book <- function(df) {
 }
 
 #' Print bib info function(English article)
+#' @param df Strings of Bib info
 #' @export
 print_English_article <- function(df) {
   # (author's name), (year of publication), (title), (journal title), (number of copies), (page citations)
@@ -191,6 +197,7 @@ print_English_article <- function(df) {
 }
 
 #' Print bib info function(Jaopanese article)
+#' @param df Strings of Bib info
 #' @export
 print_Japanese_article <- function(df) {
   # (Author's name), (Year of publication), (Title), (Title), (Number of copies), (Citation page)
@@ -206,18 +213,21 @@ print_Japanese_article <- function(df) {
 }
 
 #' Print bib info function(in collection)
+#' @param df Strings of Bib info
 #' @export
 print_incollection <- function(df) {
   return("incollectionはまだ")
 }
 
 #' Print bib info function(other)
+#' @param df Strings of Bib info
 #' @export
 print_others <- function(df) {
   return("その他はまだ")
 }
 
 #' Print bib info function(in book)
+#' @param df Strings of Bib info
 #' @export
 print_inbook <- function(df) {
   return("inBookはまだ")

@@ -6,6 +6,9 @@
 \usage{
 print_English_article(df)
 }
+\arguments{
+\item{df}{Strings of Bib info}
+}
 \description{
 Print bib info function(English article)
 }
