@@ -172,9 +172,9 @@ print_Japanese_book <- function(df) {
     E.part = print_English_book(df)
     J.part = paste(df$GENCHOKANA,df$pYear,df$JTITLE,df$JPUBLISHER)
     #Jauthor か Jeditor
-    pBib <- paste0(E.part,"(",J.part,")")
+    pBib <- paste(E.part,"(",J.part,")")
   }else{
-    pBib <- paste0(df$pName, df$pYear, df$TITLE, df$PUBLISHER)
+    pBib <- paste(df$pName, df$pYear, df$TITLE, df$PUBLISHER)
   }
   
   return(pBib)
