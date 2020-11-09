@@ -228,8 +228,8 @@ jpa_cite <- function(Rmd_file, Bib_file){
       tmp$CATEGORY == "INBOOK" ~ print_inbook(tmp),
       tmp$CATEGORY == "INCOLLECTION" ~ print_incollection(tmp)
     )
-    #print(pBib)
+    print(pBib)
   }
 
-  write(pBib,file="tmp_bibfile.tex")
+  #write(pBib,file="tmp_bibfile.tex")
 }
