@@ -239,7 +239,7 @@ jpa_cite <- function(Rmd_file, Bib_file){
   for (i in 1:NROW(bib.df)) {
     tmp <- bib.df[i, ]
     # If the AUTHOR is Japanese or has a JTITLE field such as translation
-    langFLG = (stri_enc_isascii(tmp$AUTHOR) && is.na(tmp$JTITLE))
+    langFLG = (stringi::stri_enc_isascii(tmp$AUTHOR) && is.na(tmp$JTITLE))
     tmp$pYear <- paste0("(", tmp$YEAR, ").")
     if (langFLG) {
       tmp$pName <- print_EName(tmp$AUTHORs)

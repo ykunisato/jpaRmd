@@ -173,11 +173,18 @@ print_Japanese_book <- function(df) {
   # vii）翻訳書
   if(!is.na(df$JTITLE)){
     E.part = print_English_book(df)
-    J.part = paste(df$GENCHOKANA,df$pYear,df$JTITLE,df$JPUBLISHER)
-    #Jauthor か Jeditor
-    pBib <- paste0(E.part,"(",J.part,")")
+    ## 監訳
+    if(!is.na(df$JKANYAKU)){
+      Jname <- print_JName(df$JKANYAKU)
+      Jname <- paste0(Jname,"(監訳)")
+    }else{
+      Jname <- print_JName(df$JAUTHORs)
+      Jname <- paste0(Jname,"(訳)")
+    }
+    J.part = paste(df$GENCHOKANA,Jname,df$pYear,df$JTITLE,df$JPUBLISHER)
+    pBib <- paste(E.part,"(",J.part,")")
   }else{
-    pBib <- paste0(df$pName, df$pYear, df$TITLE, df$PUBLISHER)
+    pBib <- paste(df$pName, df$pYear, df$TITLE, df$PUBLISHER)
   }
   
   return(pBib)
