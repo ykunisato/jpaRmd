@@ -1,29 +1,3 @@
-#' Extractor function
-#' @importFrom magrittr %>%
-#' @importFrom stringr str_replace_all
-#' @importFrom stringr str_trim
-#' @importFrom stringr str_length
-#' @importFrom stringr str_sub
-#' @export
-extract_values <- function(string) {
-  content <- string %>%
-    ### delete escape-sequence, \"
-    str_replace_all(pattern = '\\\"', replacement = "") %>%
-    ### delete curly-bracket
-    str_replace_all(pattern = "\\{", replacement = "") %>%
-    str_replace_all(pattern = "\\}", replacement = "") %>%
-    str_trim()
-  ### if the last character is , then delete
-  for (i in 1:length(content)) {
-    Ln <- str_length(content[i])
-    lastChar <- str_sub(content[i], start = Ln, end = Ln)
-    if (!is.na(lastChar) & lastChar == ",") {
-      content[i] <- str_sub(content[i], start = 1, end = Ln - 1)
-    }
-  }
-  return(content)
-}
-
 #' Name spliter function
 #' @importFrom magrittr %>%
 #' @importFrom stringr str_split
@@ -35,6 +9,7 @@ extract_values <- function(string) {
 #' @importFrom humaniformat last_name
 #' @importFrom stringr str_sub
 #' @importFrom stringr str_to_upper
+#' @param dat elements of data.frame contains NAME
 #' @export
 name_spliter <- function(dat) {
   dat %>%
@@ -59,9 +34,13 @@ name_spliter <- function(dat) {
 #' @importFrom purrr map
 #' @importFrom purrr map2
 #' @importFrom stringr str_flatten
+#' @param st Strings of name
 #' @export
 print_EName <- function(st) {
   st <- as.data.frame(st)
+  initial_first <- NULL
+  initial_middle <- NULL
+  initial_name <- NULL
   st %>%
     mutate(
       initial_first = map(initial_first, ~ paste0(.x, ".")),
@@ -103,13 +82,15 @@ print_EName <- function(st) {
       # wirte down all author's name and add "," befor last author's name.
       # use & not and
       pName <- str_flatten(nameList[1:(length(nameList) - 1)], collapse = ", ")
-      pName <- paste(pName, "&", nameList[length(nameList)])
+      binder <- paste0("\\","&") 
+      pName <- paste(pName, binder, nameList[length(nameList)])
     }
   }
   return(unlist(pName))
 }
 
 #' Print name function(Jpanese)
+#' @param st Strings of Japanese name
 #' @export
 print_JName <- function(st) {
   st <- as.data.frame(st)
@@ -141,10 +122,11 @@ print_JName <- function(st) {
 }
 
 #' Print bib info function(English book)
+#' @param df Strings of Bib info
 #' @export
 print_English_book <- function(df) {
-  name.tmp <- df$pName
-  title.tmp <- paste0("{\\emph ",df$TITLE,"}")
+  name.tmp <- print_EName(df$AUTHORs)
+  title.tmp <- paste0("\\emph{",df$TITLE,"}")
   # i ) General examples (author), (year of publication), (book title), (place of publication: publisher)
   # ii) New editions: Always indicate the number of editions except for the first edition. 
   # Editions should be abbreviated to ed.
@@ -168,14 +150,15 @@ print_English_book <- function(df) {
   # vi)One specific volume of a book spanning several volumes, 
   # vii) Translations, and  viii) reprints are handled by the Bib files 
   # (e.g., put it in the title; see Google Scholar)
-  pBib <- paste(df$pName, df$pYear, df$TITLE, ",", df$ADDRESS, ":", df$PUBLISHER)
+  pBib <- paste(name.tmp, df$pYear, title.tmp, ",", df$ADDRESS, ":", df$PUBLISHER)
   return(pBib)
 }
 
 #' Print bib info function(Japanese book)
+#' @param df Strings of Bib info
 #' @export
 print_Japanese_book <- function(df) {
-  name.tmp <- df$pName
+  name.tmp <- print_JName(df$AUTHORs)
   title.tmp <- df$TITLE
   # iii）Editorial and Supervisory Book
   if(!is.na(df$EDITOR)){
@@ -190,21 +173,29 @@ print_Japanese_book <- function(df) {
   # vii）翻訳書
   if(!is.na(df$JTITLE)){
     E.part = print_English_book(df)
-    J.part = paste(df$GENCHOKANA,df$pYear,df$JTITLE,df$JPUBLISHER)
-    #Jauthor か Jeditor
-    pBib <- paste0(E.part,"(",J.part,")")
+    ## 監訳
+    if(!is.na(df$JKANYAKU)){
+      Jname <- print_JName(df$JKANYAKU)
+      Jname <- paste0(Jname,"(監訳)")
+    }else{
+      Jname <- print_JName(df$JAUTHORs)
+      Jname <- paste0(Jname,"(訳)")
+    }
+    J.part = paste(df$GENCHOKANA,Jname,df$pYear,df$JTITLE,df$JPUBLISHER)
+    pBib <- paste(E.part,"(",J.part,")")
   }else{
-    pBib <- paste0(df$pName, df$pYear, df$TITLE, df$PUBLISHER)
+    pBib <- paste(df$pName, df$pYear, df$TITLE, df$PUBLISHER)
   }
   
   return(pBib)
 }
 
 #' Print bib info function(English article)
+#' @param df Strings of Bib info
 #' @export
 print_English_article <- function(df) {
   # (author's name), (year of publication), (title), (journal title), (number of copies), (page citations)
-  TITLE.tmp <-  title.tmp <- paste0("{\\emph ",df$TITLE,"},")
+  TITLE.tmp <-  title.tmp <- paste0("\\emph{",df$TITLE,"},")
   JOURNAL.tmp <- paste0(df$JOURNAL,",")
   if(!is.na(df$NUMBER)){
     Vol_and_Num.tmp <- paste0(df$VOLUME,"(",df$NUMBER,"),")
@@ -217,14 +208,15 @@ print_English_article <- function(df) {
 }
 
 #' Print bib info function(Jaopanese article)
+#' @param df Strings of Bib info
 #' @export
 print_Japanese_article <- function(df) {
   # (Author's name), (Year of publication), (Title), (Title), (Number of copies), (Citation page)
   JOURNAL.tmp <- paste0(df$JOURNAL,",")
   if(!is.na(df$NUMBER)){
-    Vol_and_Num.tmp <- paste0("{\\emph ",df$VOLUME,"}","(",df$NUMBER,"),")
+    Vol_and_Num.tmp <- paste0("\\emph{",df$VOLUME,"}","(",df$NUMBER,"),")
   }else{
-    Vol_and_Num.tmp <- paste0("{\\emph ",df$VOLUME,"},")
+    Vol_and_Num.tmp <- paste0("\\emph{",df$VOLUME,"},")
   }  
   PAGES.tmp <- paste0(df$PAGES,".")
   pBib <- paste(df$pName,df$pYear,df$TITLE,JOURNAL.tmp,Vol_and_Num.tmp,PAGES.tmp)
@@ -232,18 +224,21 @@ print_Japanese_article <- function(df) {
 }
 
 #' Print bib info function(in collection)
+#' @param df Strings of Bib info
 #' @export
 print_incollection <- function(df) {
   return("incollectionはまだ")
 }
 
 #' Print bib info function(other)
+#' @param df Strings of Bib info
 #' @export
 print_others <- function(df) {
   return("その他はまだ")
 }
 
 #' Print bib info function(in book)
+#' @param df Strings of Bib info
 #' @export
 print_inbook <- function(df) {
   return("inBookはまだ")

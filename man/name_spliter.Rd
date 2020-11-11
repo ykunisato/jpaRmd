@@ -6,6 +6,9 @@
 \usage{
 name_spliter(dat)
 }
+\arguments{
+\item{dat}{elements of data.frame contains NAME}
+}
 \description{
 Name spliter function
 }

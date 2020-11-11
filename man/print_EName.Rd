@@ -6,6 +6,9 @@
 \usage{
 print_EName(st)
 }
+\arguments{
+\item{st}{Strings of name}
+}
 \description{
 Print name function(English)
 }

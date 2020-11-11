@@ -6,6 +6,9 @@
 \usage{
 print_JName(st)
 }
+\arguments{
+\item{st}{Strings of Japanese name}
+}
 \description{
 Print name function(Jpanese)
 }

@@ -6,6 +6,9 @@
 \usage{
 print_inbook(df)
 }
+\arguments{
+\item{df}{Strings of Bib info}
+}
 \description{
 Print bib info function(in book)
 }

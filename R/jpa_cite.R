@@ -1,3 +1,30 @@
+#' Extractor function
+#' @importFrom magrittr %>%
+#' @importFrom stringr str_replace_all
+#' @importFrom stringr str_trim
+#' @importFrom stringr str_length
+#' @importFrom stringr str_sub
+#' @param string string which contains \{ or \"
+#' @export
+value_extractor <- function(string) {
+  content <- string %>%
+    ### delete escape-sequence, \"
+    str_replace_all(pattern = '\\\"', replacement = "") %>%
+    ### delete curly-bracket
+    str_replace_all(pattern = "\\{", replacement = "") %>%
+    str_replace_all(pattern = "\\}", replacement = "") %>%
+    str_trim()
+  ### if the last character is , then delete
+  for (i in 1:length(content)) {
+    Ln <- str_length(content[i])
+    lastChar <- str_sub(content[i], start = Ln, end = Ln)
+    if (!is.na(lastChar) & lastChar == ",") {
+      content[i] <- str_sub(content[i], start = 1, end = Ln - 1)
+    }
+  }
+  return(content)
+}
+
 #' Add citation function
 #' @importFrom magrittr %>%
 #' @importFrom tibble as_tibble
@@ -13,7 +40,9 @@
 #' @importFrom stringr str_detect
 #' @importFrom stringr str_to_upper
 #' @importFrom stringi stri_enc_isascii
+#' @importFrom stringi stri_escape_unicode
 #' @importFrom purrr map
+#' @importFrom stats complete.cases na.omit
 #' @param Rmd_file file name of R Markdown file
 #' @param Bib_file file name of bib file
 #' @return Make reference list and add it to R Markdown file
@@ -31,12 +60,7 @@ jpa_cite <- function(Rmd_file, Bib_file){
   
   tmp <- readLines(Rmd_file, warn = F) %>% as_tibble()
   # Bibfile name(from YMAL header)
-  bibfile <- tmp$value %>%
-    str_extract(".*\\.bib") %>%
-    as.vector() %>%
-    na.omit() %>%
-    str_replace(pattern = "bibliography:", "") %>%
-    str_trim()
+  bibfile <- Bib_file
 
   # reference pick-up
   refAll <- tmp %>%
@@ -110,7 +134,7 @@ jpa_cite <- function(Rmd_file, Bib_file){
     ## delete first record which has Key and Category
     function(x) {
       str_extract(x, "(?<==).*") %>%
-        extract_values() %>%
+        value_extractor() %>% 
         str_trim()
     }
   )
@@ -206,19 +230,23 @@ jpa_cite <- function(Rmd_file, Bib_file){
   for (i in 1:NROW(refAll)) {
     refFLG <- refFLG | refAll[i, ]$refs %>% str_detect(pattern = refKey)
   }
-  #bib.df <- bib.df[refFLG, ]
+  bib.df <- bib.df[refFLG, ]
 
-  # output reference
+  # output reference to temp_bib.tex File
+  header <- "\\hypertarget{ux5f15ux7528ux6587ux732e}{%
+    \\section{引用文献}\\label{ux5f15ux7528ux6587ux732e}}"
+  write(header, file = "temp_bib.tex")
   for (i in 1:NROW(bib.df)) {
     tmp <- bib.df[i, ]
     # If the AUTHOR is Japanese or has a JTITLE field such as translation
-    langFLG = (stri_enc_isascii(tmp$AUTHOR) && is.na(tmp$JTITLE))
+    langFLG = (stringi::stri_enc_isascii(tmp$AUTHOR) && is.na(tmp$JTITLE))
     tmp$pYear <- paste0("(", tmp$YEAR, ").")
     if (langFLG) {
       tmp$pName <- print_EName(tmp$AUTHORs)
     } else {
       tmp$pName <- print_JName(tmp$AUTHORs)
     }
+    ### Make Bib record
     pBib <- case_when(
       langFLG==TRUE && tmp$CATEGORY == "BOOK" ~ print_English_book(tmp),
       langFLG==FALSE && tmp$CATEGORY == "BOOK" ~ print_Japanese_book(tmp),
@@ -228,8 +256,14 @@ jpa_cite <- function(Rmd_file, Bib_file){
       tmp$CATEGORY == "INBOOK" ~ print_inbook(tmp),
       tmp$CATEGORY == "INCOLLECTION" ~ print_incollection(tmp)
     )
-    #print(pBib)
+    ### write Bib Record
+    #### convert BIBTEXKEY to utf8code
+    tmp.bibtexKey <- stringi::stri_escape_unicode(tmp$BIBTEXKEY) %>% 
+      str_replace_all(pattern="\\\\u",replacement="ux")
+    prefix <- paste0("\\hypertarget{refs}{}
+    \\leavevmode\\hypertarget{ref-",tmp.bibtexKey,"}{}%")
+    write(prefix, file="temp_bib.tex",append=T)
+    write(pBib,file="temp_bib.tex",append=T)
+    write("\n",file="temp_bib.tex",append=T)
   }
-
-  write(pBib,file="tmp_bibfile.tex")
 }
