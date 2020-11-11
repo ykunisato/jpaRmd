@@ -1,7 +1,8 @@
 ---
 title: "RMarkdownで『心理学研究』の論文は書けるのか？"
 subtitle: "Can we write a paper of the Japanses Journal of psychology with RMarkdown?"
-output: jpaRmd::jpa_jjp2
+bibliography:  sample.bib
+output: jpaRmd::jpa_jjp
 ---
 
 <!-- 
@@ -32,7 +33,6 @@ library(psych)
 library(gridExtra)
 library(jtools)
 library(ggsignif)
-library(jpaRmd)
 ```
 
 \clearpage
@@ -46,12 +46,12 @@ library(jpaRmd)
 　心理学の再現可能性はとってもまずい状況なのですが，それはちょっとおいておいて，文献の引用の仕方を説明します。まず，@Kunisato2012 のように，すると，bibファイル内のKunisatoの2012年の論文が引用されます。そして，次のように，[]でくくると文末の引用スタイルになります[@kunisato2019]。また，文末に複数引用する場合は，こういう感じにします[@kunisato2019; @Machino2014]。以下に詳しく書いているのでご確認ください。
 　
 
-そしてまさかの @Lewin からの @ekman1969 ですよ。[@坂野雄二1994; @lerner2015handbook]
+　そしてまさかの@Lewinからの@Ekman1969ですよ。[@坂野雄二1994,@lerner2015handbook]
 　
 
-<!-- # 引用文献 -->
-<!-- <div id="refs"></div> -->
+# 引用文献
+<div id="refs"></div>
 
-```{r message=FALSE, warning=FALSE, comment="", include=FALSE}
-jpa_cite("testRMD2.Rmd","sample.bib")
+```{r echo=FALSE}
+jpa_cite("testRmd2.Rmd")
 ```
