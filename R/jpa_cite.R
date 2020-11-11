@@ -40,6 +40,7 @@ value_extractor <- function(string) {
 #' @importFrom stringr str_detect
 #' @importFrom stringr str_to_upper
 #' @importFrom stringi stri_enc_isascii
+#' @importFrom stringi stri_escape_unicode
 #' @importFrom purrr map
 #' @importFrom stats complete.cases na.omit
 #' @param Rmd_file file name of R Markdown file
@@ -231,8 +232,10 @@ jpa_cite <- function(Rmd_file, Bib_file){
   }
   bib.df <- bib.df[refFLG, ]
 
-  # output reference
-  pBib_list <- NULL
+  # output reference to temp_bib.tex File
+  header <- "\\hypertarget{ux5f15ux7528ux6587ux732e}{%
+    \\section{引用文献}\\label{ux5f15ux7528ux6587ux732e}}"
+  write(header, file = "temp_bib.tex")
   for (i in 1:NROW(bib.df)) {
     tmp <- bib.df[i, ]
     # If the AUTHOR is Japanese or has a JTITLE field such as translation
@@ -243,6 +246,7 @@ jpa_cite <- function(Rmd_file, Bib_file){
     } else {
       tmp$pName <- print_JName(tmp$AUTHORs)
     }
+    ### Make Bib record
     pBib <- case_when(
       langFLG==TRUE && tmp$CATEGORY == "BOOK" ~ print_English_book(tmp),
       langFLG==FALSE && tmp$CATEGORY == "BOOK" ~ print_Japanese_book(tmp),
@@ -252,8 +256,14 @@ jpa_cite <- function(Rmd_file, Bib_file){
       tmp$CATEGORY == "INBOOK" ~ print_inbook(tmp),
       tmp$CATEGORY == "INCOLLECTION" ~ print_incollection(tmp)
     )
-    pBib_list <- c(pBib_list,pBib)
+    ### write Bib Record
+    #### convert BIBTEXKEY to utf8code
+    tmp.bibtexKey <- stringi::stri_escape_unicode(tmp$BIBTEXKEY) %>% 
+      str_replace_all(pattern="\\\\u",replacement="ux")
+    prefix <- paste0("\\hypertarget{refs}{}
+    \\leavevmode\\hypertarget{ref-",tmp.bibtexKey,"}{}%")
+    write(prefix, file="temp_bib.tex",append=T)
+    write(pBib,file="temp_bib.tex",append=T)
+    write("\n",file="temp_bib.tex",append=T)
   }
-  write(pBib_list,file="tmpbib.tex")
-  return(pBib_list)
 }

@@ -38,6 +38,9 @@ name_spliter <- function(dat) {
 #' @export
 print_EName <- function(st) {
   st <- as.data.frame(st)
+  initial_first <- NULL
+  initial_middle <- NULL
+  initial_name <- NULL
   st %>%
     mutate(
       initial_first = map(initial_first, ~ paste0(.x, ".")),
@@ -79,7 +82,8 @@ print_EName <- function(st) {
       # wirte down all author's name and add "," befor last author's name.
       # use & not and
       pName <- str_flatten(nameList[1:(length(nameList) - 1)], collapse = ", ")
-      pName <- paste(pName, "&", nameList[length(nameList)])
+      binder <- paste0("\\","&") 
+      pName <- paste(pName, binder, nameList[length(nameList)])
     }
   }
   return(unlist(pName))
@@ -121,8 +125,8 @@ print_JName <- function(st) {
 #' @param df Strings of Bib info
 #' @export
 print_English_book <- function(df) {
-  name.tmp <- df$pName
-  title.tmp <- paste0("{\\emph ",df$TITLE,"}")
+  name.tmp <- print_EName(df$AUTHORs)
+  title.tmp <- paste0("\\emph{",df$TITLE,"}")
   # i ) General examples (author), (year of publication), (book title), (place of publication: publisher)
   # ii) New editions: Always indicate the number of editions except for the first edition. 
   # Editions should be abbreviated to ed.
@@ -146,7 +150,7 @@ print_English_book <- function(df) {
   # vi)One specific volume of a book spanning several volumes, 
   # vii) Translations, and  viii) reprints are handled by the Bib files 
   # (e.g., put it in the title; see Google Scholar)
-  pBib <- paste(df$pName, df$pYear, df$TITLE, ",", df$ADDRESS, ":", df$PUBLISHER)
+  pBib <- paste(name.tmp, df$pYear, title.tmp, ",", df$ADDRESS, ":", df$PUBLISHER)
   return(pBib)
 }
 
@@ -154,7 +158,7 @@ print_English_book <- function(df) {
 #' @param df Strings of Bib info
 #' @export
 print_Japanese_book <- function(df) {
-  name.tmp <- df$pName
+  name.tmp <- print_JName(df$AUTHORs)
   title.tmp <- df$TITLE
   # iii）Editorial and Supervisory Book
   if(!is.na(df$EDITOR)){
@@ -184,7 +188,7 @@ print_Japanese_book <- function(df) {
 #' @export
 print_English_article <- function(df) {
   # (author's name), (year of publication), (title), (journal title), (number of copies), (page citations)
-  TITLE.tmp <-  title.tmp <- paste0("{\\emph ",df$TITLE,"},")
+  TITLE.tmp <-  title.tmp <- paste0("\\emph{",df$TITLE,"},")
   JOURNAL.tmp <- paste0(df$JOURNAL,",")
   if(!is.na(df$NUMBER)){
     Vol_and_Num.tmp <- paste0(df$VOLUME,"(",df$NUMBER,"),")
@@ -203,9 +207,9 @@ print_Japanese_article <- function(df) {
   # (Author's name), (Year of publication), (Title), (Title), (Number of copies), (Citation page)
   JOURNAL.tmp <- paste0(df$JOURNAL,",")
   if(!is.na(df$NUMBER)){
-    Vol_and_Num.tmp <- paste0("{\\emph ",df$VOLUME,"}","(",df$NUMBER,"),")
+    Vol_and_Num.tmp <- paste0("\\emph{",df$VOLUME,"}","(",df$NUMBER,"),")
   }else{
-    Vol_and_Num.tmp <- paste0("{\\emph ",df$VOLUME,"},")
+    Vol_and_Num.tmp <- paste0("\\emph{",df$VOLUME,"},")
   }  
   PAGES.tmp <- paste0(df$PAGES,".")
   pBib <- paste(df$pName,df$pYear,df$TITLE,JOURNAL.tmp,Vol_and_Num.tmp,PAGES.tmp)
