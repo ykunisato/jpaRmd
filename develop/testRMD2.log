@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.999992 (TeX Live 2020) (preloaded format=xelatex 2020.10.21)  11 NOV 2020 17:06
+This is XeTeX, Version 3.14159265-2.6-0.999992 (TeX Live 2020) (preloaded format=xelatex 2020.10.21)  11 NOV 2020 17:14
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -672,11 +672,7 @@ Package: titlesec 2019/10/16 v2.13 Sectioning titles
 \titlewidth=\dimen301
 \titlewidthlast=\dimen302
 \titlewidthfirst=\dimen303
-) (./testRMD2.aux
-
-LaTeX Warning: Label `ux5f15ux7528ux6587ux732e' multiply defined.
-
-)
+) (./testRMD2.aux)
 \openout1 = `testRMD2.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 75.
@@ -1110,75 +1106,24 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             See the microtype manual for details.
 LaTeX Font Info:    Font shape `TU/HaranoAjiGothic-Medium.otf(0)/m/n' will be
 (Font)              scaled to size 11.09656pt on input line 98.
-LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
-(Font)              scaled to size 7.0pt on input line 114.
-LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
-(Font)              scaled to size 5.0pt on input line 114.
-LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
-(Font)              scaled to size 10.00092pt on input line 114.
-LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
-(Font)              scaled to size 7.00064pt on input line 114.
-LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
-(Font)              scaled to size 5.00046pt on input line 114.
-LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
-(Font)              scaled to size 9.99893pt on input line 114.
-LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
-(Font)              scaled to size 6.99925pt on input line 114.
-LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
-(Font)              scaled to size 4.99947pt on input line 114.
-Missing character: There is no そ in font [lmroman10-regular]:mapping=tex-text;!
-Missing character: There is no し in font [lmroman10-regular]:mapping=tex-text;!
-Missing character: There is no て in font [lmroman10-regular]:mapping=tex-text;!
-Missing character: There is no ま in font [lmroman10-regular]:mapping=tex-text;!
-Missing character: There is no さ in font [lmroman10-regular]:mapping=tex-text;!
-Missing character: There is no か in font [lmroman10-regular]:mapping=tex-text;!
-Missing character: There is no の in font [lmroman10-regular]:mapping=tex-text;!
-Missing character: There is no か in font [lmroman10-regular]:mapping=tex-text;!
-Missing character: There is no ら in font [lmroman10-regular]:mapping=tex-text;!
-Missing character: There is no の in font [lmroman10-regular]:mapping=tex-text;!
-Missing character: There is no で in font [lmroman10-regular]:mapping=tex-text;!
-Missing character: There is no す in font [lmroman10-regular]:mapping=tex-text;!
-Missing character: There is no よ in font [lmroman10-regular]:mapping=tex-text;!
+(./temp_bib.tex
 LaTeX Font Info:    Font shape `TU/HaranoAjiMincho-Regular.otf(0)/b/n' will be
-(Font)              scaled to size 11.09656pt on input line 118.
-[2
+(Font)              scaled to size 11.09656pt on input line 2.
 
-]
-Underfull \hbox (badness 5105) in paragraph at lines 133--140
-[][]\TU/lmr/m/n/10 Machino, Akihiko, Yoshihiko Kunisato, Tomoya
- []
-
-
-Underfull \hbox (badness 3078) in paragraph at lines 133--140
-\TU/lmr/m/n/10 Matsumoto, Shinpei Yoshimura, Kazutaka Ueda,
- []
-
-
-LaTeX Font Warning: Font shape `TU/HaranoAjiMincho-Regular.otf(0)/m/it' undefin
-ed
-(Font)              using `TU/HaranoAjiMincho-Regular.otf(0)/m/n' instead on in
-put line 144.
-
-(./temp_bib.tex [3]
 Overfull \hbox (3.08597pt too wide) in paragraph at lines 9--11
 [][]\TU/lmr/m/n/10 Machino,A., Kunisato,Y., Matsumoto,T., Yoshimura,S.,
  []
 
-) [4] (./testRMD2.aux)
+[2
 
-LaTeX Font Warning: Some font shapes were not available, defaults substituted.
-
-
-LaTeX Warning: There were multiply-defined labels.
-
- ) 
+]) [3] (./testRMD2.aux) ) 
 Here is how much of TeX's memory you used:
- 22495 strings out of 477453
- 415277 string characters out of 5836865
- 902723 words of memory out of 5000000
- 41595 multiletter control sequences out of 15000+600000
- 541693 words of font info for 89 fonts, out of 8000000 for 9000
+ 22433 strings out of 477453
+ 413462 string characters out of 5836865
+ 901684 words of memory out of 5000000
+ 41551 multiletter control sequences out of 15000+600000
+ 538840 words of font info for 70 fonts, out of 8000000 for 9000
  1353 hyphenation exceptions out of 8191
- 111i,5n,131p,1197b,432s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 111i,5n,131p,1197b,346s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on testRMD2.pdf (4 pages).
+Output written on testRMD2.pdf (3 pages).
