@@ -233,10 +233,18 @@ jpa_cite <- function(Rmd_file) {
   }
   bib.df <- bib.df[refFLG, ]
 
+  # Output the citation type (substantively a Style file) -------------------------------------------------
+
+  ## Sort by NAME whether in Japanese or English
+  bib.df %>% 
+    dplyr::mutate(sortRecord = YOMI) %>% 
+    dplyr::mutate(sortRecord = if_else(is.na(.$sortRecord), .$AUTHOR, .$sortRecord)) %>% .$sortRecord
+  
   # output reference to temp_bib.tex File
   header <- "\\hypertarget{ux5f15ux7528ux6587ux732e}{%
     \\section{引用文献}\\label{ux5f15ux7528ux6587ux732e}}"
   write(header, file = "temp_bib.tex")
+
   for (i in 1:NROW(bib.df)) {
     tmp <- bib.df[i, ]
     # If the AUTHOR is Japanese or has a JTITLE field such as translation
@@ -247,6 +255,7 @@ jpa_cite <- function(Rmd_file) {
     } else {
       tmp$pName <- print_JName(tmp$AUTHORs)
     }
+
     ### Make Bib record
     pBib <- case_when(
       langFLG == TRUE && tmp$CATEGORY == "BOOK" ~ print_English_book(tmp),
