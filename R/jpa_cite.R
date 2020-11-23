@@ -47,10 +47,10 @@ value_extractor <- function(string) {
 #' @param Bib_file file name of bib file
 #' @return Make reference list and add it to R Markdown file
 #' @examples
-#' # jpa_cite(Rmd_file = "template.Rmd", Bib_file = "reference.bib")
+#' # jpa_cite(Rmd_file = "template.Rmd")
 #' @export
 
-jpa_cite <- function(Rmd_file, Bib_file) {
+jpa_cite <- function(Rmd_file) {
   # check argument
   if (missing(Rmd_file)) {
     stop("Please set the name of RMarkdown file")
