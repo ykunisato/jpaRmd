@@ -195,8 +195,8 @@ print_Japanese_book <- function(df) {
 #' @export
 print_English_article <- function(df) {
   # (author's name), (year of publication), (title), (journal title), (number of copies), (page citations)
-  TITLE.tmp <- title.tmp <- paste0("\\emph{", df$TITLE, "},")
-  JOURNAL.tmp <- paste0(df$JOURNAL, ",")
+  TITLE.tmp <- paste0(df$TITLE,".")
+  JOURNAL.tmp <- paste0("\\emph{",df$JOURNAL,"},")
   if (!is.na(df$NUMBER)) {
     Vol_and_Num.tmp <- paste0(df$VOLUME, "(", df$NUMBER, "),")
   } else {
