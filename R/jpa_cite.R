@@ -54,13 +54,14 @@ jpa_cite <- function(Rmd_file) {
   if (missing(Rmd_file)) {
     stop("Please set the name of RMarkdown file")
   }
+
+    tmp <- readLines(Rmd_file, warn = F) %>% as_tibble()
+  # Bibfile name(from YMAL header)
+  bibfile <- Bib_file
+  # check Bib file
   if (missing(Bib_file)) {
     stop("Please set the name of Bib file")
   }
-
-  tmp <- readLines(Rmd_file, warn = F) %>% as_tibble()
-  # Bibfile name(from YMAL header)
-  bibfile <- Bib_file
 
   # reference pick-up
   refAll <- tmp %>%
