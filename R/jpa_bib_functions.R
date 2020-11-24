@@ -182,7 +182,7 @@ print_Japanese_book <- function(df) {
       Jname <- paste0(Jname, "(訳)")
     }
     J.part <- paste(df$GENCHOKANA, Jname, df$pYear, df$JTITLE, df$JPUBLISHER)
-    pBib <- paste(E.part, "(", J.part, ")")
+    pBib <- paste0(E.part, "(", J.part, ")")
   } else {
     pBib <- paste(df$pName, df$pYear, df$TITLE, df$PUBLISHER)
   }
@@ -198,9 +198,9 @@ print_English_article <- function(df) {
   TITLE.tmp <- paste0(df$TITLE,".")
   JOURNAL.tmp <- paste0("\\emph{",df$JOURNAL,"},")
   if (!is.na(df$NUMBER)) {
-    Vol_and_Num.tmp <- paste0(df$VOLUME, "(", df$NUMBER, "),")
+    Vol_and_Num.tmp <- paste0("\\emph{",df$VOLUME,"}", "(", df$NUMBER, "),")
   } else {
-    Vol_and_Num.tmp <- paste0(df$VOLUME, ",")
+    Vol_and_Num.tmp <- paste0("\\emph{",df$VOLUME, "}",",")
   }
   PAGES.tmp <- paste0(df$PAGES, ".")
   pBib <- paste(df$pName, df$pYear, TITLE.tmp, JOURNAL.tmp, Vol_and_Num.tmp, PAGES.tmp)
