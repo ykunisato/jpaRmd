@@ -126,7 +126,7 @@ print_JName <- function(st) {
 #' @export
 print_English_book <- function(df) {
   name.tmp <- print_EName(df$AUTHORs)
-  title.tmp <- paste0("\\emph{", df$TITLE, "}")
+  title.tmp <- paste0("\\emph{", df$TITLE, "}.")
   # i ) General examples (author), (year of publication), (book title), (place of publication: publisher)
   # ii) New editions: Always indicate the number of editions except for the first edition.
   # Editions should be abbreviated to ed.
