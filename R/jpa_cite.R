@@ -44,23 +44,30 @@ value_extractor <- function(string) {
 #' @importFrom purrr map
 #' @importFrom stats complete.cases na.omit
 #' @param Rmd_file file name of R Markdown file
-#' @param Bib_file file name of bib file
 #' @return Make reference list and add it to R Markdown file
-#' @examples # jpa_cite(Rmd_file = "template.Rmd", Bib_file = "reference.bib")
+#' @examples
+#' # jpa_cite(Rmd_file = "template.Rmd")
 #' @export
 
-jpa_cite <- function(Rmd_file, Bib_file){
+jpa_cite <- function(Rmd_file) {
   # check argument
   if (missing(Rmd_file)) {
     stop("Please set the name of RMarkdown file")
   }
+
+  tmp <- readLines(Rmd_file, warn = F) %>% as_tibble()
+  # Bibfile name(from YMAL header)
+  Bib_file <- tmp$value %>%
+    stringr::str_extract(".*\\.bib") %>%
+    as.vector() %>%
+    na.omit() %>%
+    stringr::str_replace(pattern = "bibliography:", "") %>%
+    stringr::str_trim()
+
+  # check Bib file
   if (missing(Bib_file)) {
     stop("Please set the name of Bib file")
   }
-  
-  tmp <- readLines(Rmd_file, warn = F) %>% as_tibble()
-  # Bibfile name(from YMAL header)
-  bibfile <- Bib_file
 
   # reference pick-up
   refAll <- tmp %>%
@@ -87,7 +94,7 @@ jpa_cite <- function(Rmd_file, Bib_file){
     if (str_detect(bib[[i]], pattern = "=|@")) {
       flg <- i
     }
-  ## paste to previous liens
+    ## paste to previous liens
     if (i != flg) {
       bib[[flg]] <- paste(bib[[flg]], bib[[i]])
     }
@@ -104,7 +111,7 @@ jpa_cite <- function(Rmd_file, Bib_file){
   ## data list
   ls <- mapply(
     function(x, y) {
-    return(bib[x:y])
+      return(bib[x:y])
     },
     x = from,
     y = to,
@@ -134,7 +141,7 @@ jpa_cite <- function(Rmd_file, Bib_file){
     ## delete first record which has Key and Category
     function(x) {
       str_extract(x, "(?<==).*") %>%
-        value_extractor() %>% 
+        value_extractor() %>%
         str_trim()
     }
   )
@@ -221,8 +228,9 @@ jpa_cite <- function(Rmd_file, Bib_file){
     dplyr::mutate(
       AUTHORs = purrr::map(AUTHOR, ~ name_spliter(.x)),
       EDITORs = purrr::map(EDITOR, ~ name_spliter(.x)),
-      JAUTHORs = purrr::map(JAUTHOR, ~ name_spliter(.x))
-  )
+      JAUTHORs = purrr::map(JAUTHOR, ~ name_spliter(.x)),
+      JKANYAKUs = purrr::map(JKANYAKU, ~ name_spliter(.x))
+    )
 
   ## Filtering to only actually cited
   refKey <- bib.df$BIBTEXKEY %>% paste0("@", .)
@@ -232,38 +240,60 @@ jpa_cite <- function(Rmd_file, Bib_file){
   }
   bib.df <- bib.df[refFLG, ]
 
+  # Output the citation type (substantively a Style file) -------------------------------------------------
+
+  ## Sort by NAME whether in Japanese or English
+  bib.df <- bib.df %>%
+    dplyr::mutate(sortRecord = if_else(is.na(YOMI), AUTHOR, YOMI)) %>%
+    ## In the case which the same author has some papers in the same year, assign an alphabet
+    ## str(YAER) is character, make Numeric one
+    dplyr::mutate(YEARn = as.numeric(YEAR)) %>%
+    ## sort by Author and Year
+    arrange(sortRecord, YEARn) %>%
+    ## group by Author and Year
+    group_by(sortRecord, YEARn) %>%
+    ## count the papers with group
+    mutate(n = n()) %>%
+    mutate(num = row_number()) %>%
+    ## Add a string if it needs
+    mutate(addletter = if_else(n > 1, letters[num], "")) %>%
+    ### Retrun
+    mutate(YEAR = paste0(YEAR, addletter))
+
   # output reference to temp_bib.tex File
   header <- "\\hypertarget{ux5f15ux7528ux6587ux732e}{%
     \\section{引用文献}\\label{ux5f15ux7528ux6587ux732e}}"
   write(header, file = "temp_bib.tex")
+
   for (i in 1:NROW(bib.df)) {
     tmp <- bib.df[i, ]
     # If the AUTHOR is Japanese or has a JTITLE field such as translation
-    langFLG = (stringi::stri_enc_isascii(tmp$AUTHOR) && is.na(tmp$JTITLE))
+    langFLG <- (stringi::stri_enc_isascii(tmp$AUTHOR) && is.na(tmp$JTITLE))
     tmp$pYear <- paste0("(", tmp$YEAR, ").")
     if (langFLG) {
       tmp$pName <- print_EName(tmp$AUTHORs)
     } else {
       tmp$pName <- print_JName(tmp$AUTHORs)
     }
+
     ### Make Bib record
     pBib <- case_when(
-      langFLG==TRUE && tmp$CATEGORY == "BOOK" ~ print_English_book(tmp),
-      langFLG==FALSE && tmp$CATEGORY == "BOOK" ~ print_Japanese_book(tmp),
-      langFLG==TRUE && tmp$CATEGORY == "ARTICLE" ~ print_English_article(tmp),
-      langFLG==FALSE && tmp$CATEGORY == "ARTICLE" ~ print_Japanese_article(tmp),
+      langFLG == TRUE && tmp$CATEGORY == "BOOK" ~ print_English_book(tmp),
+      langFLG == FALSE && tmp$CATEGORY == "BOOK" ~ print_Japanese_book(tmp),
+      langFLG == TRUE && tmp$CATEGORY == "ARTICLE" ~ print_English_article(tmp),
+      langFLG == FALSE && tmp$CATEGORY == "ARTICLE" ~ print_Japanese_article(tmp),
       # iv) Specific chapters in the editorial book
       tmp$CATEGORY == "INBOOK" ~ print_inbook(tmp),
       tmp$CATEGORY == "INCOLLECTION" ~ print_incollection(tmp)
     )
     ### write Bib Record
     #### convert BIBTEXKEY to utf8code
-    tmp.bibtexKey <- stringi::stri_escape_unicode(tmp$BIBTEXKEY) %>% 
-      str_replace_all(pattern="\\\\u",replacement="ux")
+    tmp.bibtexKey <- stringi::stri_escape_unicode(tmp$BIBTEXKEY) %>%
+      str_replace_all(pattern = "\\\\u", replacement = "ux")
     prefix <- paste0("\\hypertarget{refs}{}
-    \\leavevmode\\hypertarget{ref-",tmp.bibtexKey,"}{}%")
-    write(prefix, file="temp_bib.tex",append=T)
-    write(pBib,file="temp_bib.tex",append=T)
-    write("\n",file="temp_bib.tex",append=T)
+    \\leavevmode\\hypertarget{ref-", tmp.bibtexKey, "}{}%")
+    write(prefix, file = "temp_bib.tex", append = T)
+    write(pBib, file = "temp_bib.tex", append = T)
+    write("\n", file = "temp_bib.tex", append = T)
   }
 }
