@@ -222,7 +222,8 @@ jpa_cite <- function(Rmd_file) {
     dplyr::mutate(
       AUTHORs = purrr::map(AUTHOR, ~ name_spliter(.x)),
       EDITORs = purrr::map(EDITOR, ~ name_spliter(.x)),
-      JAUTHORs = purrr::map(JAUTHOR, ~ name_spliter(.x))
+      JAUTHORs = purrr::map(JAUTHOR, ~ name_spliter(.x)),
+      JKANYAKUs = purrr::map(JKANYAKU, ~ name_spliter(.x))
     )
 
   ## Filtering to only actually cited
