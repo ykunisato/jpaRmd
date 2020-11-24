@@ -430,20 +430,20 @@ $endif$
 % $endif$
 % $endif$
 
-$if(biblatex)$
-$if(beamer)$
-\begin{frame}[allowframebreaks]{$biblio-title$}
-  \bibliographytrue
-  \printbibliography[heading=none]
-\end{frame}
-$else$
-\printbibliography$if(biblio-title)$[title=$biblio-title$]$endif$
-$endif$
-
-$endif$
-$for(include-after)$
-$include-after$
-$endfor$
+% $if(biblatex)$
+% $if(beamer)$
+% \begin{frame}[allowframebreaks]{$biblio-title$}
+%   \bibliographytrue
+%   \printbibliography[heading=none]
+% \end{frame}
+% $else$
+% \printbibliography$if(biblio-title)$[title=$biblio-title$]$endif$
+% $endif$
+% 
+% $endif$
+% $for(include-after)$
+% $include-after$
+% $endfor$
 
 \input{temp_bib.tex}
 \end{document}
