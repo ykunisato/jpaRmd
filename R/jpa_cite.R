@@ -44,7 +44,6 @@ value_extractor <- function(string) {
 #' @importFrom purrr map
 #' @importFrom stats complete.cases na.omit
 #' @param Rmd_file file name of R Markdown file
-#' @param Bib_file file name of bib file
 #' @return Make reference list and add it to R Markdown file
 #' @examples
 #' # jpa_cite(Rmd_file = "template.Rmd")
