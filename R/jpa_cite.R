@@ -236,9 +236,22 @@ jpa_cite <- function(Rmd_file) {
   # Output the citation type (substantively a Style file) -------------------------------------------------
 
   ## Sort by NAME whether in Japanese or English
-  bib.df <- bib.df %>%
-    dplyr::mutate(sortRecord = if_else(is.na(YOMI), AUTHOR, YOMI)) %>%
-    arrange(sortRecord)
+  bib.df <- bib.df %>% 
+    dplyr::mutate(sortRecord = if_else(is.na(YOMI),AUTHOR,YOMI)) %>% 
+    ## In the case which the same author has some papers in the same year, assign an alphabet
+    ## str(YAER) is character, make Numeric one
+    dplyr::mutate(YEARn = as.numeric(YEAR)) %>% 
+    ## sort by Author and Year
+    arrange(sortRecord,YEARn) %>% 
+    ## group by Author and Year
+    group_by(sortRecord,YEARn) %>% 
+    ## count the papers with group
+    mutate(n = n()) %>% 
+    mutate(num = row_number()) %>%　
+    ## Add a string if it needs
+    mutate(addletter = if_else(n>1,letters[num],"")) %>% 
+    ### Retrun
+    mutate(YEAR = paste0(YEAR,addletter))
 
   # output reference to temp_bib.tex File
   header <- "\\hypertarget{ux5f15ux7528ux6587ux732e}{%
