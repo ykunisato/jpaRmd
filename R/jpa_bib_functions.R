@@ -227,19 +227,19 @@ print_Japanese_article <- function(df) {
 #' @param df Strings of Bib info
 #' @export
 print_incollection <- function(df) {
-  return("incollectionはまだ")
+  return("incollection is under construction....")
 }
 
 #' Print bib info function(other)
 #' @param df Strings of Bib info
 #' @export
 print_others <- function(df) {
-  return("その他はまだ")
+  return("OTHERS is under construction....")
 }
 
 #' Print bib info function(in book)
 #' @param df Strings of Bib info
 #' @export
 print_inbook <- function(df) {
-  return("inBookはまだ")
+  return("inBook is under construction...")
 }
