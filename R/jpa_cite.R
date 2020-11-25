@@ -44,33 +44,24 @@ value_extractor <- function(string) {
 #' @importFrom purrr map
 #' @importFrom stats complete.cases na.omit
 #' @param Rmd_file file name of R Markdown file
+#' @param Bib_file file name of Bib file
 #' @return Make reference list and add it to R Markdown file
 #' @examples
 #' # jpa_cite(Rmd_file = "template.Rmd")
 #' @export
 
-jpa_cite <- function(Rmd_file) {
+jpa_cite <- function(Rmd_file,Bib_file) {
   # check argument
   if (missing(Rmd_file)) {
     stop("Please set the name of RMarkdown file")
   }
-
-  tmp <- readLines(Rmd_file, warn = F) %>% as_tibble()
-  # Bibfile name(from YMAL header)
-  Bib_file <- tmp$value %>%
-    stringr::str_extract(".*\\.bib") %>%
-    as.vector() %>%
-    na.omit() %>%
-    stringr::str_replace(pattern = "bibliography:", "") %>%
-    stringr::str_trim()
-
   # check Bib file
   if (missing(Bib_file)) {
     stop("Please set the name of Bib file")
   }
 
   # reference pick-up
-  refAll <- tmp %>%
+  refAll <- readLines(Rmd_file, warn = F) %>% as_tibble() %>%
     mutate(refs = str_extract(.$value, "\\@.*")) %>%
     na.omit()
 
