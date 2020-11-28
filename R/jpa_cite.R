@@ -50,7 +50,7 @@ value_extractor <- function(string) {
 #' # jpa_cite(Rmd_file = "template.Rmd")
 #' @export
 
-jpa_cite <- function(Rmd_file,Bib_file) {
+jpa_cite <- function(Rmd_file, Bib_file) {
   # check argument
   if (missing(Rmd_file)) {
     stop("Please set the name of RMarkdown file")
@@ -61,7 +61,8 @@ jpa_cite <- function(Rmd_file,Bib_file) {
   }
 
   # reference pick-up
-  refAll <- readLines(Rmd_file, warn = F) %>% as_tibble() %>%
+  refAll <- readLines(Rmd_file, warn = F) %>%
+    as_tibble() %>%
     mutate(refs = str_extract(.$value, "\\@.*")) %>%
     na.omit()
 
@@ -203,8 +204,10 @@ jpa_cite <- function(Rmd_file,Bib_file) {
     TYPE = character(0L),
     VOLUME = character(0L),
     YEAR = character(0L),
+    YOMI = character(0L),
     JTITLE = character(0L),
     JAUTHOR = character(0L),
+    JKANYAKU = character(0L),
     stringsAsFactors = FALSE
   )
 
@@ -216,11 +219,11 @@ jpa_cite <- function(Rmd_file,Bib_file) {
 
   bib.df <- bib.df %>%
     ## Split name into First,Middle,Last Name
-    dplyr::mutate(
-      AUTHORs = purrr::map(AUTHOR, ~ name_spliter(.x)),
-      EDITORs = purrr::map(EDITOR, ~ name_spliter(.x)),
-      JAUTHORs = purrr::map(JAUTHOR, ~ name_spliter(.x)),
-      JKANYAKUs = purrr::map(JKANYAKU, ~ name_spliter(.x))
+    mutate(
+      AUTHORs = map(AUTHOR, ~ name_spliter(.x)),
+      EDITORs = map(EDITOR, ~ name_spliter(.x)),
+      JAUTHORs = map(JAUTHOR, ~ name_spliter(.x)),
+      JKANYAKUs = map(JKANYAKU, ~ name_spliter(.x))
     )
 
   ## Filtering to only actually cited
@@ -235,10 +238,10 @@ jpa_cite <- function(Rmd_file,Bib_file) {
 
   ## Sort by NAME whether in Japanese or English
   bib.df <- bib.df %>%
-    dplyr::mutate(sortRecord = if_else(is.na(YOMI), AUTHOR, YOMI)) %>%
+    mutate(sortRecord = if_else(is.na(YOMI), AUTHOR, YOMI)) %>%
     ## In the case which the same author has some papers in the same year, assign an alphabet
     ## str(YAER) is character, make Numeric one
-    dplyr::mutate(YEARn = as.numeric(YEAR)) %>%
+    mutate(YEARn = as.numeric(YEAR)) %>%
     ## sort by Author and Year
     arrange(sortRecord, YEARn) %>%
     ## group by Author and Year
