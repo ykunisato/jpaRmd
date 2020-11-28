@@ -1,5 +1,6 @@
 #' Set Research Compendium for JPA
 #'
+#' @importFrom rmarkdown draft
 #' @param file_name file name and directory name of RMarkdown
 #' @return Make directories for Research Compendium of JPA and R Markdown file
 #' @examples # set_rc_jpa("rmarkdown_for_reproducibility")
@@ -15,7 +16,7 @@ set_rc_jpa <- function (file_name = "paper"){
   }
   # make RMarkdown file and directory
   if(!file.exists(file.path(path, file_name, "paper.Rmd"))){
-    rmarkdown::draft(file.path(path, file_name, "paper.Rmd"), template = "jpa_jjp", package = "jpaRmd", edit = FALSE)
+    draft(file.path(path, file_name, "paper.Rmd"), template = "jpa_jjp", package = "jpaRmd", edit = FALSE)
   }
   # make analysis directory
   if(!dir.exists(file.path(path, file_name, "analysis"))){
