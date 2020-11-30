@@ -9,7 +9,7 @@ jpa_cite(Rmd_file, Bib_file)
 \arguments{
 \item{Rmd_file}{file name of R Markdown file}
 
-\item{Bib_file}{file name of bib file}
+\item{Bib_file}{file name of Bib file}
 }
 \value{
 Make reference list and add it to R Markdown file
@@ -18,5 +18,5 @@ Make reference list and add it to R Markdown file
 Add citation function
 }
 \examples{
-# jpa_cite(Rmd_file = "template.Rmd", Bib_file = "reference.bib")
+# jpa_cite(Rmd_file = "template.Rmd")
 }
