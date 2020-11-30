@@ -1,6 +1,6 @@
 % Template for paper format at JPA
 \documentclass[11pt,a4paper,xelatex,ja=standard]{bxjsarticle}
-\geometry{left = 5.4cm, right = 5.4cm, top = 4.0cm, bottom = 3.5cm}
+\geometry{left = 4.3cm, right = 4.3cm, top = 3.0cm, bottom = 3.0cm}
 \renewcommand{\figurename}{Figure}
 \renewcommand{\tablename}{Table}
 $if(beamer)$
@@ -369,6 +369,9 @@ $endif$
 \usepackage{marginnote}
 \usepackage{titlesec}
 \titleformat{\section}[hang]{\large\filcenter\bfseries}{\thesection}{1zw}{}
+\usepackage{lineno}
+\pagewiselinenumbers 
+\renewcommand{\baselinestretch}{1.4}
 
 \begin{document}
 \pagestyle{empty}
