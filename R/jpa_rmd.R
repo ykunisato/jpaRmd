@@ -1,5 +1,8 @@
 #' R Markdown template for paper of the Japanese Journal of Psychology
+#' 
+#' @importFrom rmarkdown pdf_document
 #' @export
+
 jpa_jjp <- function(){
   template_tex_file <- system.file("rmarkdown/templates/jpa_jjp/resources/jpa_jjp.tex",
                              package = 'jpaRmd')
@@ -14,6 +17,7 @@ jpa_jjp <- function(){
 }
 
 #' R Markdown template for paper of the Japanese Journal of Psychology ver2
+#' @importFrom rmarkdown pdf_document
 #' @export
 jpa_jjp2 <- function(){
   template_tex_file <- system.file("rmarkdown/templates/jpa_jjp2/resources/jpa_jjp2.tex",

@@ -2,7 +2,6 @@
 title: "RMarkdownで『心理学研究』の論文は書けるのか？"
 subtitle: "Can we write a paper of the Japanses Journal of psychology with RMarkdown?"
 bibliography:  reference.bib
-csl: apa-6th-edition.csl
 output: jpaRmd::jpa_jjp2
 ---
 
@@ -142,7 +141,7 @@ cor_result <- cor.test(summary_bfi_fig$Extraversion,summary_bfi_fig$Neuroticism)
 <div id="refs"></div>
 
 ```{r echo=FALSE}
-jpaRmd::jpa_cite(Rmd_file = "Untitled.Rmd", Bib_file = "reference.bib")
+jpaRmd::jpa_cite(Rmd_file = "Untitled.Rmd")
 ```
 
 

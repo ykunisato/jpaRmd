@@ -99,17 +99,17 @@ print_JName <- function(st) {
     if (NROW(st) < 8) {
       # ii) if number of co-author is under 7, write down all author's name and add "・"
       for (i in 2:NROW(st)) {
-        pName <- paste0(pName, "・", st[i, ]$last_name, st[i, ]$first_name)
+        pName <- paste0(pName, "・", paste(st[i, ]$last_name, st[i, ]$first_name))
       }
     } else {
       # iii) if number of co-author is over 8，write down first to 6th author's name and
       ## add "..." and last author's name.
       for (i in 2:6) {
-        pName <- paste0(pName, "・", st[i, ]$last_name, st[i, ]$first_name)
+        pName <- paste0(pName, "・", paste(st[i, ]$last_name, st[i, ]$first_name))
       }
       pName <- paste0(
         pName, "…",
-        st[NROW(st), ]$last_name, st[NROW(st), ]$first_name
+        paste(st[NROW(st), ]$last_name, st[NROW(st), ]$first_name)
       )
     }
   }
@@ -175,7 +175,7 @@ print_Japanese_book <- function(df) {
     E.part <- print_English_book(df)
     ## 監訳
     if (!is.na(df$JKANYAKU)) {
-      Jname <- print_JName(df$JKANYAKU)
+      Jname <- print_JName(df$JKANYAKUs)
       Jname <- paste0(Jname, "(監訳)")
     } else {
       Jname <- print_JName(df$JAUTHORs)
@@ -195,12 +195,12 @@ print_Japanese_book <- function(df) {
 #' @export
 print_English_article <- function(df) {
   # (author's name), (year of publication), (title), (journal title), (number of copies), (page citations)
-  TITLE.tmp <- paste0(df$TITLE,".")
-  JOURNAL.tmp <- paste0("\\emph{",df$JOURNAL,"},")
+  TITLE.tmp <- paste0(df$TITLE, ".")
+  JOURNAL.tmp <- paste0("\\emph{", df$JOURNAL, "},")
   if (!is.na(df$NUMBER)) {
-    Vol_and_Num.tmp <- paste0("\\emph{",df$VOLUME,"}", "(", df$NUMBER, "),")
+    Vol_and_Num.tmp <- paste0("\\emph{", df$VOLUME, "}", "(", df$NUMBER, "),")
   } else {
-    Vol_and_Num.tmp <- paste0("\\emph{",df$VOLUME, "}",",")
+    Vol_and_Num.tmp <- paste0("\\emph{", df$VOLUME, "}", ",")
   }
   PAGES.tmp <- paste0(df$PAGES, ".")
   pBib <- paste(df$pName, df$pYear, TITLE.tmp, JOURNAL.tmp, Vol_and_Num.tmp, PAGES.tmp)
@@ -227,19 +227,19 @@ print_Japanese_article <- function(df) {
 #' @param df Strings of Bib info
 #' @export
 print_incollection <- function(df) {
-  return("incollectionはまだ")
+  return("incollection is under construction....")
 }
 
 #' Print bib info function(other)
 #' @param df Strings of Bib info
 #' @export
 print_others <- function(df) {
-  return("その他はまだ")
+  return("OTHERS is under construction....")
 }
 
 #' Print bib info function(in book)
 #' @param df Strings of Bib info
 #' @export
 print_inbook <- function(df) {
-  return("inBookはまだ")
+  return("inBook is under construction...")
 }

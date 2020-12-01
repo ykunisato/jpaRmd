@@ -45,27 +45,25 @@ value_extractor <- function(string) {
 #' @importFrom purrr map
 #' @importFrom stats complete.cases na.omit
 #' @param Rmd_file file name of R Markdown file
-#' @param Bib_file file name of bib file
+#' @param Bib_file file name of Bib file
 #' @return Make reference list and add it to R Markdown file
 #' @examples
 #' # jpa_cite(Rmd_file = "template.Rmd")
 #' @export
 
-jpa_cite <- function(Rmd_file) {
+jpa_cite <- function(Rmd_file, Bib_file) {
   # check argument
   if (missing(Rmd_file)) {
     stop("Please set the name of RMarkdown file")
   }
+  # check Bib file
   if (missing(Bib_file)) {
     stop("Please set the name of Bib file")
   }
 
-  tmp <- readLines(Rmd_file, warn = F) %>% as_tibble()
-  # Bibfile name(from YMAL header)
-  bibfile <- Bib_file
-
   # reference pick-up
-  refAll <- tmp %>%
+  refAll <- readLines(Rmd_file, warn = F) %>%
+    as_tibble() %>%
     mutate(refs = str_extract(.$value, "\\@.*")) %>%
     na.omit()
 
@@ -207,8 +205,10 @@ jpa_cite <- function(Rmd_file) {
     TYPE = character(0L),
     VOLUME = character(0L),
     YEAR = character(0L),
+    YOMI = character(0L),
     JTITLE = character(0L),
     JAUTHOR = character(0L),
+    JKANYAKU = character(0L),
     stringsAsFactors = FALSE
   )
 
@@ -220,10 +220,11 @@ jpa_cite <- function(Rmd_file) {
 
   bib.df <- bib.df %>%
     ## Split name into First,Middle,Last Name
-    dplyr::mutate(
-      AUTHORs = purrr::map(AUTHOR, ~ name_spliter(.x)),
-      EDITORs = purrr::map(EDITOR, ~ name_spliter(.x)),
-      JAUTHORs = purrr::map(JAUTHOR, ~ name_spliter(.x))
+    mutate(
+      AUTHORs = map(AUTHOR, ~ name_spliter(.x)),
+      EDITORs = map(EDITOR, ~ name_spliter(.x)),
+      JAUTHORs = map(JAUTHOR, ~ name_spliter(.x)),
+      JKANYAKUs = map(JKANYAKU, ~ name_spliter(.x))
     )
 
   ## Filtering to only actually cited
@@ -237,22 +238,22 @@ jpa_cite <- function(Rmd_file) {
   # Output the citation type (substantively a Style file) -------------------------------------------------
 
   ## Sort by NAME whether in Japanese or English
-  bib.df <- bib.df %>% 
-    dplyr::mutate(sortRecord = if_else(is.na(YOMI),AUTHOR,YOMI)) %>% 
+  bib.df <- bib.df %>%
+    mutate(sortRecord = if_else(is.na(YOMI), AUTHOR, YOMI)) %>%
     ## In the case which the same author has some papers in the same year, assign an alphabet
     ## str(YAER) is character, make Numeric one
-    dplyr::mutate(YEARn = as.numeric(YEAR)) %>% 
+    mutate(YEARn = as.numeric(YEAR)) %>%
     ## sort by Author and Year
-    arrange(sortRecord,YEARn) %>% 
+    arrange(sortRecord, YEARn) %>%
     ## group by Author and Year
-    group_by(sortRecord,YEARn) %>% 
+    group_by(sortRecord, YEARn) %>%
     ## count the papers with group
-    mutate(n = n()) %>% 
-    mutate(num = row_number()) %>%　
+    mutate(n = n()) %>%
+    mutate(num = row_number()) %>%
     ## Add a string if it needs
-    mutate(addletter = if_else(n>1,letters[num],"")) %>% 
+    mutate(addletter = if_else(n > 1, letters[num], "")) %>%
     ### Retrun
-    mutate(YEAR = paste0(YEAR,addletter))
+    mutate(YEAR = paste0(YEAR, addletter))
 
   # output reference to temp_bib.tex File
   header <- "\\hypertarget{ux5f15ux7528ux6587ux732e}{%

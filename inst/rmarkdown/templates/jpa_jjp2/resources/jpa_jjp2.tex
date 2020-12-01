@@ -410,26 +410,25 @@ $if(has-frontmatter)$
 \backmatter
 $endif$
 
-% $if(natbib)$
-% $if(bibliography)$
-% $if(biblio-title)$
-% $if(has-chapters)$
-% \renewcommand\bibname{$biblio-title$}
-% $else$
-% \renewcommand\refname{$biblio-title$}
-% $endif$
-% $endif$
-% $if(beamer)$
-% \begin{frame}[allowframebreaks]{$biblio-title$}
-%   \bibliographytrue
-% $endif$
-%   \bibliography{$for(bibliography)$$bibliography$$sep$,$endfor$}
-% $if(beamer)$
-% \end{frame}
-% $endif$
-% $endif$
-% $endif$
-
+$if(natbib)$
+$if(bibliography)$
+$if(biblio-title)$
+$if(has-chapters)$
+\renewcommand\bibname{$biblio-title$}
+$else$
+\renewcommand\refname{$biblio-title$}
+$endif$
+$endif$
+$if(beamer)$
+\begin{frame}[allowframebreaks]{$biblio-title$}
+  \bibliographytrue
+$endif$
+  \bibliography{$for(bibliography)$$bibliography$$sep$,$endfor$}
+$if(beamer)$
+\end{frame}
+$endif$
+$endif$
+$endif$
 $if(biblatex)$
 $if(beamer)$
 \begin{frame}[allowframebreaks]{$biblio-title$}
@@ -444,6 +443,5 @@ $endif$
 $for(include-after)$
 $include-after$
 $endfor$
-
 \input{temp_bib.tex}
 \end{document}
