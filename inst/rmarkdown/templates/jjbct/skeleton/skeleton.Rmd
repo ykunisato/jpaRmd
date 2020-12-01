@@ -1,6 +1,5 @@
 ---
 bibliography:  reference.bib
-csl: apa-6th-edition.csl
 output: jpaRmd::jjbct
 ---
 
@@ -140,6 +139,10 @@ cor_result <- cor.test(summary_bfi_fig$Extraversion,summary_bfi_fig$Neuroticism)
 
 # 引用文献
 <div id="refs"></div>
+
+```{r echo=FALSE}
+jpaRmd::jpa_cite(Rmd_file = "Untitled.Rmd", Bib_file = "reference.bib")
+```
 
 \clearpage 
 # 脚注
