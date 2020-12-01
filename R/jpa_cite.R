@@ -29,6 +29,7 @@ value_extractor <- function(string) {
 #' @importFrom magrittr %>%
 #' @importFrom tibble as_tibble
 #' @importFrom tibble rowid_to_column
+#' @importFrom dplyr arrange
 #' @importFrom dplyr mutate
 #' @importFrom dplyr group_by
 #' @importFrom dplyr bind_rows
