@@ -81,9 +81,8 @@ print_EName <- function(st) {
     } else {
       # wirte down all author's name and add "," befor last author's name.
       # use & not and
-      pName <- str_flatten(nameList[1:(length(nameList) - 1)], collapse = ", ")
-      binder <- paste0("\\", "&")
-      pName <- paste(pName, binder, nameList[length(nameList)])
+      pName <- stringr::str_flatten(nameList[1:(length(nameList) - 1)], collapse = ", ")
+      pName <- paste(pName, "\\&", nameList[length(nameList)])
     }
   }
   return(unlist(pName))
@@ -163,13 +162,13 @@ print_Japanese_book <- function(df) {
   title.tmp <- df$TITLE
   # iii）Editorial and Supervisory Book
   if (!is.na(df$EDITOR)) {
-    postfix <- stri_unescape_unicode("(\\u7de8)")
+    postfix <- stringi::stri_unescape_unicode("(\\u7de8)")
     name.tmp <- paste0(name.tmp, postfix)
   }
   # v ）Books in several volumes (including thematic series, collections, etc.)
   if (!is.na(df$VOLUME)) {
-    prefix <- stri_unescape_unicode("(\\u5168")
-    postfix <- stri_unescape_unicode("\\u5dfb)")
+    prefix <- stringi::stri_unescape_unicode("(\\u5168")
+    postfix <- stringi::stri_unescape_unicode("\\u5dfb)")
     title.tmp <- paste0(title.tmp, prefix, df$VOLUME, postfix)
   }
   # ii) New edition, iii) reprints, and vi)  the book in several volumes
@@ -180,11 +179,11 @@ print_Japanese_book <- function(df) {
     ## Editors
     if (!is.na(df$JKANYAKU)) {
       Jname <- print_JName(df$JKANYAKUs)
-      postfix <- stri_unescape_unicode("(\\u76e3\\u8a33)")
+      postfix <- stringi::stri_unescape_unicode("(\\u76e3\\u8a33)")
       Jname <- paste0(Jname, postfix)
     } else {
       Jname <- print_JName(df$JAUTHORs)
-      postfix <- stri_unescape_unicode("(\\u8a33)")
+      postfix <- stringi::stri_unescape_unicode("(\\u8a33)")
       Jname <- paste0(Jname, postfix)
     }
     J.part <- paste(df$GENCHOKANA, Jname, df$pYear, df$JTITLE, df$JPUBLISHER)

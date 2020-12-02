@@ -1,7 +1,7 @@
 Package: jpaRmd
 Type: Package
 Title: Rmarkdown template for paper format at Japanese Psychological Association
-Version: 0.7.9
+Version: 0.7.9.2
 Author: Yoshihiko Kunisato
 Maintainer: Yoshihiko Kunisato <ykunisato@psy.senshu-u.ac.jp>
 Description: Rmarkdown template for paper format at Japanese Psychological Association.
@@ -10,4 +10,4 @@ Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
-Imports: dplyr, magrittr, purrr, stringi, stringr, tibble, humaniformat, rmarkdown
+Imports: dplyr, magrittr, purrr, stringr, stringi, tibble, humaniformat, rmarkdown

@@ -42,6 +42,7 @@ value_extractor <- function(string) {
 #' @importFrom stringr str_to_upper
 #' @importFrom stringi stri_enc_isascii
 #' @importFrom stringi stri_escape_unicode
+#' @importFrom stringi stri_unescape_unicode
 #' @importFrom purrr map
 #' @importFrom stats complete.cases na.omit
 #' @param Rmd_file file name of R Markdown file
@@ -257,15 +258,8 @@ jpa_cite <- function(Rmd_file, Bib_file) {
   ### write File name
   FN <- Bib_file %>% str_replace(pattern = ".bib", replacement = "")
   FN <- paste0(FN, ".tex")
-  ## output reference to tex File
-  # header <- paste0(
-  #   "\\hypertarget{ux5f15ux7528ux6587ux732e}{%
-  #   \\section{",
-  #   stri_unescape_unicode("\\u5f15\\u7528\\u6587\\u732e"),
-  #   "\\label{ux5f15ux7528ux6587ux732e}}"
-  # )
-  # write(header, file = FN)
 
+  ## output reference to tex File
   for (i in 1:NROW(bib.df)) {
     tmp <- bib.df[i, ]
     # If the AUTHOR is Japanese or has a JTITLE field such as translation
@@ -293,7 +287,6 @@ jpa_cite <- function(Rmd_file, Bib_file) {
       str_replace_all(pattern = "\\\\u", replacement = "ux")
     prefix <- paste0("\\hypertarget{refs}{}
     \\leavevmode\\hypertarget{ref-", tmp.bibtexKey, "}{}%")
-
     ### write .tex File
     write(prefix, file = FN, append = T)
     write(pBib, file = FN, append = T)

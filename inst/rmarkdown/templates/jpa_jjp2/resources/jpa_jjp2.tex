@@ -324,14 +324,12 @@ $if(natbib)$
 \usepackage[$natbiboptions$]{natbib}
 \bibliographystyle{$if(biblio-style)$$biblio-style$$else$plainnat$endif$}
 $endif$
-
 $if(biblatex)$
 \usepackage[$if(biblio-style)$style=$biblio-style$,$endif$$for(biblatexoptions)$$biblatexoptions$$sep$,$endfor$]{biblatex}
 $for(bibliography)$
 \addbibresource{$bibliography$}
 $endfor$
 $endif$
-
 $if(csl-refs)$
 \newlength{\cslhangindent}
 \setlength{\cslhangindent}{1.5em}
@@ -340,7 +338,6 @@ $if(csl-refs)$
   \everypar{\setlength{\hangindent}{\cslhangindent}}\ignorespaces$endif$}%
   {\par}
 $endif$
-
 $if(title)$
 \title{$title$}
 $endif$
@@ -412,20 +409,6 @@ $body$
 $if(has-frontmatter)$
 \backmatter
 $endif$
-$if(biblatex)$
-$if(beamer)$
-\begin{frame}[allowframebreaks]{$biblio-title$}
- \bibliographytrue
- \printbibliography[heading=none]
-\end{frame}
-$else$
-\printbibliography$if(biblio-title)$[title=$biblio-title$]$endif$
-$endif$
-
-$endif$
-$for(include-after)$
-$include-after$
-$endfor$
 
 $if(natbib)$
 $if(bibliography)$
@@ -438,9 +421,9 @@ $endif$
 $endif$
 $if(beamer)$
 \begin{frame}[allowframebreaks]{$biblio-title$}
- \bibliographytrue
+  \bibliographytrue
 $endif$
- \bibliography{$for(bibliography)$$bibliography$$sep$,$endfor$}
+  \bibliography{$for(bibliography)$$bibliography$$sep$,$endfor$}
 $if(beamer)$
 \end{frame}
 $endif$
@@ -449,11 +432,15 @@ $endif$
 $if(biblatex)$
 $if(beamer)$
 \begin{frame}[allowframebreaks]{$biblio-title$}
- \bibliographytrue
- \printbibliography[heading=none]
+  \bibliographytrue
+  \printbibliography[heading=none]
 \end{frame}
 $else$
 \printbibliography$if(biblio-title)$[title=$biblio-title$]$endif$
 $endif$
 
+$endif$
+$for(include-after)$
+$include-after$
+$endfor$
 \end{document}
