@@ -412,6 +412,20 @@ $body$
 % $if(has-frontmatter)$
 % \backmatter
 % $endif$
+% $if(biblatex)$
+% $if(beamer)$
+% \begin{frame}[allowframebreaks]{$biblio-title$}
+%   \bibliographytrue
+%   \printbibliography[heading=none]
+% \end{frame}
+% $else$
+% \printbibliography$if(biblio-title)$[title=$biblio-title$]$endif$
+% $endif$
+% 
+% $endif$
+% $for(include-after)$
+% $include-after$
+% $endfor$
 
 $if(natbib)$
 $if(bibliography)$
@@ -441,10 +455,5 @@ $if(beamer)$
 $else$
 \printbibliography$if(biblio-title)$[title=$biblio-title$]$endif$
 $endif$
-
-$endif$
-$for(include-after)$
-$include-after$
-$endfor$
 
 \end{document}
