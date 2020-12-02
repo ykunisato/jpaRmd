@@ -203,15 +203,17 @@ print_Japanese_book <- function(df) {
 #' @export
 print_English_article <- function(df) {
   # (author's name), (year of publication), (title), (journal title), (number of copies), (page citations)
-  TITLE.tmp <- paste0(df$TITLE, ".")
-  JOURNAL.tmp <- paste0("\\emph{", df$JOURNAL, "},")
-  if (!is.na(df$NUMBER)) {
-    Vol_and_Num.tmp <- paste0("\\emph{", df$VOLUME, "}", "(", df$NUMBER, "),")
-  } else {
-    Vol_and_Num.tmp <- paste0("\\emph{", df$VOLUME, "}", ",")
-  }
-  PAGES.tmp <- paste0(df$PAGES, ".")
+  TITLE.tmp <- title.tmp <- paste0("{\\emph ", df$TITLE, "},")
+  JOURNAL.tmp <- paste0(df$JOURNAL, ",")
+  Vol_and_Num.tmp <- ""
+  df$VOLUME <- if_else(is.na(df$VOLUME),"",df$VOLUME)
+  df$NUMBER <- if_else(is.na(df$NUMBER),"",df$NUMBER)
+  if(df$VOLUME!=""){Vol_and_Num.tmp <- paste0("{\\emph ", df$VOLUME, "},")}
+  if(df$NUMBER!=""){Vol_and_Num.tmp <- paste0(Vol_and_Num.tmp,"(", df$NUMBER, "),")}
+  PAGES.tmp <- if(!is.na(df$PAGES)){if(df$PAGES!=""){paste0(df$PAGES, ".")}}
   pBib <- paste(df$pName, df$pYear, TITLE.tmp, JOURNAL.tmp, Vol_and_Num.tmp, PAGES.tmp)
+  ## DOI
+  if(!is.na(df$DOI)){ pBib <- paste0(pBib,df$DOI)}
   return(pBib)
 }
 
@@ -221,14 +223,15 @@ print_English_article <- function(df) {
 print_Japanese_article <- function(df) {
   # (Author's name), (Year of publication), (Title), (Title), (Number of copies), (Citation page)
   JOURNAL.tmp <- paste0(df$JOURNAL, ",")
-  if (!is.na(df$NUMBER)) {
-    Vol_and_Num.tmp <- paste0("\\emph{", df$VOLUME, "}", "(", df$NUMBER, "),")
-  } else {
-    Vol_and_Num.tmp <- paste0("\\emph{", df$VOLUME, "},")
-  }
-  PAGES.tmp <- paste0(df$PAGES, ".")
-  Spacing <- stri_unescape_unicode("\\u3000")
-  pBib <- paste(df$pName, df$pYear, df$TITLE, Spacing, JOURNAL.tmp, Vol_and_Num.tmp, PAGES.tmp)
+  Vol_and_Num.tmp <- ""
+  df$VOLUME <- if_else(is.na(df$VOLUME),"",df$VOLUME)
+  df$NUMBER <- if_else(is.na(df$NUMBER),"",df$NUMBER)
+  if(df$VOLUME!=""){Vol_and_Num.tmp <- paste0("{\\emph ", df$VOLUME, "},")}
+  if(df$NUMBER!=""){Vol_and_Num.tmp <- paste0(Vol_and_Num.tmp,"(", df$NUMBER, "),")}
+  PAGES.tmp <- if(!is.na(df$PAGES)){if(df$PAGES!=""){paste0(df$PAGES, ".")}}
+  pBib <- paste(df$pName, df$pYear, df$TITLE, JOURNAL.tmp, Vol_and_Num.tmp, PAGES.tmp)
+  ## DOI
+  if(!is.na(df$DOI)){ pBib <- paste0(pBib,df$DOI)}
   return(pBib)
 }
 
