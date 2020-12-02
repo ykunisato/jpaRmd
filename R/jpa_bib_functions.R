@@ -150,6 +150,7 @@ print_English_book <- function(df) {
   # vii) Translations, and  viii) reprints are handled by the Bib files
   # (e.g., put it in the title; see Google Scholar)
   pBib <- paste(name.tmp, df$pYear, title.tmp, ",", df$ADDRESS, ":", df$PUBLISHER)
+  pBib <- paste0(pBib,".")
   return(pBib)
 }
 
