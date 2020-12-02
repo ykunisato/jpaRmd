@@ -254,11 +254,17 @@ jpa_cite <- function(Rmd_file, Bib_file) {
     mutate(addletter = if_else(n > 1, letters[num], "")) %>%
     ### Retrun
     mutate(YEAR = paste0(YEAR, addletter))
-
-  # output reference to temp_bib.tex File
-  header <- "\\hypertarget{ux5f15ux7528ux6587ux732e}{%
-    \\section{引用文献}\\label{ux5f15ux7528ux6587ux732e}}"
-  write(header, file = "temp_bib.tex")
+  ### write File name
+  FN <- Bib_file %>% str_replace(pattern = ".bib", replacement = "")
+  FN <- paste0(FN, ".tex")
+  ## output reference to tex File
+  # header <- paste0(
+  #   "\\hypertarget{ux5f15ux7528ux6587ux732e}{%
+  #   \\section{",
+  #   stri_unescape_unicode("\\u5f15\\u7528\\u6587\\u732e"),
+  #   "\\label{ux5f15ux7528ux6587ux732e}}"
+  # )
+  # write(header, file = FN)
 
   for (i in 1:NROW(bib.df)) {
     tmp <- bib.df[i, ]
@@ -287,9 +293,7 @@ jpa_cite <- function(Rmd_file, Bib_file) {
       str_replace_all(pattern = "\\\\u", replacement = "ux")
     prefix <- paste0("\\hypertarget{refs}{}
     \\leavevmode\\hypertarget{ref-", tmp.bibtexKey, "}{}%")
-    ### write File name
-    FN <- Bib_file %>% str_replace(pattern=".bib",replacement="")
-    FN <- paste0(FN,".tex")
+
     ### write .tex File
     write(prefix, file = FN, append = T)
     write(pBib, file = FN, append = T)

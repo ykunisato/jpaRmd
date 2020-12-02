@@ -409,23 +409,23 @@ $endif$
 \setcounter{page}{1}
 
 $body$
-% $if(has-frontmatter)$
-% \backmatter
-% $endif$
-% $if(biblatex)$
-% $if(beamer)$
-% \begin{frame}[allowframebreaks]{$biblio-title$}
-%   \bibliographytrue
-%   \printbibliography[heading=none]
-% \end{frame}
-% $else$
-% \printbibliography$if(biblio-title)$[title=$biblio-title$]$endif$
-% $endif$
-% 
-% $endif$
-% $for(include-after)$
-% $include-after$
-% $endfor$
+$if(has-frontmatter)$
+\backmatter
+$endif$
+$if(biblatex)$
+$if(beamer)$
+\begin{frame}[allowframebreaks]{$biblio-title$}
+ \bibliographytrue
+ \printbibliography[heading=none]
+\end{frame}
+$else$
+\printbibliography$if(biblio-title)$[title=$biblio-title$]$endif$
+$endif$
+
+$endif$
+$for(include-after)$
+$include-after$
+$endfor$
 
 $if(natbib)$
 $if(bibliography)$

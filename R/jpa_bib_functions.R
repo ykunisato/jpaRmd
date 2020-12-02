@@ -155,6 +155,7 @@ print_English_book <- function(df) {
 }
 
 #' Print bib info function(Japanese book)
+#' @importFrom stringi stri_unescape_unicode
 #' @param df Strings of Bib info
 #' @export
 print_Japanese_book <- function(df) {
@@ -162,24 +163,29 @@ print_Japanese_book <- function(df) {
   title.tmp <- df$TITLE
   # iii）Editorial and Supervisory Book
   if (!is.na(df$EDITOR)) {
-    name.tmp <- paste0(name.tmp, "(編)")
+    postfix <- stri_unescape_unicode("(\\u7de8)")
+    name.tmp <- paste0(name.tmp, postfix)
   }
   # v ）Books in several volumes (including thematic series, collections, etc.)
   if (!is.na(df$VOLUME)) {
-    title.tmp <- paste0(title.tmp, "(全", df$VOLUME, "巻)")
+    prefix <- stri_unescape_unicode("(\\u5168")
+    postfix <- stri_unescape_unicode("\\u5dfb)")
+    title.tmp <- paste0(title.tmp, prefix, df$VOLUME, postfix)
   }
   # ii) New edition, iii) reprints, and vi)  the book in several volumes
   # are handled by the Bib files (e.g., put it in the title; see Google Scholar)
-  # vii）翻訳書
+  # vii）Transrated
   if (!is.na(df$JTITLE)) {
     E.part <- print_English_book(df)
-    ## 監訳
+    ## Editors
     if (!is.na(df$JKANYAKU)) {
       Jname <- print_JName(df$JKANYAKUs)
-      Jname <- paste0(Jname, "(監訳)")
+      postfix <- stri_unescape_unicode("(\\u76e3\\u8a33)")
+      Jname <- paste0(Jname, postfix)
     } else {
       Jname <- print_JName(df$JAUTHORs)
-      Jname <- paste0(Jname, "(訳)")
+      postfix <- stri_unescape_unicode("(\\u8a33)")
+      Jname <- paste0(Jname, postfix)
     }
     J.part <- paste(df$GENCHOKANA, Jname, df$pYear, df$JTITLE, df$JPUBLISHER)
     pBib <- paste0(E.part, "(", J.part, ")")

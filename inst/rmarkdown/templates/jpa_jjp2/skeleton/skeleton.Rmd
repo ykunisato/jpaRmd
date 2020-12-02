@@ -141,6 +141,7 @@ cor_result <- cor.test(summary_bfi_fig$Extraversion,summary_bfi_fig$Neuroticism)
 \clearpage 
 
 <!-- 引用文献ファイル名を{ }の中に入れてください。拡張子は不要です。-->
+
 # 引用文献
 
 \include{reference}
