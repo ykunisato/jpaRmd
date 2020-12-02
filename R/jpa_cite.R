@@ -255,10 +255,11 @@ jpa_cite <- function(Rmd_file, Bib_file) {
     mutate(addletter = if_else(n > 1, letters[num], "")) %>%
     ### Retrun
     mutate(YEAR = paste0(YEAR, addletter))
-  ### write File name
+  ### Set the outout File name
   FN <- Bib_file %>% str_replace(pattern = ".bib", replacement = "")
   FN <- paste0(FN, ".tex")
-
+  header <- "%%% this tex file was build by jpaRmd::jpa_cite() %%% \n"
+  write(header, file = FN, append = F)
   ## output reference to tex File
   for (i in 1:NROW(bib.df)) {
     tmp <- bib.df[i, ]
