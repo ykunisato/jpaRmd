@@ -93,21 +93,23 @@ print_EName <- function(st) {
 #' @export
 print_JName <- function(st) {
   st <- as.data.frame(st)
+  centralDot <- stri_unescape_unicode("\\u30fb")
+  triDots <- stri_unescape_unicode( "\\u2026")
   pName <- paste0(st[1, ]$last_name, "\\ ", st[1, ]$first_name)
   if (NROW(st) > 1) {
     if (NROW(st) < 8) {
-      # ii) if number of co-author is under 7, write down all author's name and add "・"
+      # ii) if number of co-author is under 7, write down all author's name and add central dot
       for (i in 2:NROW(st)) {
-        pName <- paste0(pName, "・", paste0(st[i, ]$last_name, "\\ ", st[i, ]$first_name))
+        pName <- paste0(pName, centralDot, paste0(st[i, ]$last_name, "\\ ", st[i, ]$first_name))
       }
     } else {
       # iii) if number of co-author is over 8，write down first to 6th author's name and
       ## add "..." and last author's name.
       for (i in 2:6) {
-        pName <- paste0(pName, "・", paste0(st[i, ]$last_name, "\\ ", st[i, ]$first_name))
+        pName <- paste0(pName, centralDot, paste0(st[i, ]$last_name, "\\ ", st[i, ]$first_name))
       }
       pName <- paste0(
-        pName, "…",
+        pName, triDots,
         paste0(st[NROW(st), ]$last_name, "\\ ", st[NROW(st), ]$first_name)
       )
     }
@@ -150,7 +152,7 @@ print_English_book <- function(df) {
   # vii) Translations, and  viii) reprints are handled by the Bib files
   # (e.g., put it in the title; see Google Scholar)
   pBib <- paste(name.tmp, df$pYear, title.tmp, ",", df$ADDRESS, ":", df$PUBLISHER)
-  pBib <- paste0(pBib,".")
+  pBib <- paste0(pBib, ".")
   return(pBib)
 }
 
@@ -161,33 +163,33 @@ print_English_book <- function(df) {
 print_Japanese_book <- function(df) {
   name.tmp <- print_JName(df$AUTHORs)
   title.tmp <- df$TITLE
-  # iii）Editorial and Supervisory Book
+  # iii)Editorial and Supervisory Book
   if (!is.na(df$EDITOR)) {
-    postfix <- stringi::stri_unescape_unicode("(\\u7de8)")
+    postfix <- stri_unescape_unicode("(\\u7de8)")
     name.tmp <- paste0(name.tmp, postfix)
   }
-  # v ）Books in several volumes (including thematic series, collections, etc.)
+  # v)Books in several volumes (including thematic series, collections, etc.)
   if (!is.na(df$VOLUME)) {
-    prefix <- stringi::stri_unescape_unicode("(\\u5168")
-    postfix <- stringi::stri_unescape_unicode("\\u5dfb)")
+    prefix <- stri_unescape_unicode("(\\u5168")
+    postfix <- stri_unescape_unicode("\\u5dfb)")
     title.tmp <- paste0(title.tmp, prefix, df$VOLUME, postfix)
   }
   # ii) New edition, iii) reprints, and vi)  the book in several volumes
   # are handled by the Bib files (e.g., put it in the title; see Google Scholar)
-  # vii）Transrated
+  # vii)Transrated
   if (!is.na(df$JTITLE)) {
     E.part <- print_English_book(df)
     ## Editors
     if (!is.na(df$JKANYAKU)) {
       Jname <- print_JName(df$JKANYAKUs)
-      postfix <- stringi::stri_unescape_unicode("(\\u76e3\\u8a33)")
+      postfix <- stri_unescape_unicode("(\\u76e3\\u8a33)")
       Jname <- paste0(Jname, postfix)
     } else {
       Jname <- print_JName(df$JAUTHORs)
-      postfix <- stringi::stri_unescape_unicode("(\\u8a33)")
+      postfix <- stri_unescape_unicode("(\\u8a33)")
       Jname <- paste0(Jname, postfix)
     }
-    J.part <- paste(df$GENCHOKANA, Jname, "(",df$JYEAR,").", df$JTITLE, df$JPUBLISHER)
+    J.part <- paste(df$GENCHOKANA, Jname, "(", df$JYEAR, ").", df$JTITLE, df$JPUBLISHER)
     pBib <- paste0(E.part, "(", J.part, ")")
   } else {
     pBib <- paste(df$pName, df$pYear, df$TITLE, df$PUBLISHER)
@@ -225,7 +227,8 @@ print_Japanese_article <- function(df) {
     Vol_and_Num.tmp <- paste0("\\emph{", df$VOLUME, "},")
   }
   PAGES.tmp <- paste0(df$PAGES, ".")
-  pBib <- paste(df$pName, df$pYear, df$TITLE, JOURNAL.tmp, Vol_and_Num.tmp, PAGES.tmp)
+  Spacing <- stri_unescape_unicode("\\u3000")
+  pBib <- paste(df$pName, df$pYear, df$TITLE, Spacing, JOURNAL.tmp, Vol_and_Num.tmp, PAGES.tmp)
   return(pBib)
 }
 
@@ -270,4 +273,3 @@ print_English_inproceedings <- function(df) {
 print_Japanese_inproceedings <- function(df) {
   return("English inProceedings is under construction...")
 }
-
