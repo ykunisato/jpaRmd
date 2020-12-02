@@ -287,8 +287,12 @@ jpa_cite <- function(Rmd_file, Bib_file) {
       str_replace_all(pattern = "\\\\u", replacement = "ux")
     prefix <- paste0("\\hypertarget{refs}{}
     \\leavevmode\\hypertarget{ref-", tmp.bibtexKey, "}{}%")
-    write(prefix, file = "temp_bib.tex", append = T)
-    write(pBib, file = "temp_bib.tex", append = T)
-    write("\n", file = "temp_bib.tex", append = T)
+    ### write File name
+    FN <- Bib_file %>% str_replace(pattern=".bib",replacement="")
+    FN <- paste0(FN,".tex")
+    ### write .tex File
+    write(prefix, file = FN, append = T)
+    write(pBib, file = FN, append = T)
+    write("\n", file = FN, append = T)
   }
 }
