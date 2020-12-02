@@ -18,5 +18,5 @@ Make reference list and add it to R Markdown file
 Add citation function
 }
 \examples{
-# jpa_cite(Rmd_file = "template.Rmd")
+#jpa_cite(Rmd_file = "RmdFileName",Bib_file = "BibFileName")
 }

@@ -93,22 +93,22 @@ print_EName <- function(st) {
 #' @export
 print_JName <- function(st) {
   st <- as.data.frame(st)
-  pName <- paste(st[1, ]$last_name, st[1, ]$first_name)
+  pName <- paste0(st[1, ]$last_name, "\\ ", st[1, ]$first_name)
   if (NROW(st) > 1) {
     if (NROW(st) < 8) {
       # ii) if number of co-author is under 7, write down all author's name and add "・"
       for (i in 2:NROW(st)) {
-        pName <- paste0(pName, "・", paste(st[i, ]$last_name, st[i, ]$first_name))
+        pName <- paste0(pName, "・", paste0(st[i, ]$last_name, "\\ ", st[i, ]$first_name))
       }
     } else {
       # iii) if number of co-author is over 8，write down first to 6th author's name and
       ## add "..." and last author's name.
       for (i in 2:6) {
-        pName <- paste0(pName, "・", paste(st[i, ]$last_name, st[i, ]$first_name))
+        pName <- paste0(pName, "・", paste0(st[i, ]$last_name, "\\ ", st[i, ]$first_name))
       }
       pName <- paste0(
         pName, "…",
-        paste(st[NROW(st), ]$last_name, st[NROW(st), ]$first_name)
+        paste0(st[NROW(st), ]$last_name, "\\ ", st[NROW(st), ]$first_name)
       )
     }
   }
@@ -186,7 +186,7 @@ print_Japanese_book <- function(df) {
       postfix <- stringi::stri_unescape_unicode("(\\u8a33)")
       Jname <- paste0(Jname, postfix)
     }
-    J.part <- paste(df$GENCHOKANA, Jname, df$pYear, df$JTITLE, df$JPUBLISHER)
+    J.part <- paste(df$GENCHOKANA, Jname, "(",df$JYEAR,").", df$JTITLE, df$JPUBLISHER)
     pBib <- paste0(E.part, "(", J.part, ")")
   } else {
     pBib <- paste(df$pName, df$pYear, df$TITLE, df$PUBLISHER)
@@ -228,23 +228,45 @@ print_Japanese_article <- function(df) {
   return(pBib)
 }
 
-#' Print bib info function(in collection)
+#' Print bib info function(in English collection)
 #' @param df Strings of Bib info
 #' @export
-print_incollection <- function(df) {
-  return("incollection is under construction....")
+print_English_incollection <- function(df) {
+  return("English incollection is under construction....")
 }
 
-#' Print bib info function(other)
+#' Print bib info function(in Japanese collection)
 #' @param df Strings of Bib info
 #' @export
-print_others <- function(df) {
-  return("OTHERS is under construction....")
+print_Japanese_incollection <- function(df) {
+  return("Japanse incollection is under construction....")
 }
 
-#' Print bib info function(in book)
+#' Print bib info function(in English inbook)
 #' @param df Strings of Bib info
 #' @export
-print_inbook <- function(df) {
-  return("inBook is under construction...")
+print_English_inbook <- function(df) {
+  return("English inBook is under construction...")
 }
+
+#' Print bib info function(in Japanese inbook)
+#' @param df Strings of Bib info
+#' @export
+print_Japanese_inbook <- function(df) {
+  return("English inBook is under construction...")
+}
+
+#' Print bib info function(in English Proceedings)
+#' @param df Strings of Bib info
+#' @export
+print_English_inproceedings <- function(df) {
+  return("English inProceedings is under construction...")
+}
+
+#' Print bib info function(in Japanese Proceedings)
+#' @param df Strings of Bib info
+#' @export
+print_Japanese_inproceedings <- function(df) {
+  return("English inProceedings is under construction...")
+}
+

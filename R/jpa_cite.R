@@ -48,8 +48,7 @@ value_extractor <- function(string) {
 #' @param Rmd_file file name of R Markdown file
 #' @param Bib_file file name of Bib file
 #' @return Make reference list and add it to R Markdown file
-#' @examples
-#' # jpa_cite(Rmd_file = "template.Rmd")
+#' @examples #jpa_cite(Rmd_file = "RmdFileName",Bib_file = "BibFileName")
 #' @export
 
 jpa_cite <- function(Rmd_file, Bib_file) {
@@ -179,6 +178,7 @@ jpa_cite <- function(Rmd_file, Bib_file) {
     }
   )
 
+  ## Write down all possible records here
   empty <- data.frame(
     CATEGORY = character(0L),
     BIBTEXKEY = character(0L),
@@ -274,13 +274,21 @@ jpa_cite <- function(Rmd_file, Bib_file) {
 
     ### Make Bib record
     pBib <- case_when(
-      langFLG == TRUE && tmp$CATEGORY == "BOOK" ~ print_English_book(tmp),
-      langFLG == FALSE && tmp$CATEGORY == "BOOK" ~ print_Japanese_book(tmp),
-      langFLG == TRUE && tmp$CATEGORY == "ARTICLE" ~ print_English_article(tmp),
-      langFLG == FALSE && tmp$CATEGORY == "ARTICLE" ~ print_Japanese_article(tmp),
-      # iv) Specific chapters in the editorial book
-      tmp$CATEGORY == "INBOOK" ~ print_inbook(tmp),
-      tmp$CATEGORY == "INCOLLECTION" ~ print_incollection(tmp)
+      tmp$CATEGORY == "BOOK" ~ if_else(langFLG, print_English_book(tmp),
+        print_Japanese_book(tmp)
+      ),
+      tmp$CATEGORY == "ARTICLE" ~ if_else(langFLG, print_English_article(tmp),
+        print_Japanese_article(tmp)
+      ),
+      tmp$CATEGORY == "INBOOK" ~ if_else(langFLG, print_English_inbook(tmp),
+        print_Japanese_inbook(tmp)
+      ),
+      tmp$CATEGORY == "INCOLLECTION" ~ if_else(langFLG, print_English_incollection(tmp),
+        print_Japanese_incollection(tmp)
+      ),
+      tmp$CATEGORY == "INPROCEEDINGS" ~ if_else(langFLG, print_English_inproceedings(tmp),
+        print_Japanese_inproceedings(tmp)
+      )
     )
     ### write Bib Record
     #### convert BIBTEXKEY to utf8code
