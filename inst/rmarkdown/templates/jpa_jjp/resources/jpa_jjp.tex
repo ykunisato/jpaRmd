@@ -5,14 +5,7 @@
 \renewcommand{\tablename}{Table}
 % table format
 \usepackage{caption}
-\usepackage{varwidth}
-\DeclareCaptionFormat{centeringcaption}{
-  \begin{varwidth}{\linewidth}
-    \centering
-    #1#2
-  \end{varwidth}
-}
-\captionsetup[table]{format=centeringcaption, labelsep=newline}
+\captionsetup[table]{labelsep=newline}
 
 $if(beamer)$
 $if(background-image)$
