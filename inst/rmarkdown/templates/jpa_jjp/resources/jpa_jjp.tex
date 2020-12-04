@@ -233,6 +233,7 @@ $if(beamer)$
     #1#2
   \end{varwidth}
 }
+\captionsetup[table]{format=centeringcaption, labelsep=newline}
 
 \makeatletter
 \def\fnum@table{\tablename~\thetable}
@@ -377,9 +378,6 @@ $endif$
 \usepackage{marginnote}
 \usepackage{titlesec}
 \titleformat{\section}[hang]{\large\filcenter\bfseries}{\thesection}{1zw}{}
-
-\captionsetup[table]{format=centeringcaption, labelsep=newline}
-
 \begin{document}
 \pagestyle{empty}
 $if(has-frontmatter)$
