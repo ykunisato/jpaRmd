@@ -226,6 +226,14 @@ $if(tables)$
 $if(beamer)$
 \usepackage{caption}
 % Make caption package work with longtable
+\usepackage{varwidth}
+\DeclareCaptionFormat{centeringcaption}{
+  \begin{varwidth}{\linewidth}
+    \centering
+    #1#2
+  \end{varwidth}
+}
+
 \makeatletter
 \def\fnum@table{\tablename~\thetable}
 \makeatother
@@ -371,7 +379,6 @@ $endif$
 \titleformat{\section}[hang]{\large\filcenter\bfseries}{\thesection}{1zw}{}
 
 \begin{document}
-\captionsetup{labelsep=newline}
 \pagestyle{empty}
 $if(has-frontmatter)$
 \frontmatter
@@ -444,4 +451,5 @@ $endif$
 $for(include-after)$
 $include-after$
 $endfor$
+\captionsetup{labelsep=newline, formt=centeringcaption}
 \end{document}
