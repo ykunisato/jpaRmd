@@ -3,6 +3,17 @@
 \geometry{left = 5.4cm, right = 5.4cm, top = 4.0cm, bottom = 3.5cm}
 \renewcommand{\figurename}{Figure}
 \renewcommand{\tablename}{Table}
+% table format
+\usepackage{caption}
+\usepackage{varwidth}
+\DeclareCaptionFormat{centeringcaption}{
+  \begin{varwidth}{\linewidth}
+    \centering
+    #1#2
+  \end{varwidth}
+}
+\captionsetup[table]{format=centeringcaption, labelsep=newline}
+
 $if(beamer)$
 $if(background-image)$
 \usebackgroundtemplate{%
@@ -223,15 +234,6 @@ $highlighting-macros$
 $endif$
 $if(tables)$
 \usepackage{longtable,booktabs}
-\usepackage{caption}
-\usepackage{varwidth}
-\DeclareCaptionFormat{centeringcaption}{
-  \begin{varwidth}{\linewidth}
-    \centering
-    #1#2
-  \end{varwidth}
-}
-\captionsetup[table]{format=centeringcaption, labelsep=newline}
 $if(beamer)$
 \usepackage{caption}
 % Make caption package work with longtable
