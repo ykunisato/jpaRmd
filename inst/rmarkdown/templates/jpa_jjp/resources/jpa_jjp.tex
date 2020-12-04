@@ -223,9 +223,7 @@ $highlighting-macros$
 $endif$
 $if(tables)$
 \usepackage{longtable,booktabs}
-$if(beamer)$
 \usepackage{caption}
-% Make caption package work with longtable
 \usepackage{varwidth}
 \DeclareCaptionFormat{centeringcaption}{
   \begin{varwidth}{\linewidth}
@@ -234,7 +232,9 @@ $if(beamer)$
   \end{varwidth}
 }
 \captionsetup[table]{format=centeringcaption, labelsep=newline}
-
+$if(beamer)$
+\usepackage{caption}
+% Make caption package work with longtable
 \makeatletter
 \def\fnum@table{\tablename~\thetable}
 \makeatother
