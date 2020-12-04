@@ -378,6 +378,8 @@ $endif$
 \usepackage{titlesec}
 \titleformat{\section}[hang]{\large\filcenter\bfseries}{\thesection}{1zw}{}
 
+\captionsetup{format=centeringcaption, labelsep=newline}
+
 \begin{document}
 \pagestyle{empty}
 $if(has-frontmatter)$
@@ -451,5 +453,5 @@ $endif$
 $for(include-after)$
 $include-after$
 $endfor$
-\captionsetup{labelsep=newline, formt=centeringcaption}
+
 \end{document}
