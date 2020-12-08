@@ -260,20 +260,26 @@ print_Japanese_article <- function(df) {
 #' @export
 print_English_incollection <- function(df) {
   prefix <- "In "
-  postfix <- if_else(NROW(df$EDITOR)>1,"(Eds.),","(Ed.),")
-  inbook.tmp1 <- paste0(prefix, print_EName(df$EDITORs,switchFLG = TRUE),postfix)
-  edition.tmp <- if_else(!is.na(df$EDITION),paste0(df$EDITION," ed.,"),"")
-  inbook.tmp2 <- paste0("\\emph{",df$BOOKTITLE,"} (",edition.tmp," pp.",df$PAGES,").")
-  
-  pBib <- paste(df$pName, df$pYear, df$TITLE, inbook.tmp1,inbook.tmp2,df$ADDRESS, ":", df$PUBLISHER,".")
+  postfix <- if_else(NROW(df$EDITOR) > 1, "(Eds.),", "(Ed.),")
+  inbook.tmp1 <- paste0(prefix, print_EName(df$EDITORs, switchFLG = TRUE), postfix)
+  edition.tmp <- if_else(!is.na(df$EDITION), paste0(df$EDITION, " ed.,"), "")
+  inbook.tmp2 <- paste0("\\emph{", df$BOOKTITLE, "} (", edition.tmp, " pp.", df$PAGES, ").")
+
+  pBib <- paste(df$pName, df$pYear, df$TITLE, inbook.tmp1, inbook.tmp2, df$ADDRESS, ":", df$PUBLISHER, ".")
   return(pBib)
 }
 
 #' Print bib info function(in Japanese collection)
+#' @importFrom stringi stri_unescape_unicode
 #' @param df Strings of Bib info
 #' @export
 print_Japanese_incollection <- function(df) {
-  return("Japanse incollection is under construction....")
+  postfix <- stri_unescape_unicode("(\\u7de8)")
+  inbook.tmp1 <- paste0(print_JName(df$EDITORs), postfix)
+  edition.tmp <- if_else(!is.na(df$EDITION), paste0(df$EDITION, " ed.,"), "")
+  inbook.tmp2 <- paste0("\\emph{", df$BOOKTITLE, "} (", edition.tmp, " pp.", df$PAGES, ").")
+  pBib <- paste(df$pName, df$pYear, df$TITLE, inbook.tmp1, inbook.tmp2, df$PUBLISHER)
+  return(pBib)
 }
 
 #' Print bib info function(in English inbook)
