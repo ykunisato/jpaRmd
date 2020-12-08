@@ -249,7 +249,7 @@ print_Japanese_article <- function(df) {
   pBib <- paste(df$pName, df$pYear, df$TITLE, "\\ ", JOURNAL.tmp, Vol_and_Num.tmp, PAGES.tmp)
   ## DOI
   if (!is.na(df$DOI)) {
-    pBib <- paste0(pBib, df$DOI)
+    pBib <- paste0(pBib, "\\ \\verb|",df$DOI,"|")
   }
   return(pBib)
 }
