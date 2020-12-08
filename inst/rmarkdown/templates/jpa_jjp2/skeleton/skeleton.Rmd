@@ -144,7 +144,7 @@ cor_result <- cor.test(summary_bfi_fig$Extraversion,summary_bfi_fig$Neuroticism)
 
 # 引用文献
 
-\include{reference}
+\input{reference}
 
 \clearpage 
 # 脚注
