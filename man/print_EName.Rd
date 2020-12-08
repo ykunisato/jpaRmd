@@ -4,10 +4,12 @@
 \alias{print_EName}
 \title{Print name function(English)}
 \usage{
-print_EName(st)
+print_EName(st, switchFLG = FALSE)
 }
 \arguments{
 \item{st}{Strings of name}
+
+\item{switchFLG}{switch the order of first name and last name}
 }
 \description{
 Print name function(English)

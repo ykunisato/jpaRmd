@@ -2,7 +2,7 @@
 #' @importFrom magrittr %>%
 #' @importFrom stringr str_split
 #' @importFrom dplyr mutate
-#' @importFrom purrr map
+#' @importFrom dplyr rowwise
 #' @importFrom humaniformat format_reverse
 #' @importFrom humaniformat first_name
 #' @importFrom humaniformat middle_name
@@ -16,13 +16,14 @@ name_spliter <- function(dat) {
     str_split(pattern = " and ") %>%
     unlist() %>%
     data.frame(Names = .) %>%
-    mutate(authors_name_split = map(.x = Names, ~ format_reverse(.x))) %>%
+    rowwise() %>%
+    mutate(authors_name_split = format_reverse(Names)) %>%
     mutate(
-      first_name = map(authors_name_split, ~ first_name(.x)),
-      middle_name = map(authors_name_split, ~ middle_name(.x)),
-      last_name = map(authors_name_split, ~ last_name(.x)),
-      initial_first = map(first_name, ~ str_sub(.x, start = 1, end = 1) %>% str_to_upper()),
-      initial_middle = map(middle_name, ~ str_sub(.x, start = 1, end = 1) %>% str_to_upper()),
+      first_name = first_name(authors_name_split),
+      middle_name = middle_name(authors_name_split),
+      last_name = last_name(authors_name_split),
+      initial_first = str_sub(first_name, start = 1, end = 1) %>% str_to_upper(),
+      initial_middle = str_sub(middle_name, start = 1, end = 1) %>% str_to_upper()
     ) %>%
     return()
 }
@@ -30,12 +31,11 @@ name_spliter <- function(dat) {
 #' Print name function(English)
 #' @importFrom magrittr %>%
 #' @importFrom dplyr mutate
-#' @importFrom rowwise
+#' @importFrom dplyr rowwise
 #' @importFrom dplyr if_else
-#' @importFrom purrr map
-#' @importFrom purrr map2
 #' @importFrom stringr str_flatten
 #' @param st Strings of name
+#' @param switchFLG switch the order of first name and last name
 #' @export
 print_EName <- function(st, switchFLG = FALSE) {
   st <- as.data.frame(st)
@@ -203,7 +203,7 @@ print_Japanese_book <- function(df) {
 print_English_article <- function(df) {
   # (author's name), (year of publication), (title), (journal title), (number of copies), (page citations)
   TITLE.tmp <- title.tmp <- paste0(df$TITLE, ",")
-  JOURNAL.tmp <- paste0("\\emph{",df$JOURNAL, "},")
+  JOURNAL.tmp <- paste0("\\emph{", df$JOURNAL, "},")
   Vol_and_Num.tmp <- ""
   df$VOLUME <- if_else(is.na(df$VOLUME), "", df$VOLUME)
   df$NUMBER <- if_else(is.na(df$NUMBER), "", df$NUMBER)
