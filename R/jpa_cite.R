@@ -210,6 +210,9 @@ jpa_cite <- function(Rmd_file, Bib_file) {
     JTITLE = character(0L),
     JAUTHOR = character(0L),
     JKANYAKU = character(0L),
+    TRANSAUTHOR = character(0L),
+    TRANSWORK = character(0L),
+    TRANSINFO = character(0L),
     stringsAsFactors = FALSE
   )
 
@@ -225,7 +228,8 @@ jpa_cite <- function(Rmd_file, Bib_file) {
       AUTHORs = map(AUTHOR, ~ name_spliter(.x)),
       EDITORs = map(EDITOR, ~ name_spliter(.x)),
       JAUTHORs = map(JAUTHOR, ~ name_spliter(.x)),
-      JKANYAKUs = map(JKANYAKU, ~ name_spliter(.x))
+      JKANYAKUs = map(JKANYAKU, ~ name_spliter(.x)),
+      TRANSAUTHORs = map(TRANSAUTHOR, ~name_spliter(.x))
     )
 
   ## Filtering to only actually cited

@@ -30,32 +30,27 @@ name_spliter <- function(dat) {
 #' Print name function(English)
 #' @importFrom magrittr %>%
 #' @importFrom dplyr mutate
+#' @importFrom rowwise
 #' @importFrom dplyr if_else
 #' @importFrom purrr map
 #' @importFrom purrr map2
 #' @importFrom stringr str_flatten
 #' @param st Strings of name
 #' @export
-print_EName <- function(st) {
+print_EName <- function(st, switchFLG = FALSE) {
   st <- as.data.frame(st)
-  initial_first <- NULL
-  initial_middle <- NULL
-  initial_name <- NULL
   st %>%
+    rowwise() %>%
     mutate(
-      initial_first = map(initial_first, ~ paste0(.x, ".")),
-      initial_middle = map(initial_middle, ~ paste0(.x, ".")),
-      initial_name = map2(
-        .x = initial_first, .y = initial_middle,
-        ~ paste0(.x, if_else(.y == "NA.", "", .y))
-      )
-    ) %>%
-    mutate(
-      pName = map2(
-        last_name, initial_name,
-        ~ paste0(.x, ",", .y)
+      initial_first = paste0(initial_first, "."),
+      initial_middle = paste0(initial_middle, "."),
+      initial_name = paste0(initial_first, if_else(initial_middle == "NA.", "", initial_middle)),
+      pName = if_else(switchFLG,
+        paste(initial_name, last_name),
+        paste0(last_name, ", ", initial_name)
       )
     ) -> tmp
+
   # If authors have same name, don't abbreviate first name.
   pName.tmp <- tmp$pName %>% unlist()
   duplicated.name <- which(table(pName.tmp) > 1) %>% names()
@@ -94,7 +89,7 @@ print_EName <- function(st) {
 print_JName <- function(st) {
   st <- as.data.frame(st)
   centralDot <- stri_unescape_unicode("\\u30fb")
-  triDots <- stri_unescape_unicode( "\\u2026")
+  triDots <- stri_unescape_unicode("\\u2026")
   pName <- paste0(st[1, ]$last_name, "\\ ", st[1, ]$first_name)
   if (NROW(st) > 1) {
     if (NROW(st) < 8) {
@@ -148,10 +143,14 @@ print_English_book <- function(df) {
   if (!is.na(df$VOLUME)) {
     title.tmp <- paste0(title.tmp, "(Vols.", df$VOLUME, ")")
   }
-  # vi)One specific volume of a book spanning several volumes,
-  # vii) Translations, and  viii) reprints are handled by the Bib files
-  # (e.g., put it in the title; see Google Scholar)
-  pBib <- paste(name.tmp, df$pYear, title.tmp, ",", df$ADDRESS, ":", df$PUBLISHER)
+  # vii) Transrations
+  trans.tmp <- ""
+  trans.info <- ""
+  if (!is.na(df$TRANSAUTHOR)) {
+    trans.tmp <- paste0("(", print_EName(df$TRANSAUTHORs, switchFLG = TRUE), ", ", df$TRANSWORK, ").")
+    trans.info <- paste0(" (", df$TRANSINFO, ")")
+  }
+  pBib <- paste0(name.tmp, df$pYear, title.tmp, " ", trans.tmp, df$ADDRESS, ":", df$PUBLISHER, trans.info)
   pBib <- paste0(pBib, ".")
   return(pBib)
 }
@@ -203,17 +202,27 @@ print_Japanese_book <- function(df) {
 #' @export
 print_English_article <- function(df) {
   # (author's name), (year of publication), (title), (journal title), (number of copies), (page citations)
-  TITLE.tmp <- title.tmp <- paste0("{\\emph ", df$TITLE, "},")
-  JOURNAL.tmp <- paste0(df$JOURNAL, ",")
+  TITLE.tmp <- title.tmp <- paste0(df$TITLE, ",")
+  JOURNAL.tmp <- paste0("\\emph{",df$JOURNAL, "},")
   Vol_and_Num.tmp <- ""
-  df$VOLUME <- if_else(is.na(df$VOLUME),"",df$VOLUME)
-  df$NUMBER <- if_else(is.na(df$NUMBER),"",df$NUMBER)
-  if(df$VOLUME!=""){Vol_and_Num.tmp <- paste0("{\\emph ", df$VOLUME, "},")}
-  if(df$NUMBER!=""){Vol_and_Num.tmp <- paste0(Vol_and_Num.tmp,"(", df$NUMBER, "),")}
-  PAGES.tmp <- if(!is.na(df$PAGES)){if(df$PAGES!=""){paste0(df$PAGES, ".")}}
+  df$VOLUME <- if_else(is.na(df$VOLUME), "", df$VOLUME)
+  df$NUMBER <- if_else(is.na(df$NUMBER), "", df$NUMBER)
+  if (df$VOLUME != "") {
+    Vol_and_Num.tmp <- paste0("\\emph{", df$VOLUME, "},")
+  }
+  if (df$NUMBER != "") {
+    Vol_and_Num.tmp <- paste0(Vol_and_Num.tmp, "(", df$NUMBER, "),")
+  }
+  PAGES.tmp <- if (!is.na(df$PAGES)) {
+    if (df$PAGES != "") {
+      paste0(df$PAGES, ".")
+    }
+  }
   pBib <- paste(df$pName, df$pYear, TITLE.tmp, JOURNAL.tmp, Vol_and_Num.tmp, PAGES.tmp)
   ## DOI
-  if(!is.na(df$DOI)){ pBib <- paste0(pBib,df$DOI)}
+  if (!is.na(df$DOI)) {
+    pBib <- paste0(pBib, df$DOI)
+  }
   return(pBib)
 }
 
@@ -224,14 +233,24 @@ print_Japanese_article <- function(df) {
   # (Author's name), (Year of publication), (Title), (Title), (Number of copies), (Citation page)
   JOURNAL.tmp <- paste0(df$JOURNAL, ",")
   Vol_and_Num.tmp <- ""
-  df$VOLUME <- if_else(is.na(df$VOLUME),"",df$VOLUME)
-  df$NUMBER <- if_else(is.na(df$NUMBER),"",df$NUMBER)
-  if(df$VOLUME!=""){Vol_and_Num.tmp <- paste0("{\\emph ", df$VOLUME, "},")}
-  if(df$NUMBER!=""){Vol_and_Num.tmp <- paste0(Vol_and_Num.tmp,"(", df$NUMBER, "),")}
-  PAGES.tmp <- if(!is.na(df$PAGES)){if(df$PAGES!=""){paste0(df$PAGES, ".")}}
+  df$VOLUME <- if_else(is.na(df$VOLUME), "", df$VOLUME)
+  df$NUMBER <- if_else(is.na(df$NUMBER), "", df$NUMBER)
+  if (df$VOLUME != "") {
+    Vol_and_Num.tmp <- paste0("\\emph{", df$VOLUME, "},")
+  }
+  if (df$NUMBER != "") {
+    Vol_and_Num.tmp <- paste0(Vol_and_Num.tmp, "(", df$NUMBER, "),")
+  }
+  PAGES.tmp <- if (!is.na(df$PAGES)) {
+    if (df$PAGES != "") {
+      paste0(df$PAGES, ".")
+    }
+  }
   pBib <- paste(df$pName, df$pYear, df$TITLE, JOURNAL.tmp, Vol_and_Num.tmp, PAGES.tmp)
   ## DOI
-  if(!is.na(df$DOI)){ pBib <- paste0(pBib,df$DOI)}
+  if (!is.na(df$DOI)) {
+    pBib <- paste0(pBib, df$DOI)
+  }
   return(pBib)
 }
 
