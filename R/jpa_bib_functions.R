@@ -188,10 +188,10 @@ print_Japanese_book <- function(df) {
       postfix <- stri_unescape_unicode("(\\u8a33)")
       Jname <- paste0(Jname, postfix)
     }
-    J.part <- paste(df$GENCHOKANA, Jname, "(", df$JYEAR, ").", df$JTITLE, df$JPUBLISHER)
+    J.part <- paste(df$GENCHOKANA, Jname, "(", df$JYEAR, ").", df$JTITLE, "\\ ", df$JPUBLISHER)
     pBib <- paste0(E.part, "(", J.part, ")")
   } else {
-    pBib <- paste(df$pName, df$pYear, df$TITLE, df$PUBLISHER)
+    pBib <- paste(df$pName, df$pYear, df$TITLE, "\\ ", df$PUBLISHER)
   }
 
   return(pBib)
@@ -246,7 +246,7 @@ print_Japanese_article <- function(df) {
       paste0(df$PAGES, ".")
     }
   }
-  pBib <- paste(df$pName, df$pYear, df$TITLE, JOURNAL.tmp, Vol_and_Num.tmp, PAGES.tmp)
+  pBib <- paste(df$pName, df$pYear, df$TITLE, "\\ ", JOURNAL.tmp, Vol_and_Num.tmp, PAGES.tmp)
   ## DOI
   if (!is.na(df$DOI)) {
     pBib <- paste0(pBib, df$DOI)
@@ -262,7 +262,7 @@ print_English_incollection <- function(df) {
   prefix <- "In "
   postfix <- if_else(NROW(df$EDITOR) > 1, "(Eds.),", "(Ed.),")
   inbook.tmp1 <- paste0(prefix, print_EName(df$EDITORs, switchFLG = TRUE), postfix)
-  edition.tmp <- if_else(!is.na(df$EDITION), paste0(df$EDITION, " ed.,"), "")
+  edition.tmp <- if_else(!is.na(df$EDITION), paste0(df$EDITION, " ed., "), "")
   inbook.tmp2 <- paste0("\\emph{", df$BOOKTITLE, "} (", edition.tmp, " pp.", df$PAGES, ").")
 
   pBib <- paste(df$pName, df$pYear, df$TITLE, inbook.tmp1, inbook.tmp2, df$ADDRESS, ":", df$PUBLISHER, ".")
@@ -275,37 +275,25 @@ print_English_incollection <- function(df) {
 #' @export
 print_Japanese_incollection <- function(df) {
   postfix <- stri_unescape_unicode("(\\u7de8)")
-  inbook.tmp1 <- paste0(print_JName(df$EDITORs), postfix)
+  inbook.tmp1 <- paste0("\\ ",print_JName(df$EDITORs), postfix)
   edition.tmp <- if_else(!is.na(df$EDITION), paste0(df$EDITION, " ed.,"), "")
-  inbook.tmp2 <- paste0("\\emph{", df$BOOKTITLE, "} (", edition.tmp, " pp.", df$PAGES, ").")
+  inbook.tmp2 <- paste0(df$BOOKTITLE, " (", edition.tmp, "pp.", df$PAGES, ").")
   pBib <- paste(df$pName, df$pYear, df$TITLE, inbook.tmp1, inbook.tmp2, df$PUBLISHER)
   return(pBib)
-}
-
-#' Print bib info function(in English inbook)
-#' @param df Strings of Bib info
-#' @export
-print_English_inbook <- function(df) {
-  return("English inBook is under construction...")
-}
-
-#' Print bib info function(in Japanese inbook)
-#' @param df Strings of Bib info
-#' @export
-print_Japanese_inbook <- function(df) {
-  return("English inBook is under construction...")
 }
 
 #' Print bib info function(in English Proceedings)
 #' @param df Strings of Bib info
 #' @export
 print_English_inproceedings <- function(df) {
-  return("English inProceedings is under construction...")
+  pBib <- paste(df$pName, df$pYear, df$TITLE, df$JOURNAL, ".\ ", df$PAGES, ".")
+  return(pBib)
 }
 
 #' Print bib info function(in Japanese Proceedings)
 #' @param df Strings of Bib info
 #' @export
 print_Japanese_inproceedings <- function(df) {
-  return("English inProceedings is under construction...")
+  pBib <- paste(df$pName, df$pYear, df$TITLE, df$JOURNAL, ".\\ ", df$PAGES, ".")
+  return(pBib)
 }
