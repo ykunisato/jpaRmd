@@ -210,6 +210,9 @@ jpa_cite <- function(Rmd_file, Bib_file) {
     JTITLE = character(0L),
     JAUTHOR = character(0L),
     JKANYAKU = character(0L),
+    TRANSAUTHOR = character(0L),
+    TRANSWORK = character(0L),
+    TRANSINFO = character(0L),
     stringsAsFactors = FALSE
   )
 
@@ -225,7 +228,8 @@ jpa_cite <- function(Rmd_file, Bib_file) {
       AUTHORs = map(AUTHOR, ~ name_spliter(.x)),
       EDITORs = map(EDITOR, ~ name_spliter(.x)),
       JAUTHORs = map(JAUTHOR, ~ name_spliter(.x)),
-      JKANYAKUs = map(JKANYAKU, ~ name_spliter(.x))
+      JKANYAKUs = map(JKANYAKU, ~ name_spliter(.x)),
+      TRANSAUTHORs = map(TRANSAUTHOR, ~name_spliter(.x))
     )
 
   ## Filtering to only actually cited
@@ -263,14 +267,17 @@ jpa_cite <- function(Rmd_file, Bib_file) {
   ## output reference to tex File
   for (i in 1:NROW(bib.df)) {
     tmp <- bib.df[i, ]
-    # If the AUTHOR is Japanese or has a JTITLE field such as translation
-    langFLG <- (stringi::stri_enc_isascii(tmp$AUTHOR) && is.na(tmp$JTITLE))
-    tmp$pYear <- paste0("(", tmp$YEAR, ").")
+    # Check the record is in English or Not.
+    tmpFLG <- paste0(tmp$AUTHOR,tmp$TITLE,tmp$JTITLE,tmp$JOURNAL)
+    langFLG <- !str_detect(tmpFLG,pattern = "\\p{Hiragana}|\\p{Katakana}|\\p{Han}")
     if (langFLG) {
       tmp$pName <- print_EName(tmp$AUTHORs)
     } else {
       tmp$pName <- print_JName(tmp$AUTHORs)
     }
+    
+    # Year in brackets
+    tmp$pYear <- paste0("(", tmp$YEAR, ").")
 
     ### Make Bib record
     pBib <- case_when(
@@ -279,9 +286,6 @@ jpa_cite <- function(Rmd_file, Bib_file) {
       ),
       tmp$CATEGORY == "ARTICLE" ~ if_else(langFLG, print_English_article(tmp),
         print_Japanese_article(tmp)
-      ),
-      tmp$CATEGORY == "INBOOK" ~ if_else(langFLG, print_English_inbook(tmp),
-        print_Japanese_inbook(tmp)
       ),
       tmp$CATEGORY == "INCOLLECTION" ~ if_else(langFLG, print_English_incollection(tmp),
         print_Japanese_incollection(tmp)
