@@ -255,10 +255,18 @@ print_Japanese_article <- function(df) {
 }
 
 #' Print bib info function(in English collection)
+#' @importFrom dplyr if_else
 #' @param df Strings of Bib info
 #' @export
 print_English_incollection <- function(df) {
-  return("English incollection is under construction....")
+  prefix <- "In "
+  postfix <- if_else(NROW(df$EDITOR)>1,"(Eds.),","(Ed.),")
+  inbook.tmp1 <- paste0(prefix, print_EName(df$EDITORs,switchFLG = TRUE),postfix)
+  edition.tmp <- if_else(!is.na(df$EDITION),paste0(df$EDITION," ed.,"),"")
+  inbook.tmp2 <- paste0("\\emph{",df$BOOKTITLE,"} (",edition.tmp," pp.",df$PAGES,").")
+  
+  pBib <- paste(df$pName, df$pYear, df$TITLE, inbook.tmp1,inbook.tmp2,df$ADDRESS, ":", df$PUBLISHER,".")
+  return(pBib)
 }
 
 #' Print bib info function(in Japanese collection)
