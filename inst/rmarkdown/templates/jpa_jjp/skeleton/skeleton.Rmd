@@ -138,17 +138,22 @@ cor_result <- cor.test(summary_bfi_fig$Extraversion,summary_bfi_fig$Neuroticism)
 
 　本研究では，RMarkdownで『心理学研究論文』がかけるのかを検証した。それ用のテンプレートも用意したので，あとは解析と内容を書くだけで結構いい感じのものができる。ただし，引用文献については，まだ完全とはいえず，共にこのテンプレートを磨く有志を心待ちしている。
 
-\clearpage 
 
-<!-- 引用文献ファイル名を{ }の中に入れてください。拡張子は不要です。-->
+\clearpage 
 
 # 引用文献
-
+\noindent
+\begingroup
+\setlength{\parindent}{-0.3in}
+\setlength{\leftskip}{0.2in}
+\setlength{\parskip}{8pt}
+<!-- 引用文献ファイル名を以下の{ }内に入れてください。拡張子は不要です。-->
 \input{reference}
+\endgroup
 
 \clearpage 
-# 脚注
 
+# 脚注
 <!-- 必要に応じて脚注を追加ください。不要ならclearpageから削除ください-->
 
 ${}^1$脚注の例１です。論文の補足をどうぞ。

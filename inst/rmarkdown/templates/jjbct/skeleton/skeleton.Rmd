@@ -141,10 +141,17 @@ cor_result <- cor.test(summary_bfi_fig$Extraversion,summary_bfi_fig$Neuroticism)
 \clearpage 
 
 # 引用文献
-
+\noindent
+\begingroup
+\setlength{\parindent}{-0.3in}
+\setlength{\leftskip}{0.2in}
+\setlength{\parskip}{8pt}
+<!-- 引用文献ファイル名を以下の{ }内に入れてください。拡張子は不要です。-->
 \input{reference}
+\endgroup
 
 \clearpage 
+
 # 脚注
 
 <!-- 必要に応じて脚注を追加ください。不要ならclearpageから削除ください-->
