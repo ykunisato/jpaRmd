@@ -2,7 +2,7 @@
 title: "RMarkdownで『心理学研究』の論文は書けるのか？"
 subtitle: "Can we write a paper of the Japanses Journal of psychology with RMarkdown?"
 bibliography:  reference.bib
-csl: apa-6th-edition.csl
+suppress-bibliography: yes
 output: jpaRmd::jpa_jjp
 ---
 
@@ -26,6 +26,7 @@ Can we write a paper of the Japanses Journal of psychology with RMarkdown? To so
 **Key words**: RMarkdown, Reproducibility, The Japanese Journal of Psychology
 
 <!--　このRmdファイル内で使用するRパッケージを以下に追加してください-->
+<!--　また，最後にこのファイルのファイル名，引用文献リストの入っているbibファイル名を入れてください-->
 ```{r message=FALSE, warning=FALSE, include=FALSE}
 library(kableExtra)
 library(knitr)
@@ -34,6 +35,7 @@ library(psych)
 library(gridExtra)
 library(jtools)
 library(ggsignif)
+jpaRmd::jpa_cite(Rmd_file = "Untitled.Rmd", Bib_file = "reference.bib")
 ```
 
 \clearpage
@@ -138,8 +140,11 @@ cor_result <- cor.test(summary_bfi_fig$Extraversion,summary_bfi_fig$Neuroticism)
 
 \clearpage 
 
+<!-- 引用文献ファイル名を{ }の中に入れてください。拡張子は不要です。-->
+
 # 引用文献
-<div id="refs"></div>
+
+\input{reference}
 
 \clearpage 
 # 脚注

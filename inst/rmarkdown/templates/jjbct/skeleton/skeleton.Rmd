@@ -28,6 +28,7 @@ Can we write a paper of the Japanese Journal of Behavioral and Cognitive Therapi
 **Key words**: RMarkdown, Reproducibility, The Japanese Journal of Psychology
 
 <!--　このRmdファイル内で使用するRパッケージを以下に追加してください-->
+<!--　また，最後にこのファイルのファイル名，引用文献リストの入っているbibファイル名を入れてください-->
 ```{r message=FALSE, warning=FALSE, include=FALSE}
 library(kableExtra)
 library(knitr)
@@ -36,6 +37,7 @@ library(psych)
 library(gridExtra)
 library(jtools)
 library(ggsignif)
+jpaRmd::jpa_cite(Rmd_file = "Untitled.Rmd", Bib_file = "reference.bib")
 ```
 
 　はじめに，ここから文章を書き始めます。以降が論文の本文になります。どんどん書いていきましょう！
@@ -140,9 +142,7 @@ cor_result <- cor.test(summary_bfi_fig$Extraversion,summary_bfi_fig$Neuroticism)
 
 # 引用文献
 
-```{r echo=FALSE}
-jpaRmd::jpa_cite(Rmd_file = "Untitled.Rmd", Bib_file = "reference.bib")
-```
+\input{reference}
 
 \clearpage 
 # 脚注

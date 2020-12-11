@@ -6,7 +6,6 @@
 % table format
 \usepackage{caption}
 \captionsetup[table]{labelsep=newline}
-
 $if(beamer)$
 $if(background-image)$
 \usebackgroundtemplate{%
@@ -373,6 +372,7 @@ $endif$
 \usepackage{marginnote}
 \usepackage{titlesec}
 \titleformat{\section}[hang]{\large\filcenter\bfseries}{\thesection}{1zw}{}
+
 \begin{document}
 \pagestyle{empty}
 $if(has-frontmatter)$
@@ -446,5 +446,4 @@ $endif$
 $for(include-after)$
 $include-after$
 $endfor$
-
 \end{document}

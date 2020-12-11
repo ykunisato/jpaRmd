@@ -3,7 +3,6 @@
 export(jjbct)
 export(jpa_cite)
 export(jpa_jjp)
-export(jpa_jjp2)
 export(name_spliter)
 export(print_EName)
 export(print_English_article)
