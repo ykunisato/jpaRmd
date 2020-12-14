@@ -19,3 +19,23 @@ new_m <- function(new_text){
   new_manuscript = c(new_manuscript,new_text)
   assign( "new_manuscript", new_manuscript, envir = globalenv() )
 }
+
+
+#' Make crrection table
+#' @param old_manuscript vector of old content of manuscript
+#' @param new_manuscript vector of new content of manuscript
+#' @importFrom knitr kable
+#' @importFrom magrittr %>%
+#' @importFrom kableExtra kable_styling
+#' @export
+make_correction_table <- function(old_manuscript, new_manuscript){
+  correction_data <- data.frame(old_manuscript, new_manuscript)
+  correction_table <- kable(correction_data,
+                            format = "latex",
+                            longtable = T,
+                            booktabs = T,
+                            linesep = c("\\addlinespace[16pt]"),
+                            col.names = c("\u65e7\u8ad6\u6587","\u8a02\u6b63\u8ad6\u6587")) %>%
+    kable_styling(latex_options = c("repeat_header"),full_width = T)
+  return(correction_table)
+}

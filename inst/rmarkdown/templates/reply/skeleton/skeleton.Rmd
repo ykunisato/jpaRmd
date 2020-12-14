@@ -4,10 +4,12 @@ csl: apa-6th-edition.csl
 output: jpaRmd::reply
 ---
 
-<!-- 
-あくまで査読コメントに対するリプライと修正対照表の例です
--->
+```{r include=FALSE}
+library(jpaRmd)
+```
 
+
+<!-- 　査読コメントに対するリプライを記載ください。以下は例です。　-->
 # 査読のコメントに対するリプライと修正対照表
 
 この度は，ご査読いただき・・・（大体御礼からはじまりますが，好きなスタイルでどうぞ）。
@@ -36,37 +38,31 @@ output: jpaRmd::reply
 
 # 修正対照表
 
+<!-- 
+修正対照表（新旧対照表）を作成します
+old_m()内に元の原稿の内容を""でいれて，new_m()内に修正した原稿の内容をいれます。
+old_mとnew_mの順番でセットにして，修正対照の順番で書いていってください（それが表に追加されます）。
+-->
 
 ```{r include=FALSE}
-library(jpaRmd)
-
 old_m("Abstract. Can we write a paper of the Japanses Journal of psychology with RMarkdown? To solve this mystery we headed deep into the Amazon. At the end of our long journey we found some great documents about RMarkdown and finally said, 'Yes, we can'. ... Well, we'll write a abstract like this.
 ")
+new_m("Abstract. Can we write a paper of the Japanses Journal of psychology with RMarkdown? To solve this mystery we headed deep into the Amazon. At the end of our long journey we found some great documents about RMarkdown and finally said, 'Yes, we can!'")
 
-new_m("Abstract. To solve this mystery we headed deep into the Amazon. At the end of our long journey we found some great documents about RMarkdown and finally said, 'Yes, we can'. ... Well, we'll write a abstract like this.
-")
+old_m("P1L4 心理学の再現可能性はとってもまずい状況なのですが，それはちょっとおいておいて，文献の引用の仕方を説明します。まず，@Kunisato2012 のように，すると，bibファイル内のKunisatoの2012年の論文が引用されます。そして，次のように，[]でくくると文末の引用スタイルになります[@kunisato2019]。また，文末に複数引用する場合は，こういう感じにします[@kunisato2019; @Machino2014]。以下に詳しく書いているのでご確認ください。")
+new_m("P1L4 心理学の再現可能性はとってもまずい状況です。")
 
-old_m("P1L2 この記事は，ベイズ塾 Advent Calendar 2020 - Adventar１４日目の記事です。
+old_m("P3L2 RMarkdownは，RとMarkdownが合体したものです。")
+new_m("P3L1 RMarkdownは，RとMarkdownが合体したもので，Markdownは簡単に言うとLaTeXよりも簡単にかけるやつです。RMarkdownで書いてPDF出力する際には，LaTeXを経由します。でも，数式を書いたり，ちょっと特殊なことをしない限りは，ユーザーはLaTeXを意識せずにきれいな論文を書くことができます。")
 
-R Markdownって本当に便利ですよね。Rコード，結果，文章を統合してHTMLやPDFに出力してくれます。コピペすることで生じるミスもなくなります。ベイズ塾では，@kazutanの影響もあり，随分と前からR Markdownが使われてきました。")
-new_m("P2L3 R Markdownって本当に便利ですよね。Rコード，結果，文章を統合してHTMLやPDFに出力してくれます。コピペすることで生じるミスもなくなります。ベイズ塾では，@kazutanの影響もあり，随分と前からR Markdownが使われてきました。")
+old_m("P3L5 **心理学再現性確認尺度**　心理学研究の場合，見出しじゃなくて太字にしたい時というがあると思います。")
+new_m("P3L12 **心理学再現性確認尺度**　心理学研究の場合，見出しじゃなくて太字にしたい時というがあると思います。左の心理学再現性確認尺度のように，アスタリスク２つではさむとそれができます。")
 
-old_m("P3L2 今回は，WordやHTML出力はスルーして，PDF出力に限定した内容です。PDFに限定する理由は，HTMLで厳密にフォーマット調整することはあまりなさそうですし，")
-new_m("P3L1 今回は，WordやHTML出力はスルーして，PDF出力に限定した内容です。")
-old_m("P3L5 作り方の解説の前に，私が作ったR Markdownテンプレートパッケージを紹介します。どちらも日本語を使用した論文PDFテンプレートになります（なので，日本語を処理するための工夫を色々しています）。どちらもインストールするとR Markdownの新規作成時のフォーマットとして選択できるようになります。
-
-まず，勤務先の専修大学人間科学部心理学科の卒論用R Markdownテンプレートです。GitHubも一緒に活用すると卒論指導の手間が半分になり，楽しさが２倍になりました*1。中身を埋めていって，Knitすると学科で指定しているフォーマットで卒論のPDFが出力されます。卒論用なので教育目的の内容がテンプレート内のコメントとして入っています。")
-new_m("P3L12 作り方の解説の前に，私が作ったR Markdownテンプレートパッケージを紹介します。
-
-まず，勤務先の専修大学人間科学部心理学科の卒論用R Markdownテンプレートです。GitHubも一緒に活用すると卒論指導の手間が半分になり，楽しさが２倍になりました*1。中身を埋めていって，Knitすると学科で指定しているフォーマットで卒論のPDFが出力されます。卒論用なので教育目的の内容がテンプレート内のコメントとして入っています。")
-
-old_m("Abstract. Can we write a paper of the Japanses Journal of psychology with RMarkdown? To solve this mystery we headed deep into the Amazon. At the end of our long journey we found some great documents about RMarkdown and finally said, 'Yes, we can'. ... Well, we'll write a abstract like this.
-")
-
-new_m("Abstract. To solve this mystery we headed deep into the Amazon. At the end of our long journey we found some great documents about RMarkdown and finally said, 'Yes, we can'. ... Well, we'll write a abstract like this.
-")
-
+old_m("本研究では，RMarkdownで『心理学研究論文』がかけるのかを検証した。それ用のテンプレートも用意したので，あとは解析と内容を書くだけで結構いい感じのものができる。ただし，引用文献については，まだ完全とはいえず，共にこのテンプレートを磨く有志を心待ちしている。")
+new_m("本研究では，RMarkdownで『心理学研究論文』がかけるのかを検証した。それ用のテンプレートも用意したので，あとは解析と内容を書くだけで結構いい感じのものができる。")
 ```
 
-
-
+<!-- 以下の関数で修正対照表を出力します　-->
+```{r echo=FALSE}
+make_correction_table(old_manuscript, new_manuscript)
+```
