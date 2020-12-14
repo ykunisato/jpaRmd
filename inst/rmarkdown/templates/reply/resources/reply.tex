@@ -1,8 +1,6 @@
 % Template for paper format at JPA
 \documentclass[11pt,a4paper,xelatex,ja=standard]{bxjsarticle}
 \geometry{left = 2.5cm, right = 2.5cm, top = 2.5cm, bottom = 2.5cm}
-\usepackage{longtable}
-\usepackage{longtabu}
 \renewcommand{\figurename}{Figure}
 \renewcommand{\tablename}{Table}
 $if(beamer)$
@@ -371,6 +369,9 @@ $endif$
 \usepackage{marginnote}
 \usepackage{titlesec}
 \titleformat{\section}[hang]{\large\filcenter\bfseries}{\thesection}{1zw}{}
+
+\usepackage{longtable}
+\usepackage{longtabu}
 
 \begin{document}
 \pagestyle{empty}
