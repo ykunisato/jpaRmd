@@ -371,6 +371,7 @@ $endif$
 \titleformat{\section}[hang]{\large\filcenter\bfseries}{\thesection}{1zw}{}
 
 \begin{document}
+\begin{longtable}{lll}
 \pagestyle{empty}
 $if(has-frontmatter)$
 \frontmatter
@@ -443,4 +444,5 @@ $endif$
 $for(include-after)$
 $include-after$
 $endfor$
+\end{lontable}
 \end{document}

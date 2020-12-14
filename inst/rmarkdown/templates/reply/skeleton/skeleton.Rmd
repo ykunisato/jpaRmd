@@ -40,6 +40,12 @@ output: jpaRmd::reply
 ```{r include=FALSE}
 library(jpaRmd)
 
+old_m("Abstract. Can we write a paper of the Japanses Journal of psychology with RMarkdown? To solve this mystery we headed deep into the Amazon. At the end of our long journey we found some great documents about RMarkdown and finally said, 'Yes, we can'. ... Well, we'll write a abstract like this.
+")
+
+new_m("Abstract. To solve this mystery we headed deep into the Amazon. At the end of our long journey we found some great documents about RMarkdown and finally said, 'Yes, we can'. ... Well, we'll write a abstract like this.
+")
+
 old_m("P1L2 この記事は，ベイズ塾 Advent Calendar 2020 - Adventar１４日目の記事です。
 
 R Markdownって本当に便利ですよね。Rコード，結果，文章を統合してHTMLやPDFに出力してくれます。コピペすることで生じるミスもなくなります。ベイズ塾では，@kazutanの影響もあり，随分と前からR Markdownが使われてきました。")
@@ -53,6 +59,12 @@ old_m("P3L5 作り方の解説の前に，私が作ったR Markdownテンプレ�
 new_m("P3L12 作り方の解説の前に，私が作ったR Markdownテンプレートパッケージを紹介します。
 
 まず，勤務先の専修大学人間科学部心理学科の卒論用R Markdownテンプレートです。GitHubも一緒に活用すると卒論指導の手間が半分になり，楽しさが２倍になりました*1。中身を埋めていって，Knitすると学科で指定しているフォーマットで卒論のPDFが出力されます。卒論用なので教育目的の内容がテンプレート内のコメントとして入っています。")
+
+old_m("Abstract. Can we write a paper of the Japanses Journal of psychology with RMarkdown? To solve this mystery we headed deep into the Amazon. At the end of our long journey we found some great documents about RMarkdown and finally said, 'Yes, we can'. ... Well, we'll write a abstract like this.
+")
+
+new_m("Abstract. To solve this mystery we headed deep into the Amazon. At the end of our long journey we found some great documents about RMarkdown and finally said, 'Yes, we can'. ... Well, we'll write a abstract like this.
+")
 
 ```
 
