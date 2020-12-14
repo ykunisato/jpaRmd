@@ -1,6 +1,6 @@
 ---
 bibliography:  reference.bib
-csl: apa-6th-edition.csl
+suppress-bibliography: yes
 output: jpaRmd::reply
 ---
 
