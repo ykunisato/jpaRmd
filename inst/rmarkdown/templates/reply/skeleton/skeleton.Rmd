@@ -42,6 +42,7 @@ library(jpaRmd)
 修正対照表（新旧対照表）を作成します
 old_m()内に元の原稿の内容を""でいれて，new_m()内に修正した原稿の内容をいれます。
 old_mとnew_mの順番でセットにして，修正対照の順番で書いていってください（それが表に追加されます）。
+なお，注意点としては，表にいれる文章は，引用文献処理できませんので，@kunisato　みたいに書くとそのまま出力されますので，ご注意ください。
 -->
 
 ```{r include=FALSE}
@@ -49,7 +50,7 @@ old_m("Abstract. Can we write a paper of the Japanses Journal of psychology with
 ")
 new_m("Abstract. Can we write a paper of the Japanses Journal of psychology with RMarkdown? To solve this mystery we headed deep into the Amazon. At the end of our long journey we found some great documents about RMarkdown and finally said, 'Yes, we can!'")
 
-old_m("P1L4 心理学の再現可能性はとってもまずい状況なのですが，それはちょっとおいておいて，文献の引用の仕方を説明します。まず，@Kunisato2012 のように，すると，bibファイル内のKunisatoの2012年の論文が引用されます。そして，次のように，[]でくくると文末の引用スタイルになります[@kunisato2019]。また，文末に複数引用する場合は，こういう感じにします[@kunisato2019; @Machino2014]。以下に詳しく書いているのでご確認ください。")
+old_m("P1L4 心理学の再現可能性はとってもまずい状況なのですが，それはちょっとおいておいて，文献の引用の仕方を説明します。")
 new_m("P1L4 心理学の再現可能性はとってもまずい状況です。")
 
 old_m("P3L2 RMarkdownは，RとMarkdownが合体したものです。")
