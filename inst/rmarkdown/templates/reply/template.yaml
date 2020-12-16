@@ -1,3 +1,3 @@
 name: Reply to Reviewer
 description: Format for Reply to Reviewer
-create_dir: true
+create_dir: false

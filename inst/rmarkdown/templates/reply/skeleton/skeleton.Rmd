@@ -1,6 +1,4 @@
 ---
-bibliography:  reference.bib
-suppress-bibliography: yes
 output: jpaRmd::reply
 ---
 
