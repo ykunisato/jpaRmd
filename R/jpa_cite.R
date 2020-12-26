@@ -267,14 +267,27 @@ jpa_cite <- function(Rmd_file, Bib_file) {
       pName = if_else(langFLG, print_EName(AUTHORs), print_JName(AUTHORs)),
       pYear = paste0("(", YEAR, ").")
     ) %>%
-    # prepare for List --------------------------------------------------------
+    mutate(dplFLG = 0) %>% 
+    # make items for List
     group_by(ID) %>%
     nest() %>%
     mutate(
       pBib = purrr::map(.x = data, .f = ~ pBibMaker(.x)),
       prefix = purrr::map(.x = data, .f = ~ prefixMaker(.x))
-    ) %>% 
-    unnest(cols = c(data, pBib, prefix))
+    )  %>% 
+    # make items for citating
+    mutate(cite.tmp = purrr::map(.x = data, .f = ~ citationMaker(.x))) %>% 
+    # Differnt Authors, but same family name,same year --for the case of confusion
+    unnest(cols = c(data, pBib, prefix,cite.tmp)) %>% 
+    group_by(citeCheckFLG) %>% 
+    mutate(dplFLG = n()) %>% 
+    ungroup(citeCheckFLG) %>% 
+    select(-citeName1,-citeName2,-citeCheckFLG) %>% 
+    group_by(ID) %>% 
+    nest() %>% 
+    mutate(cite = purrr::map(.x = data, .f = ~ citationMaker(.x))) %>% 
+    unnest(cols=c(data,cite)) %>% 
+    select(-citeCheckFLG) 
 
 
   # Write bibtex_temp.tex ---------------------------------------------------

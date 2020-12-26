@@ -65,6 +65,17 @@ prefixMaker <- function(df){
 }
 
 
+#' citationMaker function
+#' @param df Bib data frame
+#' @export
+citationMaker <- function(df) {
+  if (df$langFLG) {
+    tmp <- inLineCite_ENG(df)
+  } else {
+    tmp <- inLineCite_JPN(df)
+  }
+  return(tmp)
+}
 
 #' Print name function(English)
 #' @importFrom magrittr %>%
@@ -337,55 +348,122 @@ print_Japanese_inproceedings <- function(df) {
 }
 
 
-
 #' in-Line Cittion(in English)
+#' @importFrom dplyr select
 #' @param df Bib.df File from jpa_cite
 #' @export
-inLineCite_ENG <- function(df){
+inLineCite_ENG <- function(df) {
   # 著者の人数によって変わる
-  tmp_name <- df$AUTHORs %>% as.data.frame()
-  ## 二回目以降
-  citeName2 <- tmp_name[1,]$last_name
-  if(NROW(tmp_name)==2){
-    citeName2 <- paste(citeName2,"\\&",tmp_name[2,]$last_name)
-  }
-  if(NROW(tmp_name)>2){
-    citeName2 <- paste(citeName2,"et al.")
-  }
+  tmp_name <- as.data.frame(df$AUTHORs)
+  ### duplicated cheker
+  dplCheck <- df$dplFLG
+  
   ## 初出
-  citeName1 <- citeName2
-  if(NROW(tmp_name)>2){
+  NR <- NROW(tmp_name)
+  if (NR > 1) {
+    ### multi-Authors
     citeName1 <- ""
-    for(i in 1:(NROW(tmp_name)-1)){
-      citeName1 <- paste0(citeName1,tmp_name[i,]$last_name,",")
+    for (i in 1:(NR - 1)) {
+      if (dplCheck > 1) {
+        tmp1 <- paste0(tmp_name[i, ]$initial_first, ".", tmp_name[i, ]$last_name, ",")
+      } else {
+        tmp1 <- paste0(tmp_name[i, ]$last_name, ",")
+      }
+      citeName1 <- paste0(citeName1, tmp1)
     }
-    citeName1 <- paste0(citeName1,"\\&",tmp_name[NROW(tmp_name),]$last_name)
+    ### Last Author
+    tmp1 <- paste0("\\&", tmp_name[NR, ]$last_name)
+    if (dplCheck > 1) {
+      tmp1 <- paste0("\\&", tmp_name[NR, ]$initial_first, ".", tmp_name[NR, ]$last_name)
+    }
+    ### combine All Authors
+    citeName1 <- paste0(citeName1, tmp1)
+  } else {
+    ### Single Author
+    citeName1 <- tmp_name[1, ]$last_name
+    if (dplCheck > 1) {
+      citeName1 <- paste0(tmp_name[1, ]$initial_first, ".", tmp_name[1, ]$last_name)
+    }
   }
-  return(list(citeName1,citeName2))
+  
+  ## 二回目以降
+  ### Single AUthor
+  citeName2 <- tmp_name[1, ]$last_name
+  if (dplCheck > 1) {
+    citeName2 <- paste0(tmp_name[1, ]$initial_first, ".", tmp_name[1, ]$last_name)
+  }
+  ### Two AUthors
+  if (NROW(tmp_name) == 2) {
+    citeName2 <- paste(citeName2, "\\&", tmp_name[2, ]$last_name)
+    if (dplCheck > 1) {
+      citeName2 <- paste(citeName2, "\\&", tmp_name[2, ]$initial_first, ".", tmp_name[2, ]$last_name)
+    }
+  }
+  ### More than 2 Authors
+  if (NROW(tmp_name) > 2) {
+    citeName2 <- paste(citeName2, "et al.")
+  }
+  
+  
+  citeCheckFLG <- paste0(citeName1, "-", df$YEAR)
+  return(data.frame(citeName1, citeName2, citeCheckFLG))
 }
 
 #' in-Line Cittion(in Japanese)
+#' @importFrom dplyr select
 #' @param df Bib.df File from jpa_cite
 #' @export
-inLineCite_JPN <- function(df){
+inLineCite_JPN <- function(df) {
   # 著者の人数によって変わる
-  tmp_name <- df$AUTHORs %>% as.data.frame()
-  ## 二回目以降
-  citeName2 <- tmp_name[1,]$last_name
-  if(NROW(tmp_name)==2){
-    citeName2 <- paste(citeName2,"・",tmp_name[2,]$last_name)
-  }
-  if(NROW(tmp_name)>2){
-    citeName2 <- paste0(citeName2,"他")
-  }
+  tmp_name <- as.data.frame(df$AUTHORs)
+  ### duplicated cheker
+  dplCheck <- df$dplFLG
+  
+  NR <- NROW(tmp_name)
   ## 初出
-  citeName1 <- citeName2
-  if(NROW(tmp_name)>2){
+  if (NR > 1) {
+    ### multi-Authors
     citeName1 <- ""
-    for(i in 1:(NROW(tmp_name)-1)){
-      citeName1 <- paste0(citeName1,tmp_name[i,]$last_name,"・")
+    for (i in 1:(NR - 1)) {
+      if (dplCheck > 1) {
+        tmp1 <- paste0(tmp_name[i, ]$last_name, tmp_name[i, ]$first_name, stri_unescape_unicode("\\u30fb"))
+      } else {
+        tmp1 <- paste0(tmp_name[i, ]$last_name, stri_unescape_unicode("\\u30fb"))
+      }
+      citeName1 <- paste0(citeName1, tmp1)
     }
-    citeName1 <- paste0(citeName1,tmp_name[NROW(tmp_name),]$last_name)
+    ### Last Author
+    tmp1 <- paste0(tmp_name[NR, ]$last_name)
+    if (dplCheck > 1) {
+      tmp1 <- paste0(tmp_name[NR, ]$last_name, tmp_name[NR, ]$first_name)
+    }
+    citeName1 <- paste0(citeName1, tmp1)
+  } else {
+    ### single-Author
+    citeName1 <- tmp_name[1, ]$last_name
+    if (dplCheck > 1) {
+      citeName1 <- paste0(tmp_name[1, ]$last_name, tmp_name[1, ]$first_name)
+    }
   }
-  return(list(citeName1,citeName2))
+  
+  
+  ## 二回目以降
+  citeName2 <- tmp_name[1, ]$last_name
+  if (dplCheck > 1) {
+    citeName2 <- paste0(tmp_name[1, ]$last_name, tmp_name[1, ]$first_name)
+  }
+  if (NROW(tmp_name) == 2) {
+    citeName2 <- paste0(citeName2, stri_unescape_unicode("\\u30fb"), tmp_name[2, ]$last_name)
+    if (dplCheck > 1) {
+      citeName2 <- paste0(
+        citeName2, stri_unescape_unicode("\\u30fb"),
+        paste0(tmp_name[2, ]$last_name, tmp_name[2, ]$first_name)
+      )
+    }
+  }
+  if (NROW(tmp_name) > 2) {
+    citeName2 <- paste0(citeName2, stri_unescape_unicode("\\u4ed6"))
+  }
+  citeCheckFLG <- paste0(citeName1, "-", df$YEAR)
+  return(data.frame(citeName1, citeName2, citeCheckFLG))
 }
