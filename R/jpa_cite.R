@@ -302,5 +302,6 @@ jpa_cite <- function(Rmd_file, Bib_file) {
     ### write .tex File
     write(bib.df[i, ]$prefix, file = FN, append = T)
     write(bib.df[i, ]$pBib, file = FN, append = T)
+    write("\n", file = FN, append = T)
   }
 }

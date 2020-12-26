@@ -33,30 +33,30 @@ name_spliter <- function(dat) {
 #' @importFrom dplyr if_else
 #' @param df Bib data frame
 #' @export
-pBibMaker <- function(df){
-  tmp = case_when(
+pBibMaker <- function(df) {
+  tmp <- case_when(
     df$CATEGORY == "BOOK" ~ if_else(df$langFLG, print_English_book(df),
-                                    print_Japanese_book(df)
+      print_Japanese_book(df)
     ),
     df$CATEGORY == "ARTICLE" ~ if_else(df$langFLG, print_English_article(df),
-                                       print_Japanese_article(df)
+      print_Japanese_article(df)
     ),
     df$CATEGORY == "INCOLLECTION" ~ if_else(df$langFLG, print_English_incollection(df),
-                                            print_Japanese_incollection(df)
+      print_Japanese_incollection(df)
     ),
     df$CATEGORY == "INPROCEEDINGS" ~ if_else(df$langFLG, print_English_inproceedings(df),
-                                             print_Japanese_inproceedings(df)
+      print_Japanese_inproceedings(df)
     )
   )
   return(tmp)
-} 
+}
 
 #' prefixMaker function
 #' @importFrom stringi stri_escape_unicode
 #' @importFrom stringr str_replace_all
 #' @param df Bib data frame
 #' @export
-prefixMaker <- function(df){
+prefixMaker <- function(df) {
   tmp.bibtexKey <- stri_escape_unicode(df$BIBTEXKEY) %>%
     str_replace_all(pattern = "\\\\u", replacement = "ux")
   prefix <- paste0("\\hypertarget{refs}{}
@@ -298,7 +298,7 @@ print_Japanese_article <- function(df) {
   pBib <- paste(df$pName, df$pYear, df$TITLE, "\\ ", JOURNAL.tmp, Vol_and_Num.tmp, PAGES.tmp)
   ## DOI
   if (!is.na(df$DOI)) {
-    pBib <- paste0(pBib, "\\ \\verb|",df$DOI,"|")
+    pBib <- paste0(pBib, "\\ \\verb|", df$DOI, "|")
   }
   return(pBib)
 }
@@ -324,7 +324,7 @@ print_English_incollection <- function(df) {
 #' @export
 print_Japanese_incollection <- function(df) {
   postfix <- stri_unescape_unicode("(\\u7de8)")
-  inbook.tmp1 <- paste0("\\ ",print_JName(df$EDITORs), postfix)
+  inbook.tmp1 <- paste0("\\ ", print_JName(df$EDITORs), postfix)
   edition.tmp <- if_else(!is.na(df$EDITION), paste0(df$EDITION, " ed.,"), "")
   inbook.tmp2 <- paste0(df$BOOKTITLE, " (", edition.tmp, "pp.", df$PAGES, ").")
   pBib <- paste(df$pName, df$pYear, df$TITLE, inbook.tmp1, inbook.tmp2, df$PUBLISHER)
@@ -357,7 +357,7 @@ inLineCite_ENG <- function(df) {
   tmp_name <- as.data.frame(df$AUTHORs)
   ### duplicated cheker
   dplCheck <- df$dplFLG
-  
+
   ## 初出
   NR <- NROW(tmp_name)
   if (NR > 1) {
@@ -385,7 +385,7 @@ inLineCite_ENG <- function(df) {
       citeName1 <- paste0(tmp_name[1, ]$initial_first, ".", tmp_name[1, ]$last_name)
     }
   }
-  
+
   ## 二回目以降
   ### Single AUthor
   citeName2 <- tmp_name[1, ]$last_name
@@ -403,8 +403,8 @@ inLineCite_ENG <- function(df) {
   if (NROW(tmp_name) > 2) {
     citeName2 <- paste(citeName2, "et al.")
   }
-  
-  
+
+
   citeCheckFLG <- paste0(citeName1, "-", df$YEAR)
   return(data.frame(citeName1, citeName2, citeCheckFLG))
 }
@@ -418,7 +418,7 @@ inLineCite_JPN <- function(df) {
   tmp_name <- as.data.frame(df$AUTHORs)
   ### duplicated cheker
   dplCheck <- df$dplFLG
-  
+
   NR <- NROW(tmp_name)
   ## 初出
   if (NR > 1) {
@@ -445,8 +445,8 @@ inLineCite_JPN <- function(df) {
       citeName1 <- paste0(tmp_name[1, ]$last_name, tmp_name[1, ]$first_name)
     }
   }
-  
-  
+
+
   ## 二回目以降
   citeName2 <- tmp_name[1, ]$last_name
   if (dplCheck > 1) {
