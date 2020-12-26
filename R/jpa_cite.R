@@ -48,7 +48,8 @@ value_extractor <- function(string) {
 #' @param Rmd_file file name of R Markdown file
 #' @param Bib_file file name of Bib file
 #' @return Make reference list and add it to R Markdown file
-#' @examples #jpa_cite(Rmd_file = "RmdFileName",Bib_file = "BibFileName")
+#' @examples
+#' # jpa_cite(Rmd_file = "RmdFileName",Bib_file = "BibFileName")
 #' @export
 
 jpa_cite <- function(Rmd_file, Bib_file) {
@@ -229,7 +230,7 @@ jpa_cite <- function(Rmd_file, Bib_file) {
       EDITORs = map(EDITOR, ~ name_spliter(.x)),
       JAUTHORs = map(JAUTHOR, ~ name_spliter(.x)),
       JKANYAKUs = map(JKANYAKU, ~ name_spliter(.x)),
-      TRANSAUTHORs = map(TRANSAUTHOR, ~name_spliter(.x))
+      TRANSAUTHORs = map(TRANSAUTHOR, ~ name_spliter(.x))
     )
 
   ## Filtering to only actually cited
@@ -258,7 +259,25 @@ jpa_cite <- function(Rmd_file, Bib_file) {
     ## Add a string if it needs
     mutate(addletter = if_else(n > 1, letters[num], "")) %>%
     ### Retrun
-    mutate(YEAR = paste0(YEAR, addletter))
+    mutate(YEAR = paste0(YEAR, addletter)) %>%
+    ### Language type check
+    mutate(langFLG = !str_detect(paste0(AUTHOR, TITLE, JTITLE, JOURNAL), pattern = "\\p{Hiragana}|\\p{Katakana}|\\p{Han}")) %>%
+    ### printed name and year in ref.list
+    mutate(
+      pName = if_else(langFLG, print_EName(AUTHORs), print_JName(AUTHORs)),
+      pYear = paste0("(", YEAR, ").")
+    ) %>%
+    # prepare for List --------------------------------------------------------
+    group_by(ID) %>%
+    nest() %>%
+    mutate(
+      pBib = purrr::map(.x = data, .f = ~ pBibMaker(.x)),
+      prefix = purrr::map(.x = data, .f = ~ prefixMaker(.x))
+    ) %>% 
+    unnest(cols = c(data, pBib, prefix))
+
+
+  # Write bibtex_temp.tex ---------------------------------------------------
   ### Set the outout File name
   FN <- Bib_file %>% str_replace(pattern = ".bib", replacement = "")
   FN <- paste0(FN, ".tex")
@@ -266,43 +285,9 @@ jpa_cite <- function(Rmd_file, Bib_file) {
   write(header, file = FN, append = F)
   ## output reference to tex File
   for (i in 1:NROW(bib.df)) {
-    tmp <- bib.df[i, ]
-    # Check the record is in English or Not.
-    tmpFLG <- paste0(tmp$AUTHOR,tmp$TITLE,tmp$JTITLE,tmp$JOURNAL)
-    langFLG <- !str_detect(tmpFLG,pattern = "\\p{Hiragana}|\\p{Katakana}|\\p{Han}")
-    if (langFLG) {
-      tmp$pName <- print_EName(tmp$AUTHORs)
-    } else {
-      tmp$pName <- print_JName(tmp$AUTHORs)
-    }
-    
-    # Year in brackets
-    tmp$pYear <- paste0("(", tmp$YEAR, ").")
-
-    ### Make Bib record
-    pBib <- case_when(
-      tmp$CATEGORY == "BOOK" ~ if_else(langFLG, print_English_book(tmp),
-        print_Japanese_book(tmp)
-      ),
-      tmp$CATEGORY == "ARTICLE" ~ if_else(langFLG, print_English_article(tmp),
-        print_Japanese_article(tmp)
-      ),
-      tmp$CATEGORY == "INCOLLECTION" ~ if_else(langFLG, print_English_incollection(tmp),
-        print_Japanese_incollection(tmp)
-      ),
-      tmp$CATEGORY == "INPROCEEDINGS" ~ if_else(langFLG, print_English_inproceedings(tmp),
-        print_Japanese_inproceedings(tmp)
-      )
-    )
     ### write Bib Record
-    #### convert BIBTEXKEY to utf8code
-    tmp.bibtexKey <- stringi::stri_escape_unicode(tmp$BIBTEXKEY) %>%
-      str_replace_all(pattern = "\\\\u", replacement = "ux")
-    prefix <- paste0("\\hypertarget{refs}{}
-    \\leavevmode\\hypertarget{ref-", tmp.bibtexKey, "}{}%")
     ### write .tex File
-    write(prefix, file = FN, append = T)
-    write(pBib, file = FN, append = T)
-    write("\n", file = FN, append = T)
+    write(bib.df[i, ]$prefix, file = FN, append = T)
+    write(bib.df[i, ]$pBib, file = FN, append = T)
   }
 }

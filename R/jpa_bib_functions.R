@@ -28,6 +28,44 @@ name_spliter <- function(dat) {
     return()
 }
 
+
+#' pBibMaker function
+#' @importFrom dplyr if_else
+#' @param df Bib data frame
+#' @export
+pBibMaker <- function(df){
+  tmp = case_when(
+    df$CATEGORY == "BOOK" ~ if_else(df$langFLG, print_English_book(df),
+                                    print_Japanese_book(df)
+    ),
+    df$CATEGORY == "ARTICLE" ~ if_else(df$langFLG, print_English_article(df),
+                                       print_Japanese_article(df)
+    ),
+    df$CATEGORY == "INCOLLECTION" ~ if_else(df$langFLG, print_English_incollection(df),
+                                            print_Japanese_incollection(df)
+    ),
+    df$CATEGORY == "INPROCEEDINGS" ~ if_else(df$langFLG, print_English_inproceedings(df),
+                                             print_Japanese_inproceedings(df)
+    )
+  )
+  return(tmp)
+} 
+
+#' prefixMaker function
+#' @importFrom stringi stri_escape_unicode
+#' @importFrom stringr str_replace_all
+#' @param df Bib data frame
+#' @export
+prefixMaker <- function(df){
+  tmp.bibtexKey <- stri_escape_unicode(df$BIBTEXKEY) %>%
+    str_replace_all(pattern = "\\\\u", replacement = "ux")
+  prefix <- paste0("\\hypertarget{refs}{}
+    \\leavevmode\\hypertarget{ref-", tmp.bibtexKey, "}{}%")
+  return(prefix)
+}
+
+
+
 #' Print name function(English)
 #' @importFrom magrittr %>%
 #' @importFrom dplyr mutate
@@ -296,4 +334,58 @@ print_English_inproceedings <- function(df) {
 print_Japanese_inproceedings <- function(df) {
   pBib <- paste(df$pName, df$pYear, df$TITLE, df$JOURNAL, ".\\ ", df$PAGES, ".")
   return(pBib)
+}
+
+
+
+#' in-Line Cittion(in English)
+#' @param df Bib.df File from jpa_cite
+#' @export
+inLineCite_ENG <- function(df){
+  # 著者の人数によって変わる
+  tmp_name <- df$AUTHORs %>% as.data.frame()
+  ## 二回目以降
+  citeName2 <- tmp_name[1,]$last_name
+  if(NROW(tmp_name)==2){
+    citeName2 <- paste(citeName2,"\\&",tmp_name[2,]$last_name)
+  }
+  if(NROW(tmp_name)>2){
+    citeName2 <- paste(citeName2,"et al.")
+  }
+  ## 初出
+  citeName1 <- citeName2
+  if(NROW(tmp_name)>2){
+    citeName1 <- ""
+    for(i in 1:(NROW(tmp_name)-1)){
+      citeName1 <- paste0(citeName1,tmp_name[i,]$last_name,",")
+    }
+    citeName1 <- paste0(citeName1,"\\&",tmp_name[NROW(tmp_name),]$last_name)
+  }
+  return(list(citeName1,citeName2))
+}
+
+#' in-Line Cittion(in Japanese)
+#' @param df Bib.df File from jpa_cite
+#' @export
+inLineCite_JPN <- function(df){
+  # 著者の人数によって変わる
+  tmp_name <- df$AUTHORs %>% as.data.frame()
+  ## 二回目以降
+  citeName2 <- tmp_name[1,]$last_name
+  if(NROW(tmp_name)==2){
+    citeName2 <- paste(citeName2,"・",tmp_name[2,]$last_name)
+  }
+  if(NROW(tmp_name)>2){
+    citeName2 <- paste0(citeName2,"他")
+  }
+  ## 初出
+  citeName1 <- citeName2
+  if(NROW(tmp_name)>2){
+    citeName1 <- ""
+    for(i in 1:(NROW(tmp_name)-1)){
+      citeName1 <- paste0(citeName1,tmp_name[i,]$last_name,"・")
+    }
+    citeName1 <- paste0(citeName1,tmp_name[NROW(tmp_name),]$last_name)
+  }
+  return(list(citeName1,citeName2))
 }
