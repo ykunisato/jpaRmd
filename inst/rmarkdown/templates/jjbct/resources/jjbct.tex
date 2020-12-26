@@ -373,6 +373,21 @@ $endif$
 \pagewiselinenumbers 
 \renewcommand{\baselinestretch}{1.4}
 
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
+
 \begin{document}
 \pagestyle{empty}
 $if(has-frontmatter)$
@@ -446,5 +461,4 @@ $endif$
 $for(include-after)$
 $include-after$
 $endfor$
-\input{temp_bib.tex}
 \end{document}

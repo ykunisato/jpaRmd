@@ -16,6 +16,7 @@ jpa_jjp <- function(){
   format_pdf
 }
 
+
 #' R Markdown template for paper of Japanese Journal of Behavioral and Cognitive Therapies
 #' 
 #' @export
@@ -35,18 +36,20 @@ jjbct <- function(){
 }
 
 
-#' R Markdown template for paper of the Japanese Journal of Psychology ver2
-#' @importFrom rmarkdown pdf_document
+#' R Markdown template for Reply to reviewers
+#' 
 #' @export
-jpa_jjp2 <- function(){
-  template_tex_file <- system.file("rmarkdown/templates/jpa_jjp2/resources/jpa_jjp2.tex",
+#' @importFrom rmarkdown pdf_document
+
+reply <- function(){
+  template_tex_file <- system.file("rmarkdown/templates/reply/resources/reply.tex",
                                    package = 'jpaRmd')
-  format_pdf <- rmarkdown::pdf_document(latex_engine = "xelatex",
-                                        template = template_tex_file,
-                                        keep_tex = TRUE,
-                                        toc = TRUE,
-                                        toc_depth = 3,
-                                        highlight = 'tango')
+  format_pdf <- pdf_document(latex_engine = "xelatex",
+                             template = template_tex_file,
+                             keep_tex = TRUE,
+                             toc = TRUE,
+                             toc_depth = 3,
+                             highlight = 'tango')
   format_pdf$inherits <- "pdf_document"
   format_pdf
 }
