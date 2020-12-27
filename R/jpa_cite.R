@@ -365,6 +365,7 @@ jpa_cite <- function(Rmd_file, Bib_file) {
       writeLines("\n",Ftmp)
       for(i in 1:NROW(bib.df)){
         writeLines(bib.df[i, ]$pBib,Ftmp)
+        writeLines("\n",Ftmp)
       }  
     }
     
