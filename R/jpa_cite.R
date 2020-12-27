@@ -311,7 +311,7 @@ jpa_cite <- function(Rmd_file, Bib_file) {
   ## count how many times cited
   bib.df$count <- 0
   ## open temporary file
-  Ftmp <- file(paste0(Rmd_file, ".tmp"), "w")
+  Ftmp <- file(paste0("tmp_",Rmd_file), "w")
   ## check the file in each line
   for (i in 1:length(tmpfile)) {
     st <- tmpfile[i]
