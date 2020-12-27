@@ -267,27 +267,27 @@ jpa_cite <- function(Rmd_file, Bib_file) {
       pName = if_else(langFLG, print_EName(AUTHORs), print_JName(AUTHORs)),
       pYear = paste0("(", YEAR, ").")
     ) %>%
-    mutate(dplFLG = 0) %>% 
+    mutate(dplFLG = 0) %>%
     # make items for List
     group_by(ID) %>%
     nest() %>%
     mutate(
       pBib = purrr::map(.x = data, .f = ~ pBibMaker(.x)),
       prefix = purrr::map(.x = data, .f = ~ prefixMaker(.x))
-    )  %>% 
+    ) %>%
     # make items for citating
-    mutate(cite.tmp = purrr::map(.x = data, .f = ~ citationMaker(.x))) %>% 
+    mutate(cite.tmp = purrr::map(.x = data, .f = ~ citationMaker(.x))) %>%
     # Differnt Authors, but same family name,same year --for the case of confusion
-    unnest(cols = c(data, pBib, prefix,cite.tmp)) %>% 
-    group_by(citeCheckFLG) %>% 
-    mutate(dplFLG = n()) %>% 
-    ungroup(citeCheckFLG) %>% 
-    select(-citeName1,-citeName2,-citeCheckFLG) %>% 
-    group_by(ID) %>% 
-    nest() %>% 
-    mutate(cite = purrr::map(.x = data, .f = ~ citationMaker(.x))) %>% 
-    unnest(cols=c(data,cite)) %>% 
-    select(-citeCheckFLG) 
+    unnest(cols = c(data, pBib, prefix, cite.tmp)) %>%
+    group_by(citeCheckFLG) %>%
+    mutate(dplFLG = n()) %>%
+    ungroup(citeCheckFLG) %>%
+    select(-citeName1, -citeName2, -citeCheckFLG) %>%
+    group_by(ID) %>%
+    nest() %>%
+    mutate(cite = purrr::map(.x = data, .f = ~ citationMaker(.x))) %>%
+    unnest(cols = c(data, cite)) %>%
+    select(-citeCheckFLG)
 
 
   # Write bibtex_temp.tex ---------------------------------------------------
@@ -304,4 +304,77 @@ jpa_cite <- function(Rmd_file, Bib_file) {
     write(bib.df[i, ]$pBib, file = FN, append = T)
     write("\n", file = FN, append = T)
   }
+
+  # Rewrite citation in the text. -------------------------------------------------------------------
+  ## get original file
+  tmpfile <- readLines(Rmd_file, warn = F)
+  ## count how many times cited
+  bib.df$count <- 0
+  ## open temporary file
+  Ftmp <- file(paste0(Rmd_file, ".tmp"), "w")
+  ## check the file in each line
+  for (i in 1:length(tmpfile)) {
+    st <- tmpfile[i]
+    checkFLG <- str_detect(st, pattern = "@")
+    if (checkFLG) {
+      # Replacement
+      while (str_detect(st, pattern = "@")) {
+        replacement.item <- st %>% str_extract(pattern = "@[\\[a-zA-Z0-9-_\\.\\p{Hiragana}\\p{Katakana}\\p{Han}]*")
+        loc <- st %>% str_locate(replacement.item)
+        loc <- loc[1] - 1
+        tp <- FALSE
+        if (loc > 0) {
+          tp <- str_sub(st, loc, loc) %>% str_detect(pattern = "\\[")
+        }
+
+        if (tp) {
+          ### citation on the end of line
+          ##### retake citation key
+          replacement.item <- st %>% str_extract(pattern = "\\[.*?\\]")
+          ##### citaton data frame
+          replacement.df <- replacement.item %>%
+            str_extract_all(pattern = "@[a-zA-Z0-9-_\\.\\p{Hiragana}\\p{Katakana}\\p{Han}]*", simplify = T) %>%
+            t() %>%
+            as.data.frame() %>%
+            mutate(KEY = str_replace(V1, pattern = "@", replacement = "")) %>%
+            ### join with bib.df
+            left_join(bib.df, by = c("KEY" = "BIBTEXKEY")) %>%
+            ### get the citation name
+            select(V1, KEY, citeName1, citeName2, pYear, count) %>%
+            mutate(pYear = str_extract(pYear, "[a-z0-9]{4,5}")) %>%
+            mutate(citeName = if_else(count > 0, citeName2, citeName1)) %>%
+            mutate(citation = paste0(citeName, ",", pYear))
+          
+          replacement.word <- replacement.df$citation %>% paste0(collapse = "; ")
+          replacement.word <- paste0("(", replacement.word, ")")
+          ### reform for regular expression
+          replacement.item <- str_replace(replacement.item, pattern = "\\[", replacement = "\\\\[") %>%
+            str_replace(pattern = "\\]", replacement = "\\\\]")
+          ### replacement!!
+          st <- str_replace(st, pattern = replacement.item, replacement = replacement.word)
+          ### count up
+          bib.df[bib.df$BIBTEXKEY %in% replacement.df$KEY, ]$count <- 1
+          
+        } else {
+          
+          ### citation in the line
+          KEY <- str_replace(replacement.item, pattern = "@", replacement = "")
+          ref.df <- bib.df[bib.df$BIBTEXKEY == KEY, ] %>%
+            mutate(pYear = str_sub(pYear, 1, str_length(pYear) - 1))
+          if (bib.df[bib.df$BIBTEXKEY == KEY, ]$count == 0) {
+            # First time
+            st <- str_replace(st, pattern = replacement.item, replacement = paste0(ref.df$citeName1, ref.df$pYear))
+          } else {
+            # more
+            st <- str_replace(st, pattern = replacement.item, replacement = paste0(ref.df$citeName2, ref.df$pYear))
+          }
+          ### count up
+          bib.df[bib.df$BIBTEXKEY == KEY, ]$count <- 1
+        }
+        
+      }
+    }
+    writeLines(st, Ftmp)
+  }
+  close(Ftmp)
 }

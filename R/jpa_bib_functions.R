@@ -353,12 +353,12 @@ print_Japanese_inproceedings <- function(df) {
 #' @param df Bib.df File from jpa_cite
 #' @export
 inLineCite_ENG <- function(df) {
-  # 著者の人数によって変わる
+  # depends on the number of authors
   tmp_name <- as.data.frame(df$AUTHORs)
   ### duplicated cheker
   dplCheck <- df$dplFLG
 
-  ## 初出
+  ## First time
   NR <- NROW(tmp_name)
   if (NR > 1) {
     ### multi-Authors
@@ -386,7 +386,7 @@ inLineCite_ENG <- function(df) {
     }
   }
 
-  ## 二回目以降
+  ## Second time and after
   ### Single AUthor
   citeName2 <- tmp_name[1, ]$last_name
   if (dplCheck > 1) {
@@ -414,13 +414,13 @@ inLineCite_ENG <- function(df) {
 #' @param df Bib.df File from jpa_cite
 #' @export
 inLineCite_JPN <- function(df) {
-  # 著者の人数によって変わる
+  # depends on number of Authors
   tmp_name <- as.data.frame(df$AUTHORs)
   ### duplicated cheker
   dplCheck <- df$dplFLG
 
   NR <- NROW(tmp_name)
-  ## 初出
+  ## First time
   if (NR > 1) {
     ### multi-Authors
     citeName1 <- ""
@@ -447,7 +447,7 @@ inLineCite_JPN <- function(df) {
   }
 
 
-  ## 二回目以降
+  ## Second time, and after
   citeName2 <- tmp_name[1, ]$last_name
   if (dplCheck > 1) {
     citeName2 <- paste0(tmp_name[1, ]$last_name, tmp_name[1, ]$first_name)
