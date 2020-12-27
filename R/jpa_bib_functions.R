@@ -467,18 +467,3 @@ inLineCite_JPN <- function(df) {
   citeCheckFLG <- paste0(citeName1, "-", df$YEAR)
   return(data.frame(citeName1, citeName2, citeCheckFLG))
 }
-
-#' Citation Detector
-#' @importFrom stringr str_extract_all
-#' @importFrom stringr str_replace_all
-#' @param df Bib.df File from jpa_cite
-#' @export
-citeDetector <- function(df){
-  tmp <- df$refs
-  citep <- str_extract_all(tmp,pattern="\\[.+\\]") %>% as.character()
-  tmp <- str_replace_all(tmp,pattern="\\[.+\\]","")
-  citet <- str_extract_all(tmp,pattern="@[a-zA-Z0-9-\\.\\p{Hiragana}\\p{Katakana}\\p{Han}]*") %>% as.character()
-  ret <- data.frame(citep,citet)
-  return(ret)
-}
-
