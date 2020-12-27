@@ -20,4 +20,5 @@ Imports:
     humaniformat,
     rmarkdown,
     kableExtra,
-    knitr
+    knitr,
+    tidyr
