@@ -365,9 +365,9 @@ inLineCite_ENG <- function(df) {
     citeName1 <- ""
     for (i in 1:(NR - 1)) {
       if (dplCheck > 1) {
-        tmp1 <- paste0(tmp_name[i, ]$initial_first, ".", tmp_name[i, ]$last_name, ",")
+        tmp1 <- paste0(tmp_name[i, ]$initial_first, ".", tmp_name[i, ]$last_name, ", ")
       } else {
-        tmp1 <- paste0(tmp_name[i, ]$last_name, ",")
+        tmp1 <- paste0(tmp_name[i, ]$last_name, ", ")
       }
       citeName1 <- paste0(citeName1, tmp1)
     }

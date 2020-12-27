@@ -292,22 +292,6 @@ jpa_cite <- function(Rmd_file, Bib_file) {
     unnest(cols = c(data, cite)) %>%
     select(-citeCheckFLG)
 
-
-  # Write bibtex_temp.tex ---------------------------------------------------
-  ### Set the outout File name
-  FN <- Bib_file %>% str_replace(pattern = ".bib", replacement = "")
-  FN <- paste0(FN, ".tex")
-  header <- "%%% this tex file was build by jpaRmd::jpa_cite() %%% \n"
-  write(header, file = FN, append = F)
-  ## output reference to tex File
-  for (i in 1:NROW(bib.df)) {
-    ### write Bib Record
-    ### write .tex File
-    write(bib.df[i, ]$prefix, file = FN, append = T)
-    write(bib.df[i, ]$pBib, file = FN, append = T)
-    write("\n", file = FN, append = T)
-  }
-
   # Rewrite citation in the text. -------------------------------------------------------------------
   ## get original file
   tmpfile <- readLines(Rmd_file, warn = F)
@@ -319,6 +303,7 @@ jpa_cite <- function(Rmd_file, Bib_file) {
   for (i in 1:length(tmpfile)) {
     st <- tmpfile[i]
     checkFLG <- str_detect(st, pattern = "@")
+    refFLG <- str_detect(st,pattern="# \\u5f15\\u7528\\u6587\\u732e")
     if (checkFLG) {
       # Replacement
       while (str_detect(st, pattern = "@")) {
@@ -378,6 +363,15 @@ jpa_cite <- function(Rmd_file, Bib_file) {
       }
     }
     writeLines(st, Ftmp)
+    ## include reference
+    if(refFLG){
+      writeLines("\n",Ftmp)
+      for(i in 1:NROW(bib.df)){
+        writeLines(bib.df[i, ]$pBib,Ftmp)
+        writeLines("\n",Ftmp)
+      }  
+    }
+    
   }
   close(Ftmp)
 }
