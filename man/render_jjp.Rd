@@ -4,7 +4,7 @@
 \alias{render_jjp}
 \title{render function for paper of Japanese Journal of Psychology}
 \usage{
-render_jjp(Rmd_file = "Untitled.Rmd", Bib_file = "reference.bib")
+render_jjp(Rmd_file, Bib_file)
 }
 \arguments{
 \item{Rmd_file}{file name of R Markdown file}

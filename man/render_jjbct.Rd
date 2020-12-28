@@ -4,7 +4,7 @@
 \alias{render_jjbct}
 \title{render function for paper of Japanese Journal of Behavioral and Cognitive Therapies}
 \usage{
-render_jjbct(Rmd_file = "Untitled.Rmd", Bib_file = "reference.bib")
+render_jjbct(Rmd_file, Bib_file)
 }
 \arguments{
 \item{Rmd_file}{file name of R Markdown file}

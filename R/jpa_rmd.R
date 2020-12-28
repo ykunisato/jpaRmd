@@ -5,7 +5,7 @@
 #' @param Rmd_file file name of R Markdown file
 #' @param Bib_file file name of Bib file
 #' @export
-render_jjp <- function(Rmd_file = "Untitled.Rmd", Bib_file = "reference.bib"){
+render_jjp <- function(Rmd_file, Bib_file){
   jpa_cite(Rmd_file, Bib_file)
   tmp_rmd <- paste0("tmp_",Rmd_file)
   template_tex_file <- system.file("rmarkdown/templates/jpa_jjp/resources/jpa_jjp.tex",
@@ -28,7 +28,7 @@ render_jjp <- function(Rmd_file = "Untitled.Rmd", Bib_file = "reference.bib"){
 #' @param Rmd_file file name of R Markdown file
 #' @param Bib_file file name of Bib file
 #' @export
-render_jjbct <- function(Rmd_file = "Untitled.Rmd", Bib_file = "reference.bib"){
+render_jjbct <- function(Rmd_file, Bib_file){
   jpa_cite(Rmd_file, Bib_file)
   tmp_rmd <- paste0("tmp_",Rmd_file)
   template_tex_file <- system.file("rmarkdown/templates/jjbct/resources/jjbct.tex",
