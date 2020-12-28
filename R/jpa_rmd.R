@@ -1,5 +1,6 @@
 #' render function for paper of the Japanese Journal of Psychology
 #' 
+#' @importFrom rmarkdown render
 #' @importFrom rmarkdown pdf_document
 #' @param Rmd_file file name of R Markdown file
 #' @param Bib_file file name of Bib file
