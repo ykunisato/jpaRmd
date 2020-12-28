@@ -25,6 +25,7 @@ value_extractor <- function(string) {
   return(content)
 }
 
+
 #' Add citation function
 #' @importFrom magrittr %>%
 #' @importFrom tibble as_tibble
@@ -36,6 +37,7 @@ value_extractor <- function(string) {
 #' @importFrom dplyr bind_rows
 #' @importFrom dplyr case_when
 #' @importFrom dplyr if_else
+#' @importFrom dplyr n
 #' @importFrom tidyr unnest
 #' @importFrom tidyr nest
 #' @importFrom stringr str_extract
