@@ -1,4 +1,4 @@
-#' render function for paper of the Japanese Journal of Psychology
+#' render function for paper of Japanese Journal of Psychology
 #' 
 #' @importFrom rmarkdown render
 #' @importFrom rmarkdown pdf_document
@@ -21,32 +21,16 @@ render_jjp <- function(Rmd_file = "Untitled.Rmd", Bib_file = "reference.bib"){
   render(tmp_rmd,format_pdf,output_file)
 }
 
-
-#' R Markdown template for paper of the Japanese Journal of Psychology
+#' render function for paper of Japanese Journal of Behavioral and Cognitive Therapies
 #' 
+#' @importFrom rmarkdown render
 #' @importFrom rmarkdown pdf_document
+#' @param Rmd_file file name of R Markdown file
+#' @param Bib_file file name of Bib file
 #' @export
-
-jpa_jjp <- function(){
-  template_tex_file <- system.file("rmarkdown/templates/jpa_jjp/resources/jpa_jjp.tex",
-                             package = 'jpaRmd')
-  format_pdf <- rmarkdown::pdf_document(latex_engine = "xelatex",
-                                        template = template_tex_file,
-                                        keep_tex = TRUE,
-                                        toc = TRUE,
-                                        toc_depth = 3,
-                                        highlight = 'tango')
-  format_pdf$inherits <- "pdf_document"
-  format_pdf
-}
-
-
-#' R Markdown template for paper of Japanese Journal of Behavioral and Cognitive Therapies
-#' 
-#' @export
-#' @importFrom rmarkdown pdf_document
-
-jjbct <- function(){
+render_jjbct <- function(Rmd_file = "Untitled.Rmd", Bib_file = "reference.bib"){
+  jpa_cite(Rmd_file, Bib_file)
+  tmp_rmd <- paste0("tmp_",Rmd_file)
   template_tex_file <- system.file("rmarkdown/templates/jjbct/resources/jjbct.tex",
                                    package = 'jpaRmd')
   format_pdf <- pdf_document(latex_engine = "xelatex",
@@ -56,7 +40,8 @@ jjbct <- function(){
                              toc_depth = 3,
                              highlight = 'tango')
   format_pdf$inherits <- "pdf_document"
-  format_pdf
+  output_file <- strsplit(Rmd_file, ".Rmd")[[1]]
+  render(tmp_rmd,format_pdf,output_file)
 }
 
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/jpa_rmd.R
 \name{render_jjp}
 \alias{render_jjp}
-\title{render function for paper of the Japanese Journal of Psychology}
+\title{render function for paper of Japanese Journal of Psychology}
 \usage{
 render_jjp(Rmd_file = "Untitled.Rmd", Bib_file = "reference.bib")
 }
@@ -12,5 +12,5 @@ render_jjp(Rmd_file = "Untitled.Rmd", Bib_file = "reference.bib")
 \item{Bib_file}{file name of Bib file}
 }
 \description{
-render function for paper of the Japanese Journal of Psychology
+render function for paper of Japanese Journal of Psychology
 }

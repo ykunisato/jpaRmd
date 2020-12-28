@@ -1,7 +1,6 @@
 ---
-bibliography:  reference.bib
 suppress-bibliography: yes
-output: jpaRmd::jjbct
+output: jpaRmd::render_jjbct(Rmd_file = "Untitled.Rmd", Bib_file = "reference.bib")
 ---
 
 <!-- 
@@ -146,8 +145,9 @@ cor_result <- cor.test(summary_bfi_fig$Extraversion,summary_bfi_fig$Neuroticism)
 \setlength{\parindent}{-0.3in}
 \setlength{\leftskip}{0.2in}
 \setlength{\parskip}{8pt}
-<!-- 引用文献ファイル名を以下の{ }内に入れてください。拡張子は不要です。-->
-\input{reference}
+
+<insert_reference>
+
 \endgroup
 
 \clearpage 
