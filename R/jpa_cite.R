@@ -35,6 +35,7 @@ value_extractor <- function(string) {
 #' @importFrom dplyr ungroup
 #' @importFrom dplyr bind_rows
 #' @importFrom dplyr case_when
+#' @importFrom dplyr if_else
 #' @importFrom tidyr unnest
 #' @importFrom tidyr nest
 #' @importFrom stringr str_extract
