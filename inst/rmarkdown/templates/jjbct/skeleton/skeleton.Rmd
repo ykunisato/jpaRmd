@@ -36,7 +36,6 @@ library(psych)
 library(gridExtra)
 library(jtools)
 library(ggsignif)
-jpaRmd::jpa_cite(Rmd_file = "Untitled.Rmd", Bib_file = "reference.bib")
 ```
 
 　はじめに，ここから文章を書き始めます。以降が論文の本文になります。どんどん書いていきましょう！
