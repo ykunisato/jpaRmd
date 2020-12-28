@@ -47,6 +47,7 @@ value_extractor <- function(string) {
 #' @importFrom stringr str_sub
 #' @importFrom stringr str_detect
 #' @importFrom stringr str_to_upper
+#' @importFrom stringr str_locate
 #' @importFrom stringi stri_enc_isascii
 #' @importFrom stringi stri_escape_unicode
 #' @importFrom stringi stri_unescape_unicode
