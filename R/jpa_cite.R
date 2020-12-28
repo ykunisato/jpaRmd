@@ -300,7 +300,7 @@ jpa_cite <- function(Rmd_file, Bib_file) {
   for (i in 1:length(tmpfile)) {
     st <- tmpfile[i]
     checkFLG <- str_detect(st, pattern = "@")
-    refFLG <- str_detect(st,pattern="# \\u5f15\\u7528\\u6587\\u732e")
+    refFLG <- str_detect(st,pattern="<insert_reference>")
     if (checkFLG) {
       # Replacement
       while (str_detect(st, pattern = "@")) {
