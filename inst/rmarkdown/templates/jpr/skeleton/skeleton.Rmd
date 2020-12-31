@@ -11,7 +11,46 @@ output: jpaRmd::render_jpr(Rmd_file = "Untitled.Rmd", Bib_file = "reference.bib"
 　削除しても問題はないので，邪魔になったら削除してもいいです。
 -->
 
+<!-- 
+このテンプレートは，１ページが６００字になるように調整されています。心理学評論は38000字以内なので，このフォーマットで63枚以内になるように執筆する。超過やその他の詳細については，執筆規定を参照ください。
+http://sjpr.jp/pdf/kitei2013.pdf
+-->
+\thispagestyle{empty}
+
+
+## Can we write a paper of the Japanese Psychological review with RMarkdown?
+
+Yoshihiko Kunisato${}^\text{1}$・Yoshihiko. Senshu. Kunisato${}^\text{2}$
+
+Department of Psychology, School of Human Sciences, Senshu University${}^\text{1}$,
+Department of Psychology, School of Human Sciences, Sakigake Senshu University${}^\text{2}$
+
+<!-- 
+${}^\text{1}$は，上付き文字で数字をつけるための記法です。特に考える必要はなくて，｛｝内を変更ください。
+-->
+
+### Abstract
+Can we write a paper of the Japanese Psychological Review with RMarkdown? To solve 
+this mystery we headed deep into the Amazon. At the end of our long journey we found some great documents about RMarkdown and finally said, "Yes, we can". ... Well, we'll write a abstract like this.
+
+
+**Key words**: RMarkdown, Reproducibility, Japanese Psychological Review
+
+\thispagestyle{empty}
+
+\clearpage 
+
+\thispagestyle{empty}
+
 ## RMarkdownで『心理学評論』の論文は書けるか？
+
+国里愛彦${}^\text{1}$・国里(専修)愛彦${}^\text{2}$
+
+専修大学人間科学部心理学科${}^\text{1}$, 魁専修大学人間科学部心理学科${}^\text{2}$
+
+<!-- 
+${}^\text{1}$は，上付き文字で数字をつけるための記法です。特に考える必要はなくて，｛｝内を変更ください。
+-->
 
 ### 要約
 
@@ -19,13 +58,11 @@ RMarkdownで『心理学評論』の論文が書けるのか？この謎を解�
 
 **キーワード**: RMarkdown, 再現可能性，認知行動療法研究
 
-## Can we write a paper of the Japanese Journal of Behavioral and Cognitive Therapies with RMarkdown?
+\thispagestyle{empty}
 
-### Abstract
-Can we write a paper of the Japanese Psychological Review with RMarkdown? To solve this mystery we headed deep into the Amazon. At the end of our long journey we found some great documents about RMarkdown and finally said, "Yes, we can". ... Well, we'll write a abstract like this.
+\clearpage
 
-**Key words**: RMarkdown, Reproducibility, Japanese Psychological Review
-
+\setcounter{page}{1}
 <!--　このRmdファイル内で使用するRパッケージを以下に追加してください-->
 <!--　また，最後にこのファイルのファイル名，引用文献リストの入っているbibファイル名を入れてください-->
 ```{r message=FALSE, warning=FALSE, include=FALSE}
@@ -59,10 +96,31 @@ https://kunisatolab.github.io/main/how-to-write-with-rstudio.html
 
 　続いて，論文では脚注をつけることがあります。その場合は，このように上付き文字をつけます${}^1$。心理学研究では，引用文献の後ろに脚注をつけることになっているので，ここでつけた上付き文字に対応したものを書き込んでおきます。まあ，こんなに短い距離で２つも脚注とかつけないわけですが，練習のために，もう一つつけます${}^2$。
 
-<!-- 以下は1頁が32字*25行で800字になっているかのチェック用です。
-ご自身の環境でちゃんと1頁が800字になっているか確認をしてから，削除してください。-->
+<!-- 以下は1頁が30字*20行で600字になっているかのチェック用です。
+ご自身の環境でちゃんと1頁が600字になっているか確認をしてから，削除してください。-->
 \clearpage
-１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０前のページで32字*25行で800字になっているか確認します<!-- ここまで削除-->
+１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０
+１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０
+１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０
+１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０
+１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０
+１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０
+１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０
+１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０
+１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０
+１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０
+１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０
+１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０
+１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０
+１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０
+１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０
+１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０
+１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０
+１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０
+１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０
+１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０
+
+前のページで30字*20行で600字になっているか確認します<!-- ここまで削除-->
 
 ## RMarkdownとは
 
