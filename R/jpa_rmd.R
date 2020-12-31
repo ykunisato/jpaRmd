@@ -44,6 +44,28 @@ render_jjbct <- function(Rmd_file, Bib_file){
   render(tmp_rmd,format_pdf,output_file)
 }
 
+#' render function for paper of Japanese Psychological Review
+#' 
+#' @importFrom rmarkdown render
+#' @importFrom rmarkdown pdf_document
+#' @param Rmd_file file name of R Markdown file
+#' @param Bib_file file name of Bib file
+#' @export
+render_jpr <- function(Rmd_file, Bib_file){
+  jpa_cite(Rmd_file, Bib_file)
+  tmp_rmd <- paste0("tmp_",Rmd_file)
+  template_tex_file <- system.file("rmarkdown/templates/jpr/resources/jpr.tex",
+                                   package = 'jpaRmd')
+  format_pdf <- pdf_document(latex_engine = "xelatex",
+                             template = template_tex_file,
+                             keep_tex = TRUE,
+                             toc = TRUE,
+                             toc_depth = 3,
+                             highlight = 'tango')
+  format_pdf$inherits <- "pdf_document"
+  output_file <- strsplit(Rmd_file, ".Rmd")[[1]]
+  render(tmp_rmd,format_pdf,output_file)
+}
 
 #' R Markdown template for Reply to reviewers
 #' 
