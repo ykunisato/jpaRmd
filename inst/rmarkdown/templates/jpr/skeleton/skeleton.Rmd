@@ -159,7 +159,7 @@ gender <- data.frame(table(bfi$gender)) %>%
 
 **心理学再現性確認尺度**　心理学研究の場合，見出しじゃなくて太字にしたい時というがあると思います。左の心理学再現性確認尺度のように，アスタリスク２つではさむとそれができます。
 
-　論文では，図を挿入したりするのですが，その図の挿入箇所の指示を余白ですることが多いです。例えば，Figure 1をこの辺に挿入しようかなというときは，\marginpar{\fbox{Figure 1}}こういう感じでLatexのmarginparパッケージとfboxを活用して，Figure 1を線で囲ったものを作ります。
+　論文では，図を挿入したりするのですが，その図の挿入箇所の指示を余白ですることが多いです。例えば，Figure 1をこの辺に挿入しようかなというときは，\marginpar{\fbox{\textcolor{red}{Figure 1}}}こういう感じでLatexのmarginparパッケージとfboxを活用して，Figure 1を線で囲ったものを作ります。
 
 
 ## 調査手続き
@@ -171,7 +171,7 @@ gender <- data.frame(table(bfi$gender)) %>%
 
 # 結 果
 
-　論文では，表を挿入したりするのですが，その表の挿入箇所の指示を余白ですることが多いです。例えば，Table1をこの辺に挿入しようかなというときは，\marginpar{\fbox{Table1}}こういう感じでLatexのmarginparパッケージとfboxを活用して，Table1を線で囲ったものを作ります。
+　論文では，表を挿入したりするのですが，その表の挿入箇所の指示を余白ですることが多いです。例えば，Table 1をこの辺に挿入しようかなというときは，\marginpar{\fbox{\textcolor{red}{Table 1}}}こういう感じでLatexのmarginparパッケージとfboxを活用して，Table1を線で囲ったものを作ります。
 
 ## 外向性と神経症傾向の関連
 
@@ -188,7 +188,7 @@ cor_result <- cor.test(summary_bfi_fig$Extraversion,summary_bfi_fig$Neuroticism)
 ```
 
 　練習で，psychパッケージのbfiを用いて，外向性と神経症傾向を算出してみましょう。外向性と神経症傾向のPearsonの積率相違関係数は，`r sprintf('%.3f',cor_result$estimate)`であり(*t*(`r sprintf('%.0f',cor_result$parameter)`) = `r sprintf('%.3f',cor_result$statistic)`, *p* = `r sprintf('%.3f',cor_result$p.value)`，その95%信頼区間は，`r sprintf('%.3f',cor_result$conf.int[1])`から`r sprintf('%.3f',cor_result$conf.int[2])`です。
-　散布図は，Figure 2に示す\marginpar{\fbox{Figure 2}}。
+　散布図は，Figure 2に示す\marginpar{\fbox{\textcolor{red}{Figure 2}}}。
 
 # 考 察
 
