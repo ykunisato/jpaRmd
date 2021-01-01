@@ -420,6 +420,7 @@ jpa_cite <- function(Rmd_file, Bib_file) {
 #' # jpr_cite(Rmd_file = "RmdFileName",Bib_file = "BibFileName")
 #' @export
 
+# function developed
 jpr_cite <- function(Rmd_file, Bib_file) {
   # check argument
   if (missing(Rmd_file)) {
@@ -663,7 +664,10 @@ jpr_cite <- function(Rmd_file, Bib_file) {
   ## count how many times cited
   bib.df$count <- 0
   ## open temporary file
-  Ftmp <- file(paste0("tmp_",Rmd_file), "w")
+  Ftmp <- file(paste0("tmp_author_",Rmd_file), "w")
+  Ftmp2 <- file(paste0("tmp_",Rmd_file), "w")
+  Ftmp3 <- file(paste0("tmp_abst_author_",Rmd_file), "w")
+  Ftmp4 <- file(paste0("tmp_abst_",Rmd_file), "w")
   ## check the file in each line
   for (i in 1:length(tmpfile)) {
     st <- tmpfile[i]
@@ -727,6 +731,21 @@ jpr_cite <- function(Rmd_file, Bib_file) {
         
       }
     }
+    # FLG of author info
+    if(i == 1){authorInfoOn <- FALSE}
+    if(str_detect(st,pattern="author-info-start")){
+      authorInfoOn <- TRUE
+    }
+    if(str_detect(st,pattern="author-info-end")){
+      authorInfoOn <- FALSE
+    }
+    # FLG of end of abstract
+    if(i == 1){authorInfoOn <- FALSE}
+    if(str_detect(st,pattern="abstract-end")){
+      abstEnd <- TRUE
+    }
+    
+    # write paper with author info
     writeLines(st, Ftmp)
     ## include reference
     if(refFLG){
@@ -736,6 +755,48 @@ jpr_cite <- function(Rmd_file, Bib_file) {
         writeLines("\n",Ftmp)
       }  
     }
+    
+    # write paper without author info
+    if(authorInfoOn == FALSE){
+      writeLines(st, Ftmp2)
+      ## include reference
+      if(refFLG){
+        writeLines("\n",Ftmp2)
+        for(i in 1:NROW(bib.df)){
+          writeLines(bib.df[i, ]$pBib,Ftmp2)
+          writeLines("\n",Ftmp2)
+        }  
+      }
+    }
+    
+    # write abstract
+    if(abstEnd == FALSE){
+      # write abstract with author info 
+      writeLines(st, Ftmp3)
+      ## include reference
+      if(refFLG){
+        writeLines("\n",Ftm3p)
+        for(i in 1:NROW(bib.df)){
+          writeLines(bib.df[i, ]$pBib,Ftmp3)
+          writeLines("\n",Ftmp3)
+        }  
+      }
+      # write abstract without author info
+      if(authorInfoOn == FALSE){
+        writeLines(st, Ftmp4)
+        ## include reference
+        if(refFLG){
+          writeLines("\n",Ftmp)
+          for(i in 1:NROW(bib.df)){
+            writeLines(bib.df[i, ]$pBib,Ftmp4)
+            writeLines("\n",Ftmp4)
+          }  
+        }
+      }
+    }
   }
   close(Ftmp)
+  close(Ftmp2)
+  close(Ftmp3)
+  close(Ftmp4)
 }

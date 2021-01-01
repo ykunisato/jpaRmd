@@ -53,7 +53,11 @@ render_jjbct <- function(Rmd_file, Bib_file){
 #' @export
 render_jpr <- function(Rmd_file, Bib_file){
   jpr_cite(Rmd_file, Bib_file)
-  tmp_rmd <- paste0("tmp_",Rmd_file)
+  tmp_rmd1 <- paste0("tmp_author_",Rmd_file)
+  tmp_rmd2 <- paste0("tmp_",Rmd_file)
+  tmp_rmd3 <- paste0("tmp_abst_author_",Rmd_file)
+  tmp_rmd4 <- paste0("tmp_abst_",Rmd_file)
+  
   template_tex_file <- system.file("rmarkdown/templates/jpr/resources/jpr.tex",
                                    package = 'jpaRmd')
   format_pdf <- pdf_document(latex_engine = "xelatex",
@@ -64,7 +68,10 @@ render_jpr <- function(Rmd_file, Bib_file){
                              highlight = 'tango')
   format_pdf$inherits <- "pdf_document"
   output_file <- strsplit(Rmd_file, ".Rmd")[[1]]
-  render(tmp_rmd,format_pdf,output_file)
+  render(tmp_rmd1,format_pdf,output_file)
+  render(tmp_rmd2,format_pdf,output_file)
+  render(tmp_rmd3,format_pdf,output_file)
+  render(tmp_rmd4,format_pdf,output_file)
 }
 
 #' R Markdown template for Reply to reviewers
