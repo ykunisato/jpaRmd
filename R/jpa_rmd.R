@@ -67,11 +67,14 @@ render_jpr <- function(Rmd_file, Bib_file){
                              toc_depth = 3,
                              highlight = 'tango')
   format_pdf$inherits <- "pdf_document"
-  output_file <- strsplit(Rmd_file, ".Rmd")[[1]]
-  render(tmp_rmd1,format_pdf,output_file)
-  render(tmp_rmd2,format_pdf,output_file)
-  render(tmp_rmd3,format_pdf,output_file)
-  render(tmp_rmd4,format_pdf,output_file)
+  output_file1 <- paste0(strsplit(Rmd_file, ".Rmd")[[1]],"_authorInfo")
+  output_file2 <- paste0(strsplit(Rmd_file, ".Rmd")[[1]])
+  output_file3 <- paste0(strsplit(Rmd_file, ".Rmd")[[1]],"_abst_authorInfo")
+  output_file4 <- paste0(strsplit(Rmd_file, ".Rmd")[[1]],"_abst")
+  render(tmp_rmd1,format_pdf,output_file1)
+  render(tmp_rmd2,format_pdf,output_file2)
+  render(tmp_rmd3,format_pdf,output_file3)
+  render(tmp_rmd4,format_pdf,output_file4)
 }
 
 #' R Markdown template for Reply to reviewers
