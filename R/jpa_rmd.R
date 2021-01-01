@@ -52,7 +52,7 @@ render_jjbct <- function(Rmd_file, Bib_file){
 #' @param Bib_file file name of Bib file
 #' @export
 render_jpr <- function(Rmd_file, Bib_file){
-  jpa_cite(Rmd_file, Bib_file)
+  jpr_cite(Rmd_file, Bib_file)
   tmp_rmd <- paste0("tmp_",Rmd_file)
   template_tex_file <- system.file("rmarkdown/templates/jpr/resources/jpr.tex",
                                    package = 'jpaRmd')

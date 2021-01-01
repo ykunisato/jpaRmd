@@ -20,13 +20,15 @@ http://sjpr.jp/pdf/kitei2013.pdf
 
 ## Can we write a paper of the Japanese Psychological review with RMarkdown?
 
-Yoshihiko Kunisato${}^\text{1}$・Yoshihiko. Senshu. Kunisato${}^\text{2}$
+<!-- author-info-start -->
 
-Department of Psychology, School of Human Sciences, Senshu University${}^\text{1}$,
-Department of Psychology, School of Human Sciences, Sakigake Senshu University${}^\text{2}$
+Yoshihiko Kunisato${}^\text{1}$・Yoshihiko　Onihige${}^\text{2}$
 
+Senshu University${}^\text{1}$, Sakigake!! Senshu University${}^\text{2}$
+
+<!-- author-info-end -->
 <!-- 
-${}^\text{1}$は，上付き文字で数字をつけるための記法です。特に考える必要はなくて，｛｝内を変更ください。
+${}^\text{1}$は，上付き文字で数字をつけるための記法です。特に考える必要はなくて，｛｝内を変更ください。author-info-startとauthor-info-endの間に著者名や所属などの情報をいれてください。これらを含めたファイルと含めてないファイルを出力します
 -->
 
 ### Abstract
@@ -44,12 +46,16 @@ this mystery we headed deep into the Amazon. At the end of our long journey we f
 
 ## RMarkdownで『心理学評論』の論文は書けるか？
 
-国里愛彦${}^\text{1}$・国里(専修)愛彦${}^\text{2}$
+<!-- author-info-start -->
+国里愛彦${}^\text{1}$・鬼髭愛彦${}^\text{2}$
 
-専修大学人間科学部心理学科${}^\text{1}$, 魁専修大学人間科学部心理学科${}^\text{2}$
+専修大学${}^\text{1}$, 魁!!専修大学${}^\text{2}$
 
+謝辞:専修大学の暗黒卿教授に有益なコメントをいただきました。記して感謝の意を表します。本研究はJSPS科研費 JP12345678の助成を受けたものです。
+
+<!-- author-info-end -->
 <!-- 
-${}^\text{1}$は，上付き文字で数字をつけるための記法です。特に考える必要はなくて，｛｝内を変更ください。
+${}^\text{1}$は，上付き文字で数字をつけるための記法です。特に考える必要はなくて，｛｝内を変更ください。author-info-startとauthor-info-endの間に著者名や所属などの情報をいれてください。これらを含めたファイルと含めてないファイルを出力します
 -->
 
 ### 要約
