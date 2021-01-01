@@ -740,7 +740,7 @@ jpr_cite <- function(Rmd_file, Bib_file) {
       authorInfoOn <- FALSE
     }
     # FLG of end of abstract
-    if(i == 1){authorInfoOn <- FALSE}
+    if(i == 1){abstEnd <- FALSE}
     if(str_detect(st,pattern="abstract-end")){
       abstEnd <- TRUE
     }
