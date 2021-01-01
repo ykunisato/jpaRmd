@@ -66,6 +66,8 @@ RMarkdownで『心理学評論』の論文が書けるのか？この謎を解�
 
 \thispagestyle{empty}
 
+<!-- abstract-end -->
+
 \clearpage
 
 \setcounter{page}{1}

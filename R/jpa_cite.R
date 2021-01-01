@@ -736,7 +736,6 @@ jpr_cite <- function(Rmd_file, Bib_file) {
         writeLines("\n",Ftmp)
       }  
     }
-    
   }
   close(Ftmp)
 }
