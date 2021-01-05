@@ -223,20 +223,20 @@ bib_to_DF <- function(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F
   for (i in 1:NROW(refAll)) {
     refFLG <- refFLG | refAll[i, ]$refs %>% str_detect(pattern = refKey)
   }
-  bib.df <- bib.df[refFLG, ]  
-  
+  bib.df <- bib.df[refFLG, ]
+
   bib.df <- bib.df %>%
     ## In the case which the same author has some papers in the same year, assign an alphabet
     ### sorting Order; in JPA, the sorting follows the reading order of Japanese-YOMI or English-AUTHOR
     mutate(sortRecord = if_else(is.na(YOMI), AUTHOR, YOMI)) %>%
     ## str(YAER) is character, make Numeric one
-    mutate(YEARn = as.numeric(YEAR)) %>% 
+    mutate(YEARn = as.numeric(YEAR)) %>%
     ## sort by Author and Year
     arrange(sortRecord, YEARn) %>%
     ## group by Author and Year
     group_by(sortRecord, YEARn) %>%
     ## count the papers with group
-    mutate(n = n()) %>% 
+    mutate(n = n()) %>%
     mutate(num = row_number()) %>%
     ## Add a string if it needs
     mutate(addletter = if_else(n > 1, letters[num], "")) %>%

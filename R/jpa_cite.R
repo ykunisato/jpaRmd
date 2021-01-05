@@ -62,7 +62,7 @@ value_extractor <- function(string) {
 #' @export
 
 jpa_cite <- function(Rmd_file, Bib_file) {
-  bib.df <- bib_to_DF(Rmd_file, Bib_file,list_ampersand = F, cite_ampersand=F)
+  bib.df <- bib_to_DF(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F)
 
   # Rewrite citation in the text. -------------------------------------------------------------------
   ## get original file
@@ -70,31 +70,30 @@ jpa_cite <- function(Rmd_file, Bib_file) {
   ## count how many times cited
   bib.df$count <- 0
   ## open temporary file
-  Ftmp <- file(paste0("tmp_",Rmd_file), "w")
+  Ftmp <- file(paste0("tmp_", Rmd_file), "w")
   ## check the file in each line
   for (i in 1:length(tmpfile)) {
     st <- tmpfile[i]
     checkFLG <- str_detect(st, pattern = "@")
-    refFLG <- str_detect(st,pattern="<insert_reference>")
+    refFLG <- str_detect(st, pattern = "<insert_reference>")
     if (checkFLG) {
       # Replacement of main text
       while (str_detect(st, pattern = "@")) {
-        replacement <- inLineCitation(st,bib.df)
+        replacement <- inLineCitation(st, bib.df)
         st <- str_replace(st, pattern = replacement$item, replacement = replacement$word)
         bib.df[bib.df$BIBTEXKEY %in% replacement$key, ]$count <- 1
       }
     }
     writeLines(st, Ftmp)
-    
+
     ## output reference
-    if(refFLG){
-      writeLines("\n",Ftmp)
-      for(i in 1:NROW(bib.df)){
-        writeLines(bib.df[i, ]$pBib,Ftmp)
-        writeLines("\n",Ftmp)
-      }  
+    if (refFLG) {
+      writeLines("\n", Ftmp)
+      for (i in 1:NROW(bib.df)) {
+        writeLines(bib.df[i, ]$pBib, Ftmp)
+        writeLines("\n", Ftmp)
+      }
     }
-    
   }
   close(Ftmp)
 }
@@ -138,142 +137,96 @@ jpa_cite <- function(Rmd_file, Bib_file) {
 
 # function developed
 jpr_cite <- function(Rmd_file, Bib_file) {
-  bib.df <- bib_to_DF(Rmd_file, Bib_file,list_ampersand = F, cite_ampersand=F)
+  bib.df <- bib_to_DF(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F)
   # Output the citation type (substantively a Style file) -------------------------------------------------
-  
+
   # Rewrite citation in the text. -------------------------------------------------------------------
   ## get original file
   tmpfile <- readLines(Rmd_file, warn = F)
   ## count how many times cited
   bib.df$count <- 0
   ## open temporary file
-  Ftmp <- file(paste0("tmp_author_",Rmd_file), "w")
-  Ftmp2 <- file(paste0("tmp_",Rmd_file), "w")
-  Ftmp3 <- file(paste0("tmp_abst_author_",Rmd_file), "w")
-  Ftmp4 <- file(paste0("tmp_abst_",Rmd_file), "w")
+  Ftmp <- file(paste0("tmp_author_", Rmd_file), "w")
+  Ftmp2 <- file(paste0("tmp_", Rmd_file), "w")
+  Ftmp3 <- file(paste0("tmp_abst_author_", Rmd_file), "w")
+  Ftmp4 <- file(paste0("tmp_abst_", Rmd_file), "w")
   ## check the file in each line
   for (i in 1:length(tmpfile)) {
     st <- tmpfile[i]
     checkFLG <- str_detect(st, pattern = "@")
-    refFLG <- str_detect(st,pattern="<insert_reference>")
+    refFLG <- str_detect(st, pattern = "<insert_reference>")
     if (checkFLG) {
-      # Replacement
+      # Replacement of main text
       while (str_detect(st, pattern = "@")) {
-        replacement.item <- st %>% str_extract(pattern = "@[\\[a-zA-Z0-9-_\\.\\p{Hiragana}\\p{Katakana}\\p{Han}]*")
-        loc <- st %>% str_locate(replacement.item)
-        loc <- loc[1] - 1
-        tp <- FALSE
-        if (loc > 0) {
-          tp <- str_sub(st, loc, loc) %>% str_detect(pattern = "\\[")
-        }
-        
-        if (tp) {
-          ### citation on the end of line
-          ##### retake citation key
-          replacement.item <- st %>% str_extract(pattern = "\\[.*?\\]")
-          ##### citaton data frame
-          replacement.df <- replacement.item %>%
-            str_extract_all(pattern = "@[a-zA-Z0-9-_\\.\\p{Hiragana}\\p{Katakana}\\p{Han}]*", simplify = T) %>%
-            t() %>%
-            as.data.frame() %>%
-            mutate(KEY = str_replace(V1, pattern = "@", replacement = "")) %>%
-            ### join with bib.df
-            left_join(bib.df, by = c("KEY" = "BIBTEXKEY")) %>%
-            ### get the citation name
-            select(V1, KEY, citeName1, citeName2, ListYear, count) %>%
-            mutate(ListYear = str_extract(ListYear, "[a-z0-9]{4,5}")) %>%
-            mutate(citeName = if_else(count > 0, citeName2, citeName1)) %>%
-            mutate(citation = paste0(citeName, ",", ListYear))
-          
-          replacement.word <- replacement.df$citation %>% paste0(collapse = "; ")
-          replacement.word <- paste0("(", replacement.word, ")")
-          ### reform for regular expression
-          replacement.item <- str_replace(replacement.item, pattern = "\\[", replacement = "\\\\[") %>%
-            str_replace(pattern = "\\]", replacement = "\\\\]")
-          ### replacement!!
-          st <- str_replace(st, pattern = replacement.item, replacement = replacement.word)
-          ### count up
-          bib.df[bib.df$BIBTEXKEY %in% replacement.df$KEY, ]$count <- 1
-          
-        } else {
-          
-          ### citation in the line
-          KEY <- str_replace(replacement.item, pattern = "@", replacement = "")
-          ref.df <- bib.df[bib.df$BIBTEXKEY == KEY, ] %>%
-            mutate(ListYear = str_sub(ListYear, 1, str_length(ListYear) - 1))
-          if (bib.df[bib.df$BIBTEXKEY == KEY, ]$count == 0) {
-            # First time
-            st <- str_replace(st, pattern = replacement.item, replacement = paste0(ref.df$citeName1, ref.df$ListYear))
-          } else {
-            # more
-            st <- str_replace(st, pattern = replacement.item, replacement = paste0(ref.df$citeName2, ref.df$ListYear))
-          }
-          ### count up
-          bib.df[bib.df$BIBTEXKEY == KEY, ]$count <- 1
-        }
-        
+        replacement <- inLineCitation(st, bib.df)
+        st <- str_replace(st, pattern = replacement$item, replacement = replacement$word)
+        bib.df[bib.df$BIBTEXKEY %in% replacement$key, ]$count <- 1
       }
     }
     # FLG of author info
-    if(i == 1){authorInfoOn <- FALSE}
-    if(str_detect(st,pattern="author-info-start")){
+    if (i == 1) {
+      authorInfoOn <- FALSE
+    }
+    if (str_detect(st, pattern = "author-info-start")) {
       authorInfoOn <- TRUE
     }
-    if(str_detect(st,pattern="author-info-end")){
+    if (str_detect(st, pattern = "author-info-end")) {
       authorInfoOn <- FALSE
     }
     # FLG of end of abstract
-    if(i == 1){abstEnd <- FALSE}
-    if(str_detect(st,pattern="abstract-end")){
+    if (i == 1) {
+      abstEnd <- FALSE
+    }
+    if (str_detect(st, pattern = "abstract-end")) {
       abstEnd <- TRUE
     }
-    
+
     # write paper with author info
     writeLines(st, Ftmp)
     ## include reference
-    if(refFLG){
-      writeLines("\n",Ftmp)
-      for(i in 1:NROW(bib.df)){
-        writeLines(bib.df[i, ]$pBib,Ftmp)
-        writeLines("\n",Ftmp)
-      }  
+    if (refFLG) {
+      writeLines("\n", Ftmp)
+      for (i in 1:NROW(bib.df)) {
+        writeLines(bib.df[i, ]$pBib, Ftmp)
+        writeLines("\n", Ftmp)
+      }
     }
-    
+
     # write paper without author info
-    if(authorInfoOn == FALSE){
+    if (authorInfoOn == FALSE) {
       writeLines(st, Ftmp2)
       ## include reference
-      if(refFLG){
-        writeLines("\n",Ftmp2)
-        for(i in 1:NROW(bib.df)){
-          writeLines(bib.df[i, ]$pBib,Ftmp2)
-          writeLines("\n",Ftmp2)
-        }  
+      if (refFLG) {
+        writeLines("\n", Ftmp2)
+        for (i in 1:NROW(bib.df)) {
+          writeLines(bib.df[i, ]$pBib, Ftmp2)
+          writeLines("\n", Ftmp2)
+        }
       }
     }
-    
+
     # write abstract
-    if(abstEnd == FALSE){
-      # write abstract with author info 
+    if (abstEnd == FALSE) {
+      # write abstract with author info
       writeLines(st, Ftmp3)
       ## include reference
-      if(refFLG){
-        writeLines("\n",Ftm3p)
-        for(i in 1:NROW(bib.df)){
-          writeLines(bib.df[i, ]$pBib,Ftmp3)
-          writeLines("\n",Ftmp3)
-        }  
+      if (refFLG) {
+        writeLines("\n", Ftm3p)
+        for (i in 1:NROW(bib.df)) {
+          writeLines(bib.df[i, ]$pBib, Ftmp3)
+          writeLines("\n", Ftmp3)
+        }
       }
       # write abstract without author info
-      if(authorInfoOn == FALSE){
+      if (authorInfoOn == FALSE) {
         writeLines(st, Ftmp4)
         ## include reference
-        if(refFLG){
-          writeLines("\n",Ftmp)
-          for(i in 1:NROW(bib.df)){
-            writeLines(bib.df[i, ]$pBib,Ftmp4)
-            writeLines("\n",Ftmp4)
-          }  
+        if (refFLG) {
+          writeLines("\n", Ftmp)
+          for (i in 1:NROW(bib.df)) {
+            writeLines(bib.df[i, ]$pBib, Ftmp4)
+            writeLines("\n", Ftmp4)
+          }
         }
       }
     }
