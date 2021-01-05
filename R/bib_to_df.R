@@ -31,12 +31,13 @@
 #' @param Bib_file file name of Bib file
 #' @param list_ampersand combinle the last author with & or not in Bibliography
 #' @param cite_ampersand combinle the last author with & or not in in-line citation
+#' @param underline Whether to underline emphasis or not. if FALSE, emph as Italic.
 #' @return Prepare for citation database
 #' @examples
 #' # bib_to_DF(Rmd_file = "RmdFileName",Bib_file = "BibFileName")
 #' @export
 #'
-bib_to_DF <- function(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F) {
+bib_to_DF <- function(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F, underline = F) {
   # check argument
   if (missing(Rmd_file)) {
     stop("Please set the name of RMarkdown file")
@@ -261,7 +262,7 @@ bib_to_DF <- function(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F
     group_by(ID) %>%
     nest() %>%
     mutate(
-      pBib = purrr::map(.x = data, .f = ~ pBibMaker(.x)),
+      pBib = purrr::map2(.x = data, .y = underline, .f = ~ pBibMaker(.x, .y)),
       prefix = purrr::map(.x = data, .f = ~ prefixMaker(.x))
     ) %>%
     ################################### inline citation

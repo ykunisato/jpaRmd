@@ -4,7 +4,13 @@
 \alias{bib_to_DF}
 \title{bib_to_DF}
 \usage{
-bib_to_DF(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F)
+bib_to_DF(
+  Rmd_file,
+  Bib_file,
+  list_ampersand = F,
+  cite_ampersand = F,
+  underline = F
+)
 }
 \arguments{
 \item{Rmd_file}{file name of R Markdown file}
@@ -14,6 +20,8 @@ bib_to_DF(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F)
 \item{list_ampersand}{combinle the last author with & or not in Bibliography}
 
 \item{cite_ampersand}{combinle the last author with & or not in in-line citation}
+
+\item{underline}{Whether to underline emphasis or not. if FALSE, emph as Italic.}
 }
 \value{
 Prepare for citation database

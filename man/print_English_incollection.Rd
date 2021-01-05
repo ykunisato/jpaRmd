@@ -4,7 +4,7 @@
 \alias{print_English_incollection}
 \title{Print bib info function(in English collection)}
 \usage{
-print_English_incollection(df)
+print_English_incollection(df, underline = F)
 }
 \arguments{
 \item{df}{Strings of Bib info}
