@@ -171,7 +171,6 @@ print_JName <- function(st) {
 #' @param df Strings of Bib info
 #' @export
 print_English_book <- function(df) {
-  name.tmp <- print_EName(df$AUTHORs)
   title.tmp <- paste0("\\emph{", df$TITLE, "}.")
   # i ) General examples (author), (year of publication), (book title), (place of publication: publisher)
   # ii) New editions: Always indicate the number of editions except for the first edition.
@@ -200,7 +199,7 @@ print_English_book <- function(df) {
     trans.tmp <- paste0("(", print_EName(df$TRANSAUTHORs, switchFLG = TRUE), ", ", df$TRANSWORK, ").")
     trans.info <- paste0(" (", df$TRANSINFO, ")")
   }
-  pBib <- paste0(name.tmp, df$pYear, title.tmp, " ", trans.tmp, df$ADDRESS, ":", df$PUBLISHER, trans.info)
+  pBib <- paste0(df$ListName, df$ListYear, title.tmp, " ", trans.tmp, df$ADDRESS, ":", df$PUBLISHER, trans.info)
   pBib <- paste0(pBib, ".")
   return(pBib)
 }
@@ -210,7 +209,6 @@ print_English_book <- function(df) {
 #' @param df Strings of Bib info
 #' @export
 print_Japanese_book <- function(df) {
-  name.tmp <- print_JName(df$AUTHORs)
   title.tmp <- df$TITLE
   # iii)Editorial and Supervisory Book
   if (!is.na(df$EDITOR)) {
@@ -241,7 +239,7 @@ print_Japanese_book <- function(df) {
     J.part <- paste(df$GENCHOKANA, Jname, "(", df$JYEAR, ").", df$JTITLE, "\\ ", df$JPUBLISHER)
     pBib <- paste0(E.part, "(", J.part, ")")
   } else {
-    pBib <- paste(df$pName, df$pYear, df$TITLE, "\\ ", df$PUBLISHER)
+    pBib <- paste(df$ListName, df$ListYear, df$TITLE, "\\ ", df$PUBLISHER)
   }
 
   return(pBib)
@@ -268,7 +266,7 @@ print_English_article <- function(df) {
       paste0(df$PAGES, ".")
     }
   }
-  pBib <- paste(df$pName, df$pYear, TITLE.tmp, JOURNAL.tmp, Vol_and_Num.tmp, PAGES.tmp)
+  pBib <- paste(df$ListName, df$ListYear, TITLE.tmp, JOURNAL.tmp, Vol_and_Num.tmp, PAGES.tmp)
   ## DOI
   if (!is.na(df$DOI)) {
     pBib <- paste0(pBib, df$DOI)
@@ -296,7 +294,7 @@ print_Japanese_article <- function(df) {
       paste0(df$PAGES, ".")
     }
   }
-  pBib <- paste(df$pName, df$pYear, df$TITLE, "\\ ", JOURNAL.tmp, Vol_and_Num.tmp, PAGES.tmp)
+  pBib <- paste(df$ListName, df$ListYear, df$TITLE, "\\ ", JOURNAL.tmp, Vol_and_Num.tmp, PAGES.tmp)
   ## DOI
   if (!is.na(df$DOI)) {
     pBib <- paste0(pBib, "\\ \\verb|", df$DOI, "|")
@@ -315,7 +313,7 @@ print_English_incollection <- function(df) {
   edition.tmp <- if_else(!is.na(df$EDITION), paste0(df$EDITION, " ed., "), "")
   inbook.tmp2 <- paste0("\\emph{", df$BOOKTITLE, "} (", edition.tmp, " pp.", df$PAGES, ").")
 
-  pBib <- paste(df$pName, df$pYear, df$TITLE, inbook.tmp1, inbook.tmp2, df$ADDRESS, ":", df$PUBLISHER, ".")
+  pBib <- paste(df$ListName, df$ListYear, df$TITLE, inbook.tmp1, inbook.tmp2, df$ADDRESS, ":", df$PUBLISHER, ".")
   return(pBib)
 }
 
@@ -328,7 +326,7 @@ print_Japanese_incollection <- function(df) {
   inbook.tmp1 <- paste0("\\ ", print_JName(df$EDITORs), postfix)
   edition.tmp <- if_else(!is.na(df$EDITION), paste0(df$EDITION, " ed.,"), "")
   inbook.tmp2 <- paste0(df$BOOKTITLE, " (", edition.tmp, "pp.", df$PAGES, ").")
-  pBib <- paste(df$pName, df$pYear, df$TITLE, inbook.tmp1, inbook.tmp2, df$PUBLISHER)
+  pBib <- paste(df$ListName, df$ListYear, df$TITLE, inbook.tmp1, inbook.tmp2, df$PUBLISHER)
   return(pBib)
 }
 
@@ -336,7 +334,7 @@ print_Japanese_incollection <- function(df) {
 #' @param df Strings of Bib info
 #' @export
 print_English_inproceedings <- function(df) {
-  pBib <- paste(df$pName, df$pYear, df$TITLE, df$JOURNAL, ".\ ", df$PAGES, ".")
+  pBib <- paste(df$ListName, df$ListYear, df$TITLE, df$JOURNAL, ".\ ", df$PAGES, ".")
   return(pBib)
 }
 
@@ -344,7 +342,7 @@ print_English_inproceedings <- function(df) {
 #' @param df Strings of Bib info
 #' @export
 print_Japanese_inproceedings <- function(df) {
-  pBib <- paste(df$pName, df$pYear, df$TITLE, df$JOURNAL, ".\\ ", df$PAGES, ".")
+  pBib <- paste(df$ListName, df$ListYear, df$TITLE, df$JOURNAL, ".\\ ", df$PAGES, ".")
   return(pBib)
 }
 
