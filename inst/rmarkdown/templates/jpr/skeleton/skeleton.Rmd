@@ -1,16 +1,9 @@
 ---
-title: "RMarkdownで『心理学研究』の論文は書けるのか？"
-subtitle: "Can we write a paper of the Japanses Journal of psychology with RMarkdown?"
 suppress-bibliography: yes
-output: jpaRmd::render_jjp(Rmd_file = "Untitled.Rmd", Bib_file = "reference.bib")
+output: jpaRmd::render_jpr(Rmd_file = "Untitled.Rmd", Bib_file = "reference.bib")
 ---
 
 <!-- 
-投稿原稿には含めないですが，投稿にあたって以下の情報が必要です。
-・著者名（日本語とローマ字）
-・所属（日本語とローマ字）
-・脚注（研究費や研究に関わった方への謝辞，学会などでの発表，責任著者の英語の連絡先）
-
 <<< このRmdテンプレートを使う際の注意事項 >>>
 1.以下に色々と説明が書いてあるので，それにしたがって，書き足していってください。
 　作業が進んだら，上の「Knit」を押すと，Rmd→TeX→PDFの変換が自動的になされます。
@@ -18,12 +11,66 @@ output: jpaRmd::render_jjp(Rmd_file = "Untitled.Rmd", Bib_file = "reference.bib"
 　削除しても問題はないので，邪魔になったら削除してもいいです。
 -->
 
+<!-- 
+このテンプレートは，１ページが６００字になるように調整されています。心理学評論は38000字以内なので，このフォーマットで63枚以内になるように執筆する。超過やその他の詳細については，執筆規定を参照ください。
+http://sjpr.jp/pdf/kitei2013.pdf
+-->
+\thispagestyle{empty}
 
-# Abstract
-Can we write a paper of the Japanses Journal of psychology with RMarkdown? To solve this mystery we headed deep into the Amazon. At the end of our long journey we found some great documents about RMarkdown and finally said, "Yes, we can". ... Well, we'll write a abstract like this.
 
-**Key words**: RMarkdown, Reproducibility, The Japanese Journal of Psychology
+## Can we write a paper of the Japanese Psychological review with RMarkdown?
 
+<!-- author-info-start -->
+
+Yoshihiko Kunisato${}^\text{1}$・Yoshihiko　Onihige${}^\text{2}$
+
+Senshu University${}^\text{1}$, Sakigake!! Senshu University${}^\text{2}$
+
+<!-- author-info-end -->
+<!-- 
+${}^\text{1}$は，上付き文字で数字をつけるための記法です。特に考える必要はなくて，｛｝内を変更ください。author-info-startとauthor-info-endの間に著者名や所属などの情報をいれてください。これらを含めたファイルと含めてないファイルを出力します
+-->
+
+### Abstract
+Can we write a paper of the Japanese Psychological Review with RMarkdown? To solve 
+this mystery we headed deep into the Amazon. At the end of our long journey we found some great documents about RMarkdown and finally said, "Yes, we can". ... Well, we'll write a abstract like this.
+
+
+**Key words**: RMarkdown, Reproducibility, Japanese Psychological Review
+
+\thispagestyle{empty}
+
+\clearpage 
+
+\thispagestyle{empty}
+
+## RMarkdownで『心理学評論』の論文は書けるか？
+
+<!-- author-info-start -->
+国里愛彦${}^\text{1}$・鬼髭愛彦${}^\text{2}$
+
+専修大学${}^\text{1}$, 魁!!専修大学${}^\text{2}$
+
+謝辞:専修大学の暗黒卿教授に有益なコメントをいただきました。記して感謝の意を表します。本研究はJSPS科研費 JP12345678の助成を受けたものです。
+
+<!-- author-info-end -->
+<!-- 
+${}^\text{1}$は，上付き文字で数字をつけるための記法です。特に考える必要はなくて，｛｝内を変更ください。author-info-startとauthor-info-endの間に著者名や所属などの情報をいれてください。これらを含めたファイルと含めてないファイルを出力します
+-->
+
+### 要約
+
+RMarkdownで『心理学評論』の論文が書けるのか？この謎を解くために，私たちはアマゾンの奥深くに向かいました。数多の苦難を乗り越えた長い旅路の最後に，RMarkdownに関する素晴らしいドキュメントを見つけることができ，「はい。できます」と述べることができました。... さて，まあ，こんな感じで要約を書きます。
+
+**キーワード**: RMarkdown, 再現可能性，認知行動療法研究
+
+\thispagestyle{empty}
+
+<!-- abstract-end -->
+
+\clearpage
+
+\setcounter{page}{1}
 <!--　このRmdファイル内で使用するRパッケージを以下に追加してください-->
 <!--　また，最後にこのファイルのファイル名，引用文献リストの入っているbibファイル名を入れてください-->
 ```{r message=FALSE, warning=FALSE, include=FALSE}
@@ -35,8 +82,6 @@ library(gridExtra)
 library(jtools)
 library(ggsignif)
 ```
-
-\clearpage
 
 　はじめに，ここから文章を書き始めます。以降が論文の本文になります。どんどん書いていきましょう！
 
@@ -59,10 +104,31 @@ https://kunisatolab.github.io/main/how-to-write-with-rstudio.html
 
 　続いて，論文では脚注をつけることがあります。その場合は，このように上付き文字をつけます${}^1$。心理学研究では，引用文献の後ろに脚注をつけることになっているので，ここでつけた上付き文字に対応したものを書き込んでおきます。まあ，こんなに短い距離で２つも脚注とかつけないわけですが，練習のために，もう一つつけます${}^2$。
 
-<!-- 以下は1頁が25字*32行で800字になっているかのチェック用です。
-ご自身の環境でちゃんと1頁が800字になっているか確認をしてから，削除してください。-->
+<!-- 以下は1頁が30字*20行で600字になっているかのチェック用です。
+ご自身の環境でちゃんと1頁が600字になっているか確認をしてから，削除してください。-->
 \clearpage
-１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０<!-- ここまで削除-->
+１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０
+１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０
+１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０
+１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０
+１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０
+１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０
+１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０
+１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０
+１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０
+１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０
+１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０
+１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０
+１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０
+１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０
+１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０
+１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０
+１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０
+１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０
+１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０
+１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０
+
+前のページで30字*20行で600字になっているか確認します<!-- ここまで削除-->
 
 ## RMarkdownとは
 
@@ -70,7 +136,7 @@ https://kunisatolab.github.io/main/how-to-write-with-rstudio.html
 
 ## 本研究の目的
 　
-　RMarkdownでちゃんと『心理学研究』に投稿できる原稿PDFファイルが作れるか検証した。
+　RMarkdownでちゃんと『心理学評論』に投稿できる原稿PDFファイルが作れるか検証した。
 
 # 方 法
 ## 参加者
@@ -101,7 +167,7 @@ gender <- data.frame(table(bfi$gender)) %>%
 
 **心理学再現性確認尺度**　心理学研究の場合，見出しじゃなくて太字にしたい時というがあると思います。左の心理学再現性確認尺度のように，アスタリスク２つではさむとそれができます。
 
-　論文では，図を挿入したりするのですが，その図の挿入箇所の指示を余白ですることが多いです。例えば，Figure 1をこの辺に挿入しようかなというときは，\marginpar{\fbox{Figure 1}}こういう感じでLatexのmarginparパッケージとfboxを活用して，Figure 1を線で囲ったものを作ります。
+　論文では，図を挿入したりするのですが，その図の挿入箇所の指示を余白ですることが多いです。例えば，Figure 1をこの辺に挿入しようかなというときは，\marginpar{\fbox{\textcolor{red}{Figure 1}}}こういう感じでLatexのmarginparパッケージとfboxを活用して，Figure 1を線で囲ったものを作ります。
 
 
 ## 調査手続き
@@ -113,7 +179,7 @@ gender <- data.frame(table(bfi$gender)) %>%
 
 # 結 果
 
-　論文では，表を挿入したりするのですが，その表の挿入箇所の指示を余白ですることが多いです。例えば，Table1をこの辺に挿入しようかなというときは，\marginpar{\fbox{Table1}}こういう感じでLatexのmarginparパッケージとfboxを活用して，Table1を線で囲ったものを作ります。
+　論文では，表を挿入したりするのですが，その表の挿入箇所の指示を余白ですることが多いです。例えば，Table 1をこの辺に挿入しようかなというときは，\marginpar{\fbox{\textcolor{red}{Table 1}}}こういう感じでLatexのmarginparパッケージとfboxを活用して，Table1を線で囲ったものを作ります。
 
 ## 外向性と神経症傾向の関連
 
@@ -130,12 +196,11 @@ cor_result <- cor.test(summary_bfi_fig$Extraversion,summary_bfi_fig$Neuroticism)
 ```
 
 　練習で，psychパッケージのbfiを用いて，外向性と神経症傾向を算出してみましょう。外向性と神経症傾向のPearsonの積率相違関係数は，`r sprintf('%.3f',cor_result$estimate)`であり(*t*(`r sprintf('%.0f',cor_result$parameter)`) = `r sprintf('%.3f',cor_result$statistic)`, *p* = `r sprintf('%.3f',cor_result$p.value)`，その95%信頼区間は，`r sprintf('%.3f',cor_result$conf.int[1])`から`r sprintf('%.3f',cor_result$conf.int[2])`です。
-　散布図は，Figure 2に示す\marginpar{\fbox{Figure 2}}。
+　散布図は，Figure 2に示す\marginpar{\fbox{\textcolor{red}{Figure 2}}}。
 
 # 考 察
 
 　本研究では，RMarkdownで『心理学研究論文』がかけるのかを検証した。それ用のテンプレートも用意したので，あとは解析と内容を書くだけで結構いい感じのものができる。ただし，引用文献については，まだ完全とはいえず，共にこのテンプレートを磨く有志を心待ちしている。
-
 
 \clearpage 
 
@@ -153,6 +218,7 @@ cor_result <- cor.test(summary_bfi_fig$Extraversion,summary_bfi_fig$Neuroticism)
 \clearpage 
 
 # 脚注
+
 <!-- 必要に応じて脚注を追加ください。不要ならclearpageから削除ください-->
 
 ${}^1$脚注の例１です。論文の補足をどうぞ。
