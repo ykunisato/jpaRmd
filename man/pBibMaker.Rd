@@ -4,7 +4,7 @@
 \alias{pBibMaker}
 \title{pBibMaker function}
 \usage{
-pBibMaker(df)
+pBibMaker(df, underline)
 }
 \arguments{
 \item{df}{Bib data frame}

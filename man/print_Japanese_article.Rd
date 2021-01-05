@@ -4,7 +4,7 @@
 \alias{print_Japanese_article}
 \title{Print bib info function(Jaopanese article)}
 \usage{
-print_Japanese_article(df)
+print_Japanese_article(df, underline = F)
 }
 \arguments{
 \item{df}{Strings of Bib info}

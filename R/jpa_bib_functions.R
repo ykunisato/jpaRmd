@@ -33,15 +33,15 @@ name_spliter <- function(dat) {
 #' @importFrom dplyr if_else
 #' @param df Bib data frame
 #' @export
-pBibMaker <- function(df) {
+pBibMaker <- function(df, underline) {
   tmp <- case_when(
-    df$CATEGORY == "BOOK" ~ if_else(df$langFLG, print_English_book(df),
+    df$CATEGORY == "BOOK" ~ if_else(df$langFLG, print_English_book(df, underline),
       print_Japanese_book(df)
     ),
-    df$CATEGORY == "ARTICLE" ~ if_else(df$langFLG, print_English_article(df),
-      print_Japanese_article(df)
+    df$CATEGORY == "ARTICLE" ~ if_else(df$langFLG, print_English_article(df, underline),
+      print_Japanese_article(df, underline)
     ),
-    df$CATEGORY == "INCOLLECTION" ~ if_else(df$langFLG, print_English_incollection(df),
+    df$CATEGORY == "INCOLLECTION" ~ if_else(df$langFLG, print_English_incollection(df, underline),
       print_Japanese_incollection(df)
     ),
     df$CATEGORY == "INPROCEEDINGS" ~ if_else(df$langFLG, print_English_inproceedings(df),
@@ -174,9 +174,14 @@ print_JName <- function(st) {
 #' Print bib info function(English book)
 #' @param df Strings of Bib info
 #' @export
-print_English_book <- function(df) {
+print_English_book <- function(df, underline = F) {
   name.tmp <- df$ListName
-  title.tmp <- paste0("\\emph{", df$TITLE, "}.")
+  if (underline) {
+    eff <- "\\underline{"
+  } else {
+    eff <- "\\emph{"
+  }
+  title.tmp <- paste0(eff, df$TITLE, "}.")
   # i ) General examples (author), (year of publication), (book title), (place of publication: publisher)
   # ii) New editions: Always indicate the number of editions except for the first edition.
   # Editions should be abbreviated to ed.
@@ -254,15 +259,20 @@ print_Japanese_book <- function(df) {
 #' Print bib info function(English article)
 #' @param df Strings of Bib info
 #' @export
-print_English_article <- function(df) {
+print_English_article <- function(df, underline = F) {
   # (author's name), (year of publication), (title), (journal title), (number of copies), (page citations)
   TITLE.tmp <- title.tmp <- paste0(df$TITLE, ",")
-  JOURNAL.tmp <- paste0("\\emph{", df$JOURNAL, "},")
+  if (underline) {
+    eff <- "\\underline{"
+  } else {
+    eff <- "\\emph{"
+  }
+  JOURNAL.tmp <- paste0(eff, df$JOURNAL, "},")
   Vol_and_Num.tmp <- ""
   df$VOLUME <- if_else(is.na(df$VOLUME), "", df$VOLUME)
   df$NUMBER <- if_else(is.na(df$NUMBER), "", df$NUMBER)
   if (df$VOLUME != "") {
-    Vol_and_Num.tmp <- paste0("\\emph{", df$VOLUME, "},")
+    Vol_and_Num.tmp <- paste0(eff, df$VOLUME, "},")
   }
   if (df$NUMBER != "") {
     Vol_and_Num.tmp <- paste0(Vol_and_Num.tmp, "(", df$NUMBER, "),")
@@ -283,14 +293,19 @@ print_English_article <- function(df) {
 #' Print bib info function(Jaopanese article)
 #' @param df Strings of Bib info
 #' @export
-print_Japanese_article <- function(df) {
+print_Japanese_article <- function(df, underline = F) {
   # (Author's name), (Year of publication), (Title), (Title), (Number of copies), (Citation page)
   JOURNAL.tmp <- paste0(df$JOURNAL, ",")
+  if (underline) {
+    eff <- "\\underline{"
+  } else {
+    eff <- "\\emph{"
+  }
   Vol_and_Num.tmp <- ""
   df$VOLUME <- if_else(is.na(df$VOLUME), "", df$VOLUME)
   df$NUMBER <- if_else(is.na(df$NUMBER), "", df$NUMBER)
   if (df$VOLUME != "") {
-    Vol_and_Num.tmp <- paste0("\\emph{", df$VOLUME, "},")
+    Vol_and_Num.tmp <- paste0(eff, df$VOLUME, "},")
   }
   if (df$NUMBER != "") {
     Vol_and_Num.tmp <- paste0(Vol_and_Num.tmp, "(", df$NUMBER, "),")
@@ -312,12 +327,17 @@ print_Japanese_article <- function(df) {
 #' @importFrom dplyr if_else
 #' @param df Strings of Bib info
 #' @export
-print_English_incollection <- function(df) {
+print_English_incollection <- function(df, underline = F) {
+  if (underline) {
+    eff <- "\\underline{"
+  } else {
+    eff <- "\\emph{"
+  }
   prefix <- "In "
   postfix <- if_else(NROW(df$EDITOR) > 1, "(Eds.),", "(Ed.),")
   inbook.tmp1 <- paste0(prefix, print_EName(df$EDITORs, switchFLG = TRUE), postfix)
   edition.tmp <- if_else(!is.na(df$EDITION), paste0(df$EDITION, " ed., "), "")
-  inbook.tmp2 <- paste0("\\emph{", df$BOOKTITLE, "} (", edition.tmp, " pp.", df$PAGES, ").")
+  inbook.tmp2 <- paste0(eff, df$BOOKTITLE, "} (", edition.tmp, " pp.", df$PAGES, ").")
 
   pBib <- paste(df$ListName, df$ListYear, df$TITLE, inbook.tmp1, inbook.tmp2, df$ADDRESS, ":", df$PUBLISHER, ".")
   return(pBib)
