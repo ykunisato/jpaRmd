@@ -131,10 +131,10 @@ jpa_cite <- function(Rmd_file, Bib_file) {
             ### join with bib.df
             left_join(bib.df, by = c("KEY" = "BIBTEXKEY")) %>%
             ### get the citation name
-            select(V1, KEY, citeName1, citeName2, pYear, count) %>%
-            mutate(pYear = str_extract(pYear, "[a-z0-9]{4,5}")) %>%
+            select(V1, KEY, citeName1, citeName2, ListYear, count) %>%
+            mutate(ListYear = str_extract(ListYear, "[a-z0-9]{4,5}")) %>%
             mutate(citeName = if_else(count > 0, citeName2, citeName1)) %>%
-            mutate(citation = paste0(citeName, ",", pYear))
+            mutate(citation = paste0(citeName, ",", ListYear))
           
           replacement.word <- replacement.df$citation %>% paste0(collapse = "; ")
           replacement.word <- paste0("(", replacement.word, ")")
@@ -151,13 +151,13 @@ jpa_cite <- function(Rmd_file, Bib_file) {
           ### citation in the line
           KEY <- str_replace(replacement.item, pattern = "@", replacement = "")
           ref.df <- bib.df[bib.df$BIBTEXKEY == KEY, ] %>%
-            mutate(pYear = str_sub(pYear, 1, str_length(pYear) - 1))
+            mutate(ListYear = str_sub(ListYear, 1, str_length(ListYear) - 1))
           if (bib.df[bib.df$BIBTEXKEY == KEY, ]$count == 0) {
             # First time
-            st <- str_replace(st, pattern = replacement.item, replacement = paste0(ref.df$citeName1, ref.df$pYear))
+            st <- str_replace(st, pattern = replacement.item, replacement = paste0(ref.df$citeName1, ref.df$ListYear))
           } else {
             # more
-            st <- str_replace(st, pattern = replacement.item, replacement = paste0(ref.df$citeName2, ref.df$pYear))
+            st <- str_replace(st, pattern = replacement.item, replacement = paste0(ref.df$citeName2, ref.df$ListYear))
           }
           ### count up
           bib.df[bib.df$BIBTEXKEY == KEY, ]$count <- 1
@@ -228,8 +228,8 @@ jpr_cite <- function(Rmd_file, Bib_file) {
     arrange(sortRecord, YEARn) %>%
     ### printed name and year in ref.list
     mutate(
-      pName = if_else(langFLG, print_EName(AUTHORs), print_JName(AUTHORs)),
-      pYear = paste0("(", YEAR, ").")
+      ListName = if_else(langFLG, print_EName(AUTHORs), print_JName(AUTHORs)),
+      ListYear = paste0("(", YEAR, ").")
     ) %>%
     mutate(dplFLG = 0) %>%
     # make items for List
@@ -292,10 +292,10 @@ jpr_cite <- function(Rmd_file, Bib_file) {
             ### join with bib.df
             left_join(bib.df, by = c("KEY" = "BIBTEXKEY")) %>%
             ### get the citation name
-            select(V1, KEY, citeName1, citeName2, pYear, count) %>%
-            mutate(pYear = str_extract(pYear, "[a-z0-9]{4,5}")) %>%
+            select(V1, KEY, citeName1, citeName2, ListYear, count) %>%
+            mutate(ListYear = str_extract(ListYear, "[a-z0-9]{4,5}")) %>%
             mutate(citeName = if_else(count > 0, citeName2, citeName1)) %>%
-            mutate(citation = paste0(citeName, ",", pYear))
+            mutate(citation = paste0(citeName, ",", ListYear))
           
           replacement.word <- replacement.df$citation %>% paste0(collapse = "; ")
           replacement.word <- paste0("(", replacement.word, ")")
@@ -312,13 +312,13 @@ jpr_cite <- function(Rmd_file, Bib_file) {
           ### citation in the line
           KEY <- str_replace(replacement.item, pattern = "@", replacement = "")
           ref.df <- bib.df[bib.df$BIBTEXKEY == KEY, ] %>%
-            mutate(pYear = str_sub(pYear, 1, str_length(pYear) - 1))
+            mutate(ListYear = str_sub(ListYear, 1, str_length(ListYear) - 1))
           if (bib.df[bib.df$BIBTEXKEY == KEY, ]$count == 0) {
             # First time
-            st <- str_replace(st, pattern = replacement.item, replacement = paste0(ref.df$citeName1, ref.df$pYear))
+            st <- str_replace(st, pattern = replacement.item, replacement = paste0(ref.df$citeName1, ref.df$ListYear))
           } else {
             # more
-            st <- str_replace(st, pattern = replacement.item, replacement = paste0(ref.df$citeName2, ref.df$pYear))
+            st <- str_replace(st, pattern = replacement.item, replacement = paste0(ref.df$citeName2, ref.df$ListYear))
           }
           ### count up
           bib.df[bib.df$BIBTEXKEY == KEY, ]$count <- 1
