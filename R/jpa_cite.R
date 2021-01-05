@@ -62,38 +62,7 @@ value_extractor <- function(string) {
 #' @export
 
 jpa_cite <- function(Rmd_file, Bib_file) {
-  bib.df <- bib_to_DF(Rmd_file, Bib_file)
-  # Output the citation type (substantively a Style file) -------------------------------------------------
-
-  ## Sort by NAME whether in Japanese or English
-  bib.df <- bib.df %>%
-    rowwise() %>% 
-    ### printed name and year in ref.list
-    mutate(
-      ListName = if_else(langFLG, print_EName(AUTHORs), print_JName(AUTHORs)),
-      ListYear = paste0("(", YEAR, ").")
-    ) %>%
-    mutate(dplFLG = 0) %>%
-    # make items for List
-    group_by(ID) %>%
-    nest() %>%
-    mutate(
-      pBib = purrr::map(.x = data, .f = ~ pBibMaker(.x)),
-      prefix = purrr::map(.x = data, .f = ~ prefixMaker(.x))
-    ) %>%
-    # make items for citating
-    mutate(cite.tmp = purrr::map(.x = data, .f = ~ citationMaker(.x))) %>%
-    # Differnt Authors, but same family name,same year --for the case of confusion
-    unnest(cols = c(data, pBib, prefix, cite.tmp)) %>%
-    group_by(citeCheckFLG) %>%
-    mutate(dplFLG = n()) %>%
-    ungroup(citeCheckFLG) %>%
-    select(-citeName1, -citeName2, -citeCheckFLG) %>%
-    group_by(ID) %>%
-    nest() %>%
-    mutate(cite = purrr::map(.x = data, .f = ~ citationMaker(.x))) %>%
-    unnest(cols = c(data, cite)) %>%
-    select(-citeCheckFLG)
+  bib.df <- bib_to_DF(Rmd_file, Bib_file,list_ampersand = F, cite_ampersand=F)
 
   # Rewrite citation in the text. -------------------------------------------------------------------
   ## get original file
@@ -110,6 +79,8 @@ jpa_cite <- function(Rmd_file, Bib_file) {
     if (checkFLG) {
       # Replacement
       while (str_detect(st, pattern = "@")) {
+        replacement.item <- inLineCitation(st,bib.df,)
+        
         replacement.item <- st %>% str_extract(pattern = "@[\\[a-zA-Z0-9-_\\.\\p{Hiragana}\\p{Katakana}\\p{Han}]*")
         loc <- st %>% str_locate(replacement.item)
         loc <- loc[1] - 1

@@ -29,12 +29,14 @@
 #' @importFrom stats complete.cases na.omit
 #' @param Rmd_file file name of R Markdown file
 #' @param Bib_file file name of Bib file
+#' @param list_ampersand combinle the last author with & or not in Bibliography
+#' @param cite_ampersand combinle the last author with & or not in in-line citation
 #' @return Prepare for citation database
 #' @examples
 #' # bib_to_DF(Rmd_file = "RmdFileName",Bib_file = "BibFileName")
 #' @export
 #'
-bib_to_DF <- function(Rmd_file, Bib_file) {
+bib_to_DF <- function(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F) {
   # check argument
   if (missing(Rmd_file)) {
     stop("Please set the name of RMarkdown file")
@@ -238,6 +240,36 @@ bib_to_DF <- function(Rmd_file, Bib_file) {
     ungroup() %>%
     select(-c(sortRecord, YEARn, n, num, addletter))
 
+  ## List and Citation Name
+  bib.df <- bib.df %>%
+    rowwise() %>%
+    ################################## bib list
+    mutate(
+      ListName = if_else(langFLG, print_EName(AUTHORs, ampersand = list_ampersand), print_JName(AUTHORs)),
+      ListYear = paste0("(", YEAR, ").")
+    ) %>%
+    mutate(dplFLG = 0) %>%
+    # make items for List
+    group_by(ID) %>%
+    nest() %>%
+    mutate(
+      pBib = purrr::map(.x = data, .f = ~ pBibMaker(.x)),
+      prefix = purrr::map(.x = data, .f = ~ prefixMaker(.x))
+    ) %>%
+    ################################### inline citation
+    # make items for citating
+    mutate(cite.tmp = purrr::map2(.x = data, .y = cite_ampersand, .f = ~ citationMaker(.x, .y))) %>%
+    # Differnt Authors, but same family name,same year --for the case of confusion
+    unnest(cols = c(data, pBib, prefix, cite.tmp)) %>%
+    group_by(citeCheckFLG) %>%
+    mutate(dplFLG = n()) %>%
+    ungroup(citeCheckFLG) %>%
+    select(-citeName1, -citeName2, -citeCheckFLG) %>%
+    group_by(ID) %>%
+    nest() %>%
+    mutate(cite = purrr::map2(.x = data, , .y = cite_ampersand, .f = ~ citationMaker(.x, .y))) %>%
+    unnest(cols = c(data, cite)) %>%
+    select(-citeCheckFLG)
 
   ## Filtering to only actually cited
   refKey <- bib.df$BIBTEXKEY %>% paste0("@", .)
