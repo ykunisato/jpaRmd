@@ -67,7 +67,6 @@ jpa_cite <- function(Rmd_file, Bib_file) {
 
   ## Sort by NAME whether in Japanese or English
   bib.df <- bib.df %>%
-    mutate(sortRecord = if_else(is.na(YOMI), AUTHOR, YOMI)) %>%
     ### printed name and year in ref.list
     mutate(
       pName = if_else(langFLG, print_EName(AUTHORs), print_JName(AUTHORs)),
@@ -166,7 +165,7 @@ jpa_cite <- function(Rmd_file, Bib_file) {
       }
     }
     writeLines(st, Ftmp)
-    ## include reference
+    ## output reference
     if(refFLG){
       writeLines("\n",Ftmp)
       for(i in 1:NROW(bib.df)){
@@ -224,6 +223,8 @@ jpr_cite <- function(Rmd_file, Bib_file) {
   ## Sort by NAME whether in Japanese or English
   bib.df <- bib.df %>%
     mutate(sortRecord = if_else(is.na(YOMI), AUTHOR, YOMI)) %>%
+    ## sort by Author and Year
+    arrange(sortRecord, YEARn) %>%
     ### printed name and year in ref.list
     mutate(
       pName = if_else(langFLG, print_EName(AUTHORs), print_JName(AUTHORs)),

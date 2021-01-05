@@ -33,7 +33,7 @@
 #' @examples
 #' # bib_to_DF(Rmd_file = "RmdFileName",Bib_file = "BibFileName")
 #' @export
-#' 
+#'
 bib_to_DF <- function(Rmd_file, Bib_file) {
   # check argument
   if (missing(Rmd_file)) {
@@ -215,10 +215,12 @@ bib_to_DF <- function(Rmd_file, Bib_file) {
       TRANSAUTHORs = map(TRANSAUTHOR, ~ name_spliter(.x))
     )
 
-  bib.df <- bib.df %>% 
-  ## In the case which the same author has some papers in the same year, assign an alphabet
-  ## str(YAER) is character, make Numeric one
-  mutate(YEARn = as.numeric(YEAR)) %>%
+  bib.df <- bib.df %>%
+    ## In the case which the same author has some papers in the same year, assign an alphabet
+    ### sorting Order; in JPA, the sorting follows the reading order of Japanese-YOMI or English-AUTHOR
+    mutate(sortRecord = if_else(is.na(YOMI), AUTHOR, YOMI)) %>%
+    ## str(YAER) is character, make Numeric one
+    mutate(YEARn = as.numeric(YEAR)) %>%
     ## sort by Author and Year
     arrange(sortRecord, YEARn) %>%
     ## group by Author and Year
@@ -231,9 +233,12 @@ bib_to_DF <- function(Rmd_file, Bib_file) {
     ### Retrun
     mutate(YEAR = paste0(YEAR, addletter)) %>%
     ### Language type check
-    mutate(langFLG = !str_detect(paste0(AUTHOR, TITLE, JTITLE, JOURNAL), pattern = "\\p{Hiragana}|\\p{Katakana}|\\p{Han}"))
-  
-  
+    mutate(langFLG = !str_detect(paste0(AUTHOR, TITLE, JTITLE, JOURNAL), pattern = "\\p{Hiragana}|\\p{Katakana}|\\p{Han}")) %>%
+    ### delete unnecessary variables
+    ungroup() %>%
+    select(-c(sortRecord, YEARn, n, num, addletter))
+
+
   ## Filtering to only actually cited
   refKey <- bib.df$BIBTEXKEY %>% paste0("@", .)
   refFLG <- vector(length = length(refKey))
