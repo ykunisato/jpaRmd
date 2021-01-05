@@ -25,7 +25,6 @@ value_extractor <- function(string) {
   return(content)
 }
 
-
 #' Add citation with JPA format
 #' @importFrom magrittr %>%
 #' @importFrom tibble as_tibble
@@ -63,219 +62,16 @@ value_extractor <- function(string) {
 #' @export
 
 jpa_cite <- function(Rmd_file, Bib_file) {
-  # check argument
-  if (missing(Rmd_file)) {
-    stop("Please set the name of RMarkdown file")
-  }
-  # check Bib file
-  if (missing(Bib_file)) {
-    stop("Please set the name of Bib file")
-  }
-
-  # reference pick-up
-  refAll <- readLines(Rmd_file, warn = F) %>%
-    as_tibble() %>%
-    mutate(refs = str_extract(.$value, "\\@.*")) %>%
-    na.omit()
-
-  # readBib file as tibble
-  bib <- readLines(Bib_file, warn = F) %>%
-    str_trim()
-
-  ## Delete commented out records
-  for (i in 1:length(bib)) {
-    if (str_sub(bib[[i]], 1, 1) == "%") {
-      bib[[i]] <- ""
-    }
-  }
-  ## Delete record which has no containts
-  bib <- bib[-which(sapply(bib, function(x) x == ""))]
-
-  ## Lines which don't have the `key` of records(if the line has the `key`,
-  ## the line must have '=' or '@') are continuation of the previous line.
-  for (i in 1:length(bib)) {
-    ## check the key
-    if (str_detect(bib[[i]], pattern = "=|@")) {
-      flg <- i
-    }
-    ## paste to previous liens
-    if (i != flg) {
-      bib[[flg]] <- paste(bib[[flg]], bib[[i]])
-    }
-  }
-  ## ommit the line which have no keys
-  bib <- bib[which(str_detect(bib, pattern = "=|@"))]
-
-  ##### Thanks to bib2df
-  ## LineID to read from
-  from <- which(str_extract(bib, "[:graph:]") == "@")
-  ## LineID to read stop
-  to <- c(from[-1] - 1, length(bib))
-
-  ## data list
-  ls <- mapply(
-    function(x, y) {
-      return(bib[x:y])
-    },
-    x = from,
-    y = to,
-    SIMPLIFY = T
-  )
-
-  ## get reference KEY and fields,categories
-  keys <- lapply(
-    ls,
-    function(x) {
-      str_extract(x[1], "(?<=\\{)[^,]+")
-    }
-  )
-  fields <- lapply(ls, function(x) {
-    str_extract(x[1], "(?<=@)[^\\{]+") %>% str_to_upper()
-  })
-
-  categories <- lapply(
-    ls,
-    function(x) {
-      str_extract(x, "[[:alnum:]_-]+") %>% str_to_upper()
-    }
-  )
-
-  values <- lapply(
-    ls,
-    ## delete first record which has Key and Category
-    function(x) {
-      str_extract(x, "(?<==).*") %>%
-        value_extractor() %>%
-        str_trim()
-    }
-  )
-
-  items <- mapply(cbind, categories, values, SIMPLIFY = FALSE)
-  items <- lapply(
-    items,
-    function(x) {
-      x <- cbind(str_to_upper(x[, 1]), x[, 2])
-    }
-  )
-
-  items <- lapply(
-    items,
-    function(x) {
-      x[complete.cases(x), ]
-    }
-  )
-
-  items <- mapply(function(x, y) {
-    rbind(x, c("CATEGORY", y))
-  },
-  x = items, y = fields, SIMPLIFY = FALSE
-  )
-
-  items <- lapply(items, t)
-  items <- lapply(
-    items,
-    function(x) {
-      colnames(x) <- x[1, ]
-      x <- x[-1, ]
-      return(x)
-    }
-  )
-  items <- lapply(
-    items,
-    function(x) {
-      x <- t(x)
-      x <- data.frame(x, stringsAsFactors = FALSE)
-      return(x)
-    }
-  )
-
-  ## Write down all possible records here
-  empty <- data.frame(
-    CATEGORY = character(0L),
-    BIBTEXKEY = character(0L),
-    ADDRESS = character(0L),
-    ANNOTE = character(0L),
-    AUTHOR = character(0L),
-    BOOKTITLE = character(0L),
-    CHAPTER = character(0L),
-    CROSSREF = character(0L),
-    EDITION = character(0L),
-    EDITOR = character(0L),
-    HOWPUBLISHED = character(0L),
-    INSTITUTION = character(0L),
-    JOURNAL = character(0L),
-    KEY = character(0L),
-    MONTH = character(0L),
-    NOTE = character(0L),
-    NUMBER = character(0L),
-    ORGANIZATION = character(0L),
-    PAGES = character(0L),
-    PUBLISHER = character(0L),
-    SCHOOL = character(0L),
-    SERIES = character(0L),
-    TITLE = character(0L),
-    TYPE = character(0L),
-    VOLUME = character(0L),
-    YEAR = character(0L),
-    YOMI = character(0L),
-    JTITLE = character(0L),
-    JAUTHOR = character(0L),
-    JKANYAKU = character(0L),
-    TRANSAUTHOR = character(0L),
-    TRANSWORK = character(0L),
-    TRANSINFO = character(0L),
-    stringsAsFactors = FALSE
-  )
-
-  bib.df <- bind_rows(c(list(empty), items)) %>%
-    as_tibble() %>%
-    rowid_to_column("ID") %>%
-    group_by(ID)
-  bib.df$BIBTEXKEY <- unlist(keys)
-
-  bib.df <- bib.df %>%
-    ## Split name into First,Middle,Last Name
-    mutate(
-      AUTHORs = map(AUTHOR, ~ name_spliter(.x)),
-      EDITORs = map(EDITOR, ~ name_spliter(.x)),
-      JAUTHORs = map(JAUTHOR, ~ name_spliter(.x)),
-      JKANYAKUs = map(JKANYAKU, ~ name_spliter(.x)),
-      TRANSAUTHORs = map(TRANSAUTHOR, ~ name_spliter(.x))
-    )
-
-  ## Filtering to only actually cited
-  refKey <- bib.df$BIBTEXKEY %>% paste0("@", .)
-  refFLG <- vector(length = length(refKey))
-  for (i in 1:NROW(refAll)) {
-    refFLG <- refFLG | refAll[i, ]$refs %>% str_detect(pattern = refKey)
-  }
-  bib.df <- bib.df[refFLG, ]
-
+  bib.df <- bib_to_DF(Rmd_file, Bib_file)
   # Output the citation type (substantively a Style file) -------------------------------------------------
 
   ## Sort by NAME whether in Japanese or English
   bib.df <- bib.df %>%
-    mutate(sortRecord = if_else(is.na(YOMI), AUTHOR, YOMI)) %>%
-    ## In the case which the same author has some papers in the same year, assign an alphabet
-    ## str(YAER) is character, make Numeric one
-    mutate(YEARn = as.numeric(YEAR)) %>%
-    ## sort by Author and Year
-    arrange(sortRecord, YEARn) %>%
-    ## group by Author and Year
-    group_by(sortRecord, YEARn) %>%
-    ## count the papers with group
-    mutate(n = n()) %>%
-    mutate(num = row_number()) %>%
-    ## Add a string if it needs
-    mutate(addletter = if_else(n > 1, letters[num], "")) %>%
-    ### Retrun
-    mutate(YEAR = paste0(YEAR, addletter)) %>%
-    ### Language type check
-    mutate(langFLG = !str_detect(paste0(AUTHOR, TITLE, JTITLE, JOURNAL), pattern = "\\p{Hiragana}|\\p{Katakana}|\\p{Han}")) %>%
+    rowwise() %>% 
     ### printed name and year in ref.list
     mutate(
-      pName = if_else(langFLG, print_EName(AUTHORs), print_JName(AUTHORs)),
-      pYear = paste0("(", YEAR, ").")
+      ListName = if_else(langFLG, print_EName(AUTHORs), print_JName(AUTHORs)),
+      ListYear = paste0("(", YEAR, ").")
     ) %>%
     mutate(dplFLG = 0) %>%
     # make items for List
@@ -335,10 +131,10 @@ jpa_cite <- function(Rmd_file, Bib_file) {
             ### join with bib.df
             left_join(bib.df, by = c("KEY" = "BIBTEXKEY")) %>%
             ### get the citation name
-            select(V1, KEY, citeName1, citeName2, pYear, count) %>%
-            mutate(pYear = str_extract(pYear, "[a-z0-9]{4,5}")) %>%
+            select(V1, KEY, citeName1, citeName2, ListYear, count) %>%
+            mutate(ListYear = str_extract(ListYear, "[a-z0-9]{4,5}")) %>%
             mutate(citeName = if_else(count > 0, citeName2, citeName1)) %>%
-            mutate(citation = paste0(citeName, ",", pYear))
+            mutate(citation = paste0(citeName, ",", ListYear))
           
           replacement.word <- replacement.df$citation %>% paste0(collapse = "; ")
           replacement.word <- paste0("(", replacement.word, ")")
@@ -355,13 +151,13 @@ jpa_cite <- function(Rmd_file, Bib_file) {
           ### citation in the line
           KEY <- str_replace(replacement.item, pattern = "@", replacement = "")
           ref.df <- bib.df[bib.df$BIBTEXKEY == KEY, ] %>%
-            mutate(pYear = str_sub(pYear, 1, str_length(pYear) - 1))
+            mutate(ListYear = str_sub(ListYear, 1, str_length(ListYear) - 1))
           if (bib.df[bib.df$BIBTEXKEY == KEY, ]$count == 0) {
             # First time
-            st <- str_replace(st, pattern = replacement.item, replacement = paste0(ref.df$citeName1, ref.df$pYear))
+            st <- str_replace(st, pattern = replacement.item, replacement = paste0(ref.df$citeName1, ref.df$ListYear))
           } else {
             # more
-            st <- str_replace(st, pattern = replacement.item, replacement = paste0(ref.df$citeName2, ref.df$pYear))
+            st <- str_replace(st, pattern = replacement.item, replacement = paste0(ref.df$citeName2, ref.df$ListYear))
           }
           ### count up
           bib.df[bib.df$BIBTEXKEY == KEY, ]$count <- 1
@@ -370,7 +166,7 @@ jpa_cite <- function(Rmd_file, Bib_file) {
       }
     }
     writeLines(st, Ftmp)
-    ## include reference
+    ## output reference
     if(refFLG){
       writeLines("\n",Ftmp)
       for(i in 1:NROW(bib.df)){
@@ -422,219 +218,18 @@ jpa_cite <- function(Rmd_file, Bib_file) {
 
 # function developed
 jpr_cite <- function(Rmd_file, Bib_file) {
-  # check argument
-  if (missing(Rmd_file)) {
-    stop("Please set the name of RMarkdown file")
-  }
-  # check Bib file
-  if (missing(Bib_file)) {
-    stop("Please set the name of Bib file")
-  }
-  
-  # reference pick-up
-  refAll <- readLines(Rmd_file, warn = F) %>%
-    as_tibble() %>%
-    mutate(refs = str_extract(.$value, "\\@.*")) %>%
-    na.omit()
-  
-  # readBib file as tibble
-  bib <- readLines(Bib_file, warn = F) %>%
-    str_trim()
-  
-  ## Delete commented out records
-  for (i in 1:length(bib)) {
-    if (str_sub(bib[[i]], 1, 1) == "%") {
-      bib[[i]] <- ""
-    }
-  }
-  ## Delete record which has no containts
-  bib <- bib[-which(sapply(bib, function(x) x == ""))]
-  
-  ## Lines which don't have the `key` of records(if the line has the `key`,
-  ## the line must have '=' or '@') are continuation of the previous line.
-  for (i in 1:length(bib)) {
-    ## check the key
-    if (str_detect(bib[[i]], pattern = "=|@")) {
-      flg <- i
-    }
-    ## paste to previous liens
-    if (i != flg) {
-      bib[[flg]] <- paste(bib[[flg]], bib[[i]])
-    }
-  }
-  ## ommit the line which have no keys
-  bib <- bib[which(str_detect(bib, pattern = "=|@"))]
-  
-  ##### Thanks to bib2df
-  ## LineID to read from
-  from <- which(str_extract(bib, "[:graph:]") == "@")
-  ## LineID to read stop
-  to <- c(from[-1] - 1, length(bib))
-  
-  ## data list
-  ls <- mapply(
-    function(x, y) {
-      return(bib[x:y])
-    },
-    x = from,
-    y = to,
-    SIMPLIFY = T
-  )
-  
-  ## get reference KEY and fields,categories
-  keys <- lapply(
-    ls,
-    function(x) {
-      str_extract(x[1], "(?<=\\{)[^,]+")
-    }
-  )
-  fields <- lapply(ls, function(x) {
-    str_extract(x[1], "(?<=@)[^\\{]+") %>% str_to_upper()
-  })
-  
-  categories <- lapply(
-    ls,
-    function(x) {
-      str_extract(x, "[[:alnum:]_-]+") %>% str_to_upper()
-    }
-  )
-  
-  values <- lapply(
-    ls,
-    ## delete first record which has Key and Category
-    function(x) {
-      str_extract(x, "(?<==).*") %>%
-        value_extractor() %>%
-        str_trim()
-    }
-  )
-  
-  items <- mapply(cbind, categories, values, SIMPLIFY = FALSE)
-  items <- lapply(
-    items,
-    function(x) {
-      x <- cbind(str_to_upper(x[, 1]), x[, 2])
-    }
-  )
-  
-  items <- lapply(
-    items,
-    function(x) {
-      x[complete.cases(x), ]
-    }
-  )
-  
-  items <- mapply(function(x, y) {
-    rbind(x, c("CATEGORY", y))
-  },
-  x = items, y = fields, SIMPLIFY = FALSE
-  )
-  
-  items <- lapply(items, t)
-  items <- lapply(
-    items,
-    function(x) {
-      colnames(x) <- x[1, ]
-      x <- x[-1, ]
-      return(x)
-    }
-  )
-  items <- lapply(
-    items,
-    function(x) {
-      x <- t(x)
-      x <- data.frame(x, stringsAsFactors = FALSE)
-      return(x)
-    }
-  )
-  
-  ## Write down all possible records here
-  empty <- data.frame(
-    CATEGORY = character(0L),
-    BIBTEXKEY = character(0L),
-    ADDRESS = character(0L),
-    ANNOTE = character(0L),
-    AUTHOR = character(0L),
-    BOOKTITLE = character(0L),
-    CHAPTER = character(0L),
-    CROSSREF = character(0L),
-    EDITION = character(0L),
-    EDITOR = character(0L),
-    HOWPUBLISHED = character(0L),
-    INSTITUTION = character(0L),
-    JOURNAL = character(0L),
-    KEY = character(0L),
-    MONTH = character(0L),
-    NOTE = character(0L),
-    NUMBER = character(0L),
-    ORGANIZATION = character(0L),
-    PAGES = character(0L),
-    PUBLISHER = character(0L),
-    SCHOOL = character(0L),
-    SERIES = character(0L),
-    TITLE = character(0L),
-    TYPE = character(0L),
-    VOLUME = character(0L),
-    YEAR = character(0L),
-    YOMI = character(0L),
-    JTITLE = character(0L),
-    JAUTHOR = character(0L),
-    JKANYAKU = character(0L),
-    TRANSAUTHOR = character(0L),
-    TRANSWORK = character(0L),
-    TRANSINFO = character(0L),
-    stringsAsFactors = FALSE
-  )
-  
-  bib.df <- bind_rows(c(list(empty), items)) %>%
-    as_tibble() %>%
-    rowid_to_column("ID") %>%
-    group_by(ID)
-  bib.df$BIBTEXKEY <- unlist(keys)
-  
-  bib.df <- bib.df %>%
-    ## Split name into First,Middle,Last Name
-    mutate(
-      AUTHORs = map(AUTHOR, ~ name_spliter(.x)),
-      EDITORs = map(EDITOR, ~ name_spliter(.x)),
-      JAUTHORs = map(JAUTHOR, ~ name_spliter(.x)),
-      JKANYAKUs = map(JKANYAKU, ~ name_spliter(.x)),
-      TRANSAUTHORs = map(TRANSAUTHOR, ~ name_spliter(.x))
-    )
-  
-  ## Filtering to only actually cited
-  refKey <- bib.df$BIBTEXKEY %>% paste0("@", .)
-  refFLG <- vector(length = length(refKey))
-  for (i in 1:NROW(refAll)) {
-    refFLG <- refFLG | refAll[i, ]$refs %>% str_detect(pattern = refKey)
-  }
-  bib.df <- bib.df[refFLG, ]
-  
+  bib.df <- bib_to_DF(Rmd_file, Bib_file)
   # Output the citation type (substantively a Style file) -------------------------------------------------
   
   ## Sort by NAME whether in Japanese or English
   bib.df <- bib.df %>%
     mutate(sortRecord = if_else(is.na(YOMI), AUTHOR, YOMI)) %>%
-    ## In the case which the same author has some papers in the same year, assign an alphabet
-    ## str(YAER) is character, make Numeric one
-    mutate(YEARn = as.numeric(YEAR)) %>%
     ## sort by Author and Year
     arrange(sortRecord, YEARn) %>%
-    ## group by Author and Year
-    group_by(sortRecord, YEARn) %>%
-    ## count the papers with group
-    mutate(n = n()) %>%
-    mutate(num = row_number()) %>%
-    ## Add a string if it needs
-    mutate(addletter = if_else(n > 1, letters[num], "")) %>%
-    ### Retrun
-    mutate(YEAR = paste0(YEAR, addletter)) %>%
-    ### Language type check
-    mutate(langFLG = !str_detect(paste0(AUTHOR, TITLE, JTITLE, JOURNAL), pattern = "\\p{Hiragana}|\\p{Katakana}|\\p{Han}")) %>%
     ### printed name and year in ref.list
     mutate(
-      pName = if_else(langFLG, print_EName(AUTHORs), print_JName(AUTHORs)),
-      pYear = paste0("(", YEAR, ").")
+      ListName = if_else(langFLG, print_EName(AUTHORs), print_JName(AUTHORs)),
+      ListYear = paste0("(", YEAR, ").")
     ) %>%
     mutate(dplFLG = 0) %>%
     # make items for List
@@ -697,10 +292,10 @@ jpr_cite <- function(Rmd_file, Bib_file) {
             ### join with bib.df
             left_join(bib.df, by = c("KEY" = "BIBTEXKEY")) %>%
             ### get the citation name
-            select(V1, KEY, citeName1, citeName2, pYear, count) %>%
-            mutate(pYear = str_extract(pYear, "[a-z0-9]{4,5}")) %>%
+            select(V1, KEY, citeName1, citeName2, ListYear, count) %>%
+            mutate(ListYear = str_extract(ListYear, "[a-z0-9]{4,5}")) %>%
             mutate(citeName = if_else(count > 0, citeName2, citeName1)) %>%
-            mutate(citation = paste0(citeName, ",", pYear))
+            mutate(citation = paste0(citeName, ",", ListYear))
           
           replacement.word <- replacement.df$citation %>% paste0(collapse = "; ")
           replacement.word <- paste0("(", replacement.word, ")")
@@ -717,13 +312,13 @@ jpr_cite <- function(Rmd_file, Bib_file) {
           ### citation in the line
           KEY <- str_replace(replacement.item, pattern = "@", replacement = "")
           ref.df <- bib.df[bib.df$BIBTEXKEY == KEY, ] %>%
-            mutate(pYear = str_sub(pYear, 1, str_length(pYear) - 1))
+            mutate(ListYear = str_sub(ListYear, 1, str_length(ListYear) - 1))
           if (bib.df[bib.df$BIBTEXKEY == KEY, ]$count == 0) {
             # First time
-            st <- str_replace(st, pattern = replacement.item, replacement = paste0(ref.df$citeName1, ref.df$pYear))
+            st <- str_replace(st, pattern = replacement.item, replacement = paste0(ref.df$citeName1, ref.df$ListYear))
           } else {
             # more
-            st <- str_replace(st, pattern = replacement.item, replacement = paste0(ref.df$citeName2, ref.df$pYear))
+            st <- str_replace(st, pattern = replacement.item, replacement = paste0(ref.df$citeName2, ref.df$ListYear))
           }
           ### count up
           bib.df[bib.df$BIBTEXKEY == KEY, ]$count <- 1
