@@ -4,7 +4,7 @@
 \alias{citationMaker}
 \title{citationMaker function}
 \usage{
-citationMaker(df)
+citationMaker(df, ampersand = T)
 }
 \arguments{
 \item{df}{Bib data frame}

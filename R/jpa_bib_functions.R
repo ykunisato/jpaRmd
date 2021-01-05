@@ -68,9 +68,9 @@ prefixMaker <- function(df) {
 #' citationMaker function
 #' @param df Bib data frame
 #' @export
-citationMaker <- function(df,ampersand=T) {
+citationMaker <- function(df, ampersand = T) {
   if (df$langFLG) {
-    tmp <- inLineCite_ENG(df,ampersand)
+    tmp <- inLineCite_ENG(df, ampersand)
   } else {
     tmp <- inLineCite_JPN(df)
   }
@@ -87,7 +87,7 @@ citationMaker <- function(df,ampersand=T) {
 #' @param switchFLG switch the order of first name and last name
 #' @param ampersand it TRUE, combine last author with ampersand else "and"
 #' @export
-print_EName <- function(st,ampersand=T, switchFLG = FALSE) {
+print_EName <- function(st, ampersand = T, switchFLG = FALSE) {
   st <- as.data.frame(st)
   st %>%
     rowwise() %>%
@@ -127,7 +127,11 @@ print_EName <- function(st,ampersand=T, switchFLG = FALSE) {
       # wirte down all author's name and add "," befor last author's name.
       # use & not and
       pName <- stringr::str_flatten(nameList[1:(length(nameList) - 1)], collapse = ", ")
-      pName <- if(ampersand){paste(pName, "\\&", nameList[length(nameList)])}else{paste(pName, "and", nameList[length(nameList)])}
+      pName <- if (ampersand) {
+        paste(pName, "\\&", nameList[length(nameList)])
+      } else {
+        paste(pName, "and", nameList[length(nameList)])
+      }
     }
   }
   return(unlist(pName))
@@ -171,6 +175,7 @@ print_JName <- function(st) {
 #' @param df Strings of Bib info
 #' @export
 print_English_book <- function(df) {
+  name.tmp <- df$ListName
   title.tmp <- paste0("\\emph{", df$TITLE, "}.")
   # i ) General examples (author), (year of publication), (book title), (place of publication: publisher)
   # ii) New editions: Always indicate the number of editions except for the first edition.
@@ -199,7 +204,7 @@ print_English_book <- function(df) {
     trans.tmp <- paste0("(", print_EName(df$TRANSAUTHORs, switchFLG = TRUE), ", ", df$TRANSWORK, ").")
     trans.info <- paste0(" (", df$TRANSINFO, ")")
   }
-  pBib <- paste0(df$ListName, df$ListYear, title.tmp, " ", trans.tmp, df$ADDRESS, ":", df$PUBLISHER, trans.info)
+  pBib <- paste0(name.tmp, df$ListYear, title.tmp, " ", trans.tmp, df$ADDRESS, ":", df$PUBLISHER, trans.info)
   pBib <- paste0(pBib, ".")
   return(pBib)
 }
@@ -209,6 +214,7 @@ print_English_book <- function(df) {
 #' @param df Strings of Bib info
 #' @export
 print_Japanese_book <- function(df) {
+  name.tmp <- df$ListName
   title.tmp <- df$TITLE
   # iii)Editorial and Supervisory Book
   if (!is.na(df$EDITOR)) {
@@ -239,7 +245,7 @@ print_Japanese_book <- function(df) {
     J.part <- paste(df$GENCHOKANA, Jname, "(", df$JYEAR, ").", df$JTITLE, "\\ ", df$JPUBLISHER)
     pBib <- paste0(E.part, "(", J.part, ")")
   } else {
-    pBib <- paste(df$ListName, df$ListYear, df$TITLE, "\\ ", df$PUBLISHER)
+    pBib <- paste(name.tmp, df$ListYear, df$TITLE, "\\ ", df$PUBLISHER)
   }
 
   return(pBib)
@@ -351,11 +357,15 @@ print_Japanese_inproceedings <- function(df) {
 #' @importFrom dplyr select
 #' @param df Bib.df File from jpa_cite
 #' @export
-inLineCite_ENG <- function(df,ampersand) {
+inLineCite_ENG <- function(df, ampersand) {
   # depends on the number of authors
   tmp_name <- as.data.frame(df$AUTHORs)
   # ampersand
-  if(ampersand){tmp_connecter = "\\&"}else{tmp_connecter = "and"}
+  if (ampersand) {
+    tmp_connecter <- " \\& "
+  } else {
+    tmp_connecter <- "\\ and\\ "
+  }
   ### duplicated cheker
   dplCheck <- df$dplFLG
 
@@ -373,9 +383,9 @@ inLineCite_ENG <- function(df,ampersand) {
       citeName1 <- paste0(citeName1, tmp1)
     }
     ### Last Author
-    tmp1 <- paste0("\\&", tmp_name[NR, ]$last_name)
+    tmp1 <- paste0(tmp_connecter, tmp_name[NR, ]$last_name)
     if (dplCheck > 1) {
-      tmp1 <- paste0("\\&", tmp_name[NR, ]$initial_first, ".", tmp_name[NR, ]$last_name)
+      tmp1 <- paste0(tmp_connecter, tmp_name[NR, ]$initial_first, ".", tmp_name[NR, ]$last_name)
     }
     ### combine All Authors
     citeName1 <- paste0(citeName1, tmp1)
@@ -395,14 +405,14 @@ inLineCite_ENG <- function(df,ampersand) {
   }
   ### Two AUthors
   if (NROW(tmp_name) == 2) {
-    citeName2 <- paste(citeName2, tmp_connecter, tmp_name[2, ]$last_name)
+    citeName2 <- paste0(citeName2, tmp_connecter, tmp_name[2, ]$last_name)
     if (dplCheck > 1) {
-      citeName2 <- paste(citeName2, tmp_connecter, tmp_name[2, ]$initial_first, ".", tmp_name[2, ]$last_name)
+      citeName2 <- paste0(citeName2, tmp_connecter, tmp_name[2, ]$initial_first, ".", tmp_name[2, ]$last_name)
     }
   }
   ### More than 2 Authors
   if (NROW(tmp_name) > 2) {
-    citeName2 <- paste(citeName2, "et al.")
+    citeName2 <- paste0(citeName2, "\\ et al.")
   }
 
 

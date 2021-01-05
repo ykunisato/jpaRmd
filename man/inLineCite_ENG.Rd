@@ -4,7 +4,7 @@
 \alias{inLineCite_ENG}
 \title{in-Line Cittion(in English)}
 \usage{
-inLineCite_ENG(df)
+inLineCite_ENG(df, ampersand)
 }
 \arguments{
 \item{df}{Bib.df File from jpa_cite}
