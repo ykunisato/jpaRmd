@@ -77,66 +77,15 @@ jpa_cite <- function(Rmd_file, Bib_file) {
     checkFLG <- str_detect(st, pattern = "@")
     refFLG <- str_detect(st,pattern="<insert_reference>")
     if (checkFLG) {
-      # Replacement
+      # Replacement of main text
       while (str_detect(st, pattern = "@")) {
-        replacement.item <- inLineCitation(st,bib.df,)
-        
-        replacement.item <- st %>% str_extract(pattern = "@[\\[a-zA-Z0-9-_\\.\\p{Hiragana}\\p{Katakana}\\p{Han}]*")
-        loc <- st %>% str_locate(replacement.item)
-        loc <- loc[1] - 1
-        tp <- FALSE
-        if (loc > 0) {
-          tp <- str_sub(st, loc, loc) %>% str_detect(pattern = "\\[")
-        }
-
-        if (tp) {
-          ### citation on the end of line
-          ##### retake citation key
-          replacement.item <- st %>% str_extract(pattern = "\\[.*?\\]")
-          ##### citaton data frame
-          replacement.df <- replacement.item %>%
-            str_extract_all(pattern = "@[a-zA-Z0-9-_\\.\\p{Hiragana}\\p{Katakana}\\p{Han}]*", simplify = T) %>%
-            t() %>%
-            as.data.frame() %>%
-            mutate(KEY = str_replace(V1, pattern = "@", replacement = "")) %>%
-            ### join with bib.df
-            left_join(bib.df, by = c("KEY" = "BIBTEXKEY")) %>%
-            ### get the citation name
-            select(V1, KEY, citeName1, citeName2, ListYear, count) %>%
-            mutate(ListYear = str_extract(ListYear, "[a-z0-9]{4,5}")) %>%
-            mutate(citeName = if_else(count > 0, citeName2, citeName1)) %>%
-            mutate(citation = paste0(citeName, ",", ListYear))
-          
-          replacement.word <- replacement.df$citation %>% paste0(collapse = "; ")
-          replacement.word <- paste0("(", replacement.word, ")")
-          ### reform for regular expression
-          replacement.item <- str_replace(replacement.item, pattern = "\\[", replacement = "\\\\[") %>%
-            str_replace(pattern = "\\]", replacement = "\\\\]")
-          ### replacement!!
-          st <- str_replace(st, pattern = replacement.item, replacement = replacement.word)
-          ### count up
-          bib.df[bib.df$BIBTEXKEY %in% replacement.df$KEY, ]$count <- 1
-          
-        } else {
-          
-          ### citation in the line
-          KEY <- str_replace(replacement.item, pattern = "@", replacement = "")
-          ref.df <- bib.df[bib.df$BIBTEXKEY == KEY, ] %>%
-            mutate(ListYear = str_sub(ListYear, 1, str_length(ListYear) - 1))
-          if (bib.df[bib.df$BIBTEXKEY == KEY, ]$count == 0) {
-            # First time
-            st <- str_replace(st, pattern = replacement.item, replacement = paste0(ref.df$citeName1, ref.df$ListYear))
-          } else {
-            # more
-            st <- str_replace(st, pattern = replacement.item, replacement = paste0(ref.df$citeName2, ref.df$ListYear))
-          }
-          ### count up
-          bib.df[bib.df$BIBTEXKEY == KEY, ]$count <- 1
-        }
-        
+        replacement <- inLineCitation(st,bib.df)
+        st <- str_replace(st, pattern = replacement$item, replacement = replacement$word)
+        bib.df[bib.df$BIBTEXKEY %in% replacement$key, ]$count <- 1
       }
     }
     writeLines(st, Ftmp)
+    
     ## output reference
     if(refFLG){
       writeLines("\n",Ftmp)

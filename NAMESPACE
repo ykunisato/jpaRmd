@@ -2,6 +2,7 @@
 
 export(bib_to_DF)
 export(citationMaker)
+export(inLineCitation)
 export(inLineCite_ENG)
 export(inLineCite_JPN)
 export(jpa_cite)

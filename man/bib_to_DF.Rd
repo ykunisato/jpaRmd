@@ -4,12 +4,16 @@
 \alias{bib_to_DF}
 \title{bib_to_DF}
 \usage{
-bib_to_DF(Rmd_file, Bib_file)
+bib_to_DF(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F)
 }
 \arguments{
 \item{Rmd_file}{file name of R Markdown file}
 
 \item{Bib_file}{file name of Bib file}
+
+\item{list_ampersand}{combinle the last author with & or not in Bibliography}
+
+\item{cite_ampersand}{combinle the last author with & or not in in-line citation}
 }
 \value{
 Prepare for citation database

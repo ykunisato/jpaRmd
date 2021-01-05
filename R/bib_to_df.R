@@ -217,18 +217,26 @@ bib_to_DF <- function(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F
       TRANSAUTHORs = map(TRANSAUTHOR, ~ name_spliter(.x))
     )
 
+  ## Filtering to only actually cited
+  refKey <- bib.df$BIBTEXKEY %>% paste0("@", .)
+  refFLG <- vector(length = length(refKey))
+  for (i in 1:NROW(refAll)) {
+    refFLG <- refFLG | refAll[i, ]$refs %>% str_detect(pattern = refKey)
+  }
+  bib.df <- bib.df[refFLG, ]  
+  
   bib.df <- bib.df %>%
     ## In the case which the same author has some papers in the same year, assign an alphabet
     ### sorting Order; in JPA, the sorting follows the reading order of Japanese-YOMI or English-AUTHOR
     mutate(sortRecord = if_else(is.na(YOMI), AUTHOR, YOMI)) %>%
     ## str(YAER) is character, make Numeric one
-    mutate(YEARn = as.numeric(YEAR)) %>%
+    mutate(YEARn = as.numeric(YEAR)) %>% 
     ## sort by Author and Year
     arrange(sortRecord, YEARn) %>%
     ## group by Author and Year
     group_by(sortRecord, YEARn) %>%
     ## count the papers with group
-    mutate(n = n()) %>%
+    mutate(n = n()) %>% 
     mutate(num = row_number()) %>%
     ## Add a string if it needs
     mutate(addletter = if_else(n > 1, letters[num], "")) %>%
@@ -267,16 +275,10 @@ bib_to_DF <- function(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F
     select(-citeName1, -citeName2, -citeCheckFLG) %>%
     group_by(ID) %>%
     nest() %>%
-    mutate(cite = purrr::map2(.x = data, , .y = cite_ampersand, .f = ~ citationMaker(.x, .y))) %>%
+    mutate(cite = purrr::map2(.x = data, .y = cite_ampersand, .f = ~ citationMaker(.x, .y))) %>%
     unnest(cols = c(data, cite)) %>%
     select(-citeCheckFLG)
 
-  ## Filtering to only actually cited
-  refKey <- bib.df$BIBTEXKEY %>% paste0("@", .)
-  refFLG <- vector(length = length(refKey))
-  for (i in 1:NROW(refAll)) {
-    refFLG <- refFLG | refAll[i, ]$refs %>% str_detect(pattern = refKey)
-  }
-  bib.df <- bib.df[refFLG, ]
+
   return(bib.df)
 }
