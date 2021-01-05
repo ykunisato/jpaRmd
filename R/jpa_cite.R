@@ -70,8 +70,8 @@ jpa_cite <- function(Rmd_file, Bib_file) {
     rowwise() %>% 
     ### printed name and year in ref.list
     mutate(
-      pName = if_else(langFLG, print_EName(AUTHORs), print_JName(AUTHORs)),
-      pYear = paste0("(", YEAR, ").")
+      ListName = if_else(langFLG, print_EName(AUTHORs), print_JName(AUTHORs)),
+      ListYear = paste0("(", YEAR, ").")
     ) %>%
     mutate(dplFLG = 0) %>%
     # make items for List
