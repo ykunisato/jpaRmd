@@ -177,7 +177,7 @@ print_JName <- function(st) {
 print_English_book <- function(df, underline = F) {
   name.tmp <- df$ListName
   if (underline) {
-    eff <- "\\underline{"
+    eff <- "\\uline{"
   } else {
     eff <- "\\emph{"
   }
@@ -263,7 +263,7 @@ print_English_article <- function(df, underline = F) {
   # (author's name), (year of publication), (title), (journal title), (number of copies), (page citations)
   TITLE.tmp <- title.tmp <- paste0(df$TITLE, ",")
   if (underline) {
-    eff <- "\\underline{"
+    eff <- "\\uline{"
   } else {
     eff <- "\\emph{"
   }
@@ -297,7 +297,7 @@ print_Japanese_article <- function(df, underline = F) {
   # (Author's name), (Year of publication), (Title), (Title), (Number of copies), (Citation page)
   JOURNAL.tmp <- paste0(df$JOURNAL, ",")
   if (underline) {
-    eff <- "\\underline{"
+    eff <- "\\uline{"
   } else {
     eff <- "\\emph{"
   }
@@ -329,7 +329,7 @@ print_Japanese_article <- function(df, underline = F) {
 #' @export
 print_English_incollection <- function(df, underline = F) {
   if (underline) {
-    eff <- "\\underline{"
+    eff <- "\\uline{"
   } else {
     eff <- "\\emph{"
   }
