@@ -62,7 +62,7 @@ value_extractor <- function(string) {
 #' @export
 
 jpa_cite <- function(Rmd_file, Bib_file) {
-  bib.df <- bib_to_DF(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F,underline = F)
+  bib.df <- bib_to_DF(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F, underline = F)
 
   # Rewrite citation in the text. -------------------------------------------------------------------
   ## get original file
@@ -137,7 +137,7 @@ jpa_cite <- function(Rmd_file, Bib_file) {
 
 # function developed
 jpr_cite <- function(Rmd_file, Bib_file) {
-  bib.df <- bib_to_DF(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F)
+  bib.df <- bib_to_DF(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F, underline = T)
   # Output the citation type (substantively a Style file) -------------------------------------------------
 
   # Rewrite citation in the text. -------------------------------------------------------------------
