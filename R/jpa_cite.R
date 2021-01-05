@@ -25,10 +25,6 @@ value_extractor <- function(string) {
   return(content)
 }
 
-
-
-
-
 #' Add citation with JPA format
 #' @importFrom magrittr %>%
 #' @importFrom tibble as_tibble
@@ -72,22 +68,6 @@ jpa_cite <- function(Rmd_file, Bib_file) {
   ## Sort by NAME whether in Japanese or English
   bib.df <- bib.df %>%
     mutate(sortRecord = if_else(is.na(YOMI), AUTHOR, YOMI)) %>%
-    ## In the case which the same author has some papers in the same year, assign an alphabet
-    ## str(YAER) is character, make Numeric one
-    mutate(YEARn = as.numeric(YEAR)) %>%
-    ## sort by Author and Year
-    arrange(sortRecord, YEARn) %>%
-    ## group by Author and Year
-    group_by(sortRecord, YEARn) %>%
-    ## count the papers with group
-    mutate(n = n()) %>%
-    mutate(num = row_number()) %>%
-    ## Add a string if it needs
-    mutate(addletter = if_else(n > 1, letters[num], "")) %>%
-    ### Retrun
-    mutate(YEAR = paste0(YEAR, addletter)) %>%
-    ### Language type check
-    mutate(langFLG = !str_detect(paste0(AUTHOR, TITLE, JTITLE, JOURNAL), pattern = "\\p{Hiragana}|\\p{Katakana}|\\p{Han}")) %>%
     ### printed name and year in ref.list
     mutate(
       pName = if_else(langFLG, print_EName(AUTHORs), print_JName(AUTHORs)),
@@ -244,22 +224,6 @@ jpr_cite <- function(Rmd_file, Bib_file) {
   ## Sort by NAME whether in Japanese or English
   bib.df <- bib.df %>%
     mutate(sortRecord = if_else(is.na(YOMI), AUTHOR, YOMI)) %>%
-    ## In the case which the same author has some papers in the same year, assign an alphabet
-    ## str(YAER) is character, make Numeric one
-    mutate(YEARn = as.numeric(YEAR)) %>%
-    ## sort by Author and Year
-    arrange(sortRecord, YEARn) %>%
-    ## group by Author and Year
-    group_by(sortRecord, YEARn) %>%
-    ## count the papers with group
-    mutate(n = n()) %>%
-    mutate(num = row_number()) %>%
-    ## Add a string if it needs
-    mutate(addletter = if_else(n > 1, letters[num], "")) %>%
-    ### Retrun
-    mutate(YEAR = paste0(YEAR, addletter)) %>%
-    ### Language type check
-    mutate(langFLG = !str_detect(paste0(AUTHOR, TITLE, JTITLE, JOURNAL), pattern = "\\p{Hiragana}|\\p{Katakana}|\\p{Han}")) %>%
     ### printed name and year in ref.list
     mutate(
       pName = if_else(langFLG, print_EName(AUTHORs), print_JName(AUTHORs)),

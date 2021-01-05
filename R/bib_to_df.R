@@ -1,4 +1,4 @@
-#' BIB to bib.df
+#' bib_to_DF
 #' @importFrom magrittr %>%
 #' @importFrom tibble as_tibble
 #' @importFrom tibble rowid_to_column
@@ -31,7 +31,7 @@
 #' @param Bib_file file name of Bib file
 #' @return Prepare for citation database
 #' @examples
-#' bib_to_DF(Rmd_file = "RmdFileName",Bib_file = "BibFileName")
+#' # bib_to_DF(Rmd_file = "RmdFileName",Bib_file = "BibFileName")
 #' @export
 #' 
 bib_to_DF <- function(Rmd_file, Bib_file) {
@@ -215,6 +215,25 @@ bib_to_DF <- function(Rmd_file, Bib_file) {
       TRANSAUTHORs = map(TRANSAUTHOR, ~ name_spliter(.x))
     )
 
+  bib.df <- bib.df %>% 
+  ## In the case which the same author has some papers in the same year, assign an alphabet
+  ## str(YAER) is character, make Numeric one
+  mutate(YEARn = as.numeric(YEAR)) %>%
+    ## sort by Author and Year
+    arrange(sortRecord, YEARn) %>%
+    ## group by Author and Year
+    group_by(sortRecord, YEARn) %>%
+    ## count the papers with group
+    mutate(n = n()) %>%
+    mutate(num = row_number()) %>%
+    ## Add a string if it needs
+    mutate(addletter = if_else(n > 1, letters[num], "")) %>%
+    ### Retrun
+    mutate(YEAR = paste0(YEAR, addletter)) %>%
+    ### Language type check
+    mutate(langFLG = !str_detect(paste0(AUTHOR, TITLE, JTITLE, JOURNAL), pattern = "\\p{Hiragana}|\\p{Katakana}|\\p{Han}"))
+  
+  
   ## Filtering to only actually cited
   refKey <- bib.df$BIBTEXKEY %>% paste0("@", .)
   refFLG <- vector(length = length(refKey))
