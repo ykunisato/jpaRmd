@@ -67,6 +67,7 @@ jpa_cite <- function(Rmd_file, Bib_file) {
 
   ## Sort by NAME whether in Japanese or English
   bib.df <- bib.df %>%
+    rowwise() %>% 
     ### printed name and year in ref.list
     mutate(
       pName = if_else(langFLG, print_EName(AUTHORs), print_JName(AUTHORs)),

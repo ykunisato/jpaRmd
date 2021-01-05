@@ -4,10 +4,12 @@
 \alias{print_EName}
 \title{Print name function(English)}
 \usage{
-print_EName(st, switchFLG = FALSE)
+print_EName(st, ampersand = T, switchFLG = FALSE)
 }
 \arguments{
 \item{st}{Strings of name}
+
+\item{ampersand}{it TRUE, combine last author with ampersand else "and"}
 
 \item{switchFLG}{switch the order of first name and last name}
 }

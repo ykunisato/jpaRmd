@@ -85,8 +85,9 @@ citationMaker <- function(df) {
 #' @importFrom stringr str_flatten
 #' @param st Strings of name
 #' @param switchFLG switch the order of first name and last name
+#' @param ampersand it TRUE, combine last author with ampersand else "and"
 #' @export
-print_EName <- function(st, switchFLG = FALSE) {
+print_EName <- function(st,ampersand=T, switchFLG = FALSE) {
   st <- as.data.frame(st)
   st %>%
     rowwise() %>%
@@ -126,7 +127,7 @@ print_EName <- function(st, switchFLG = FALSE) {
       # wirte down all author's name and add "," befor last author's name.
       # use & not and
       pName <- stringr::str_flatten(nameList[1:(length(nameList) - 1)], collapse = ", ")
-      pName <- paste(pName, "\\&", nameList[length(nameList)])
+      pName <- if(ampersand){paste(pName, "\\&", nameList[length(nameList)])}else{paste(pName, "and", nameList[length(nameList)])}
     }
   }
   return(unlist(pName))
