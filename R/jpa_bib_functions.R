@@ -68,9 +68,9 @@ prefixMaker <- function(df) {
 #' citationMaker function
 #' @param df Bib data frame
 #' @export
-citationMaker <- function(df) {
+citationMaker <- function(df,ampersand=T) {
   if (df$langFLG) {
-    tmp <- inLineCite_ENG(df)
+    tmp <- inLineCite_ENG(df,ampersand)
   } else {
     tmp <- inLineCite_JPN(df)
   }
@@ -351,9 +351,11 @@ print_Japanese_inproceedings <- function(df) {
 #' @importFrom dplyr select
 #' @param df Bib.df File from jpa_cite
 #' @export
-inLineCite_ENG <- function(df) {
+inLineCite_ENG <- function(df,ampersand) {
   # depends on the number of authors
   tmp_name <- as.data.frame(df$AUTHORs)
+  # ampersand
+  if(ampersand){tmp_connecter = "\\&"}else{tmp_connecter = "and"}
   ### duplicated cheker
   dplCheck <- df$dplFLG
 
@@ -393,9 +395,9 @@ inLineCite_ENG <- function(df) {
   }
   ### Two AUthors
   if (NROW(tmp_name) == 2) {
-    citeName2 <- paste(citeName2, "\\&", tmp_name[2, ]$last_name)
+    citeName2 <- paste(citeName2, tmp_connecter, tmp_name[2, ]$last_name)
     if (dplCheck > 1) {
-      citeName2 <- paste(citeName2, "\\&", tmp_name[2, ]$initial_first, ".", tmp_name[2, ]$last_name)
+      citeName2 <- paste(citeName2, tmp_connecter, tmp_name[2, ]$initial_first, ".", tmp_name[2, ]$last_name)
     }
   }
   ### More than 2 Authors
