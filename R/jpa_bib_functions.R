@@ -272,11 +272,12 @@ print_English_article <- function(df, underline = F) {
   df$VOLUME <- if_else(is.na(df$VOLUME), "", df$VOLUME)
   df$NUMBER <- if_else(is.na(df$NUMBER), "", df$NUMBER)
   if (df$VOLUME != "") {
-    Vol_and_Num.tmp <- paste0(eff, df$VOLUME, "},")
+    Vol_and_Num.tmp <- paste0(eff, df$VOLUME, "}")
   }
   if (df$NUMBER != "") {
-    Vol_and_Num.tmp <- paste0(Vol_and_Num.tmp, "(", df$NUMBER, "),")
+    Vol_and_Num.tmp <- paste0(Vol_and_Num.tmp, "(", df$NUMBER, ")")
   }
+  Vol_and_Num.tmp <- paste0(Vol_and_Num.tmp,",")
   PAGES.tmp <- if (!is.na(df$PAGES)) {
     if (df$PAGES != "") {
       paste0(df$PAGES, ".")
@@ -305,11 +306,12 @@ print_Japanese_article <- function(df, underline = F) {
   df$VOLUME <- if_else(is.na(df$VOLUME), "", df$VOLUME)
   df$NUMBER <- if_else(is.na(df$NUMBER), "", df$NUMBER)
   if (df$VOLUME != "") {
-    Vol_and_Num.tmp <- paste0(eff, df$VOLUME, "},")
+    Vol_and_Num.tmp <- paste0(eff, df$VOLUME, "}")
   }
   if (df$NUMBER != "") {
-    Vol_and_Num.tmp <- paste0(Vol_and_Num.tmp, "(", df$NUMBER, "),")
+    Vol_and_Num.tmp <- paste0(Vol_and_Num.tmp, "(", df$NUMBER, ")")
   }
+  Vol_and_Num.tmp <- paste0(Vol_and_Num.tmp,",")
   PAGES.tmp <- if (!is.na(df$PAGES)) {
     if (df$PAGES != "") {
       paste0(df$PAGES, ".")
