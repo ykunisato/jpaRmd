@@ -268,7 +268,7 @@ summary_bfi_fig2 <- summary_bfi_fig %>%
    mutate(gender = ifelse(gender=="1", "Male","Female"))
 
 p1 <- ggplot(summary_bfi_fig2,aes(x = gender, y = Neuroticism)) +
-   stat_summary(aes(fill=gender),fun.y=mean,geom="bar",alpha=0.8, colour="black", position="dodge", show.legend = F) +
+   stat_summary(aes(fill=gender),fun=mean,geom="bar",alpha=0.8, colour="black", position="dodge", show.legend = F) +
    stat_summary(aes(group=gender),fun.data=mean_sdl,geom="errorbar",size=0.5,width=0.2,position=position_dodge(.9)) +
    scale_fill_manual(values=c("gray10","white")) +
    theme(panel.background = element_blank()) +
