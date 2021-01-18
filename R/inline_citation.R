@@ -44,7 +44,7 @@ inLineCitation <- function(st, bib.df) {
       select(V1, KEY, citeName1, citeName2, ListYear, count) %>%
       mutate(ListYear = str_extract(ListYear, "[a-z0-9]{4,5}")) %>%
       mutate(citeName = if_else(count > 0, citeName2, citeName1)) %>%
-      mutate(citation = paste0(citeName, ",", ListYear))
+      mutate(citation = paste0(citeName, ",\\ ", ListYear))
 
     word <- tmp.df$citation %>% paste0(collapse = "; ")
     word <- paste0("(", word, ")")
