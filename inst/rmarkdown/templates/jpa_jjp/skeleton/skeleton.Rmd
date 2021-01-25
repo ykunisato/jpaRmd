@@ -2,7 +2,7 @@
 title: "RMarkdownで『心理学研究』の論文は書けるのか？"
 subtitle: "Can we write a paper of the Japanses Journal of psychology with RMarkdown?"
 suppress-bibliography: yes
-output: jpaRmd::render_jjp(Rmd_file = "Untitled.Rmd", Bib_file = "reference.bib")
+output: jpaRmd::render_jjp(Rmd_file = "Untitled.Rmd", Bib_file = "references.bib")
 ---
 
 <!-- 
