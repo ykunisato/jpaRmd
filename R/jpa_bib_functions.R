@@ -1,4 +1,4 @@
-#' Name spliter function
+#' @title Name spliter function
 #' @importFrom magrittr %>%
 #' @importFrom stringr str_split
 #' @importFrom dplyr mutate
@@ -29,7 +29,7 @@ name_spliter <- function(dat) {
 }
 
 
-#' pBibMaker function
+#' @title pBibMaker function
 #' @importFrom dplyr if_else
 #' @param df Bib data frame
 #' @export
@@ -51,7 +51,7 @@ pBibMaker <- function(df, underline) {
   return(tmp)
 }
 
-#' prefixMaker function
+#' @title prefixMaker function
 #' @importFrom stringi stri_escape_unicode
 #' @importFrom stringr str_replace_all
 #' @param df Bib data frame
@@ -65,7 +65,7 @@ prefixMaker <- function(df) {
 }
 
 
-#' citationMaker function
+#' @title citationMaker function
 #' @param df Bib data frame
 #' @export
 citationMaker <- function(df, ampersand = T) {
@@ -77,7 +77,7 @@ citationMaker <- function(df, ampersand = T) {
   return(tmp)
 }
 
-#' Print name function(English)
+#' @title Print name function(English)
 #' @importFrom magrittr %>%
 #' @importFrom dplyr mutate
 #' @importFrom dplyr rowwise
@@ -137,7 +137,7 @@ print_EName <- function(st, ampersand = T, switchFLG = FALSE) {
   return(unlist(pName))
 }
 
-#' Print name function(Jpanese)
+#' @title Print name function(Jpanese)
 #' @param st Strings of Japanese name
 #' @export
 print_JName <- function(st) {
@@ -171,7 +171,7 @@ print_JName <- function(st) {
   return(pName)
 }
 
-#' Print bib info function(English book)
+#' @title Print bib info function(English book)
 #' @param df Strings of Bib info
 #' @export
 print_English_book <- function(df, underline = F) {
@@ -214,7 +214,7 @@ print_English_book <- function(df, underline = F) {
   return(pBib)
 }
 
-#' Print bib info function(Japanese book)
+#' @title Print bib info function(Japanese book)
 #' @importFrom stringi stri_unescape_unicode
 #' @param df Strings of Bib info
 #' @export
@@ -256,7 +256,7 @@ print_Japanese_book <- function(df) {
   return(pBib)
 }
 
-#' Print bib info function(English article)
+#' @title Print bib info function(English article)
 #' @param df Strings of Bib info
 #' @export
 print_English_article <- function(df, underline = F) {
@@ -291,7 +291,7 @@ print_English_article <- function(df, underline = F) {
   return(pBib)
 }
 
-#' Print bib info function(Jaopanese article)
+#' @title Print bib info function(Jaopanese article)
 #' @param df Strings of Bib info
 #' @export
 print_Japanese_article <- function(df, underline = F) {
@@ -325,7 +325,7 @@ print_Japanese_article <- function(df, underline = F) {
   return(pBib)
 }
 
-#' Print bib info function(in English collection)
+#' @title Print bib info function(in English collection)
 #' @importFrom dplyr if_else
 #' @param df Strings of Bib info
 #' @export
@@ -345,7 +345,7 @@ print_English_incollection <- function(df, underline = F) {
   return(pBib)
 }
 
-#' Print bib info function(in Japanese collection)
+#' @title Print bib info function(in Japanese collection)
 #' @importFrom stringi stri_unescape_unicode
 #' @param df Strings of Bib info
 #' @export
@@ -358,7 +358,7 @@ print_Japanese_incollection <- function(df) {
   return(pBib)
 }
 
-#' Print bib info function(in English Proceedings)
+#' @title Print bib info function(in English Proceedings)
 #' @param df Strings of Bib info
 #' @export
 print_English_inproceedings <- function(df) {
@@ -366,7 +366,7 @@ print_English_inproceedings <- function(df) {
   return(pBib)
 }
 
-#' Print bib info function(in Japanese Proceedings)
+#' @title Print bib info function(in Japanese Proceedings)
 #' @param df Strings of Bib info
 #' @export
 print_Japanese_inproceedings <- function(df) {
@@ -374,8 +374,7 @@ print_Japanese_inproceedings <- function(df) {
   return(pBib)
 }
 
-
-#' in-Line Cittion(in English)
+#' @title in-Line Cittion(in English)
 #' @importFrom dplyr select
 #' @param df Bib.df File from jpa_cite
 #' @export
@@ -442,7 +441,7 @@ inLineCite_ENG <- function(df, ampersand) {
   return(data.frame(citeName1, citeName2, citeCheckFLG))
 }
 
-#' in-Line Cittion(in Japanese)
+#' @title in-Line Cittion(in Japanese)
 #' @importFrom dplyr select
 #' @param df Bib.df File from jpa_cite
 #' @export
@@ -451,7 +450,6 @@ inLineCite_JPN <- function(df) {
   tmp_name <- as.data.frame(df$AUTHORs)
   ### duplicated cheker
   dplCheck <- df$dplFLG
-
   NR <- NROW(tmp_name)
   ## First time
   if (NR > 1) {
@@ -478,8 +476,6 @@ inLineCite_JPN <- function(df) {
       citeName1 <- paste0(tmp_name[1, ]$last_name, tmp_name[1, ]$first_name)
     }
   }
-
-
   ## Second time, and after
   citeName2 <- tmp_name[1, ]$last_name
   if (dplCheck > 1) {

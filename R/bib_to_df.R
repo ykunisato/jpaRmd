@@ -1,4 +1,4 @@
-#' bib_to_DF
+#' @title bib_to_DF
 #' @importFrom magrittr %>%
 #' @importFrom tibble as_tibble
 #' @importFrom tibble rowid_to_column
@@ -36,7 +36,6 @@
 #' @examples
 #' # bib_to_DF(Rmd_file = "RmdFileName",Bib_file = "BibFileName")
 #' @export
-#'
 bib_to_DF <- function(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F, underline = F) {
   # check argument
   if (missing(Rmd_file)) {
@@ -86,7 +85,6 @@ bib_to_DF <- function(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F
   from <- which(str_extract(bib, "[:graph:]") == "@")
   ## LineID to read stop
   to <- c(from[-1] - 1, length(bib))
-
   ## data list
   ls <- mapply(
     function(x, y) {
@@ -96,7 +94,6 @@ bib_to_DF <- function(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F
     y = to,
     SIMPLIFY = T
   )
-
   ## get reference KEY and fields,categories
   keys <- lapply(
     ls,
@@ -279,7 +276,5 @@ bib_to_DF <- function(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F
     mutate(cite = purrr::map2(.x = data, .y = cite_ampersand, .f = ~ citationMaker(.x, .y))) %>%
     unnest(cols = c(data, cite)) %>%
     select(-citeCheckFLG)
-
-
   return(bib.df)
 }

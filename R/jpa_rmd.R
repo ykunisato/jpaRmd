@@ -1,5 +1,4 @@
-#' render function for paper of Japanese Journal of Psychology
-#'
+#' @title render function for paper of Japanese Journal of Psychology
 #' @importFrom rmarkdown render
 #' @importFrom rmarkdown pdf_document
 #' @param Rmd_file file name of R Markdown file
@@ -24,8 +23,7 @@ render_jjp <- function(Rmd_file, Bib_file) {
   render(tmp_rmd, format_pdf, output_file)
 }
 
-#' render function for paper of Japanese Journal of Behavioral and Cognitive Therapies
-#'
+#' @title render function for paper of Japanese Journal of Behavioral and Cognitive Therapies
 #' @importFrom rmarkdown render
 #' @importFrom rmarkdown pdf_document
 #' @param Rmd_file file name of R Markdown file
@@ -50,8 +48,7 @@ render_jjbct <- function(Rmd_file, Bib_file) {
   render(tmp_rmd, format_pdf, output_file)
 }
 
-#' render function for paper of Japanese Psychological Review
-#'
+#' @title render function for paper of Japanese Psychological Review
 #' @importFrom rmarkdown render
 #' @importFrom rmarkdown pdf_document
 #' @param Rmd_file file name of R Markdown file
@@ -86,11 +83,9 @@ render_jpr <- function(Rmd_file, Bib_file) {
   render(tmp_rmd4, format_pdf, output_file4)
 }
 
-#' R Markdown template for Reply to reviewers
-#'
+#' @title R Markdown template for Reply to reviewers
 #' @export
 #' @importFrom rmarkdown pdf_document
-
 reply <- function() {
   template_tex_file <- system.file("rmarkdown/templates/reply/resources/reply.tex",
     package = "jpaRmd"

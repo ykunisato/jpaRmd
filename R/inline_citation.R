@@ -1,4 +1,4 @@
-#' inLine Citation
+#' @title inLine Citation
 #' @importFrom dplyr mutate
 #' @importFrom dplyr select
 #' @importFrom dplyr if_else
