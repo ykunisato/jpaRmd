@@ -1,4 +1,4 @@
-#' Extractor function
+#' @title Extractor function
 #' @importFrom magrittr %>%
 #' @importFrom stringr str_replace_all
 #' @importFrom stringr str_trim
@@ -25,7 +25,7 @@ value_extractor <- function(string) {
   return(content)
 }
 
-#' Add citation with JPA format
+#' @title Add citation with JPA format
 #' @importFrom magrittr %>%
 #' @importFrom tibble as_tibble
 #' @importFrom tibble rowid_to_column
@@ -60,10 +60,8 @@ value_extractor <- function(string) {
 #' @examples
 #' # jpa_cite(Rmd_file = "RmdFileName",Bib_file = "BibFileName")
 #' @export
-
 jpa_cite <- function(Rmd_file, Bib_file) {
   bib.df <- bib_to_DF(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F, underline = F)
-
   # Rewrite citation in the text. -------------------------------------------------------------------
   ## get original file
   tmpfile <- readLines(Rmd_file, warn = F)
@@ -85,7 +83,6 @@ jpa_cite <- function(Rmd_file, Bib_file) {
       }
     }
     writeLines(st, Ftmp)
-
     ## output reference
     if (refFLG) {
       writeLines("\n", Ftmp)

@@ -1,10 +1,13 @@
 Package: jpaRmd
 Type: Package
-Title: Rmarkdown template for paper format at Japanese Psychological Association
-Version: 0.8.4
-Author: Yoshihiko Kunisato
+Title: Rmarkdown template for Japanese journals in psychology
+Version: 0.8.5
+Authors@R: c(person("Yoshihiko", "Kunisato", email = "ykunisato@psy.senshu-u.ac.jp", role = c("cre","aut")),person("Koji", "Kosugi", email = "kosugi@psy.senshu-u.ac.jp", role = c("cre","aut")))
+Author: Yoshihiko Kunisato [aut, cre],Koji Kosugi [aut, cre]
 Maintainer: Yoshihiko Kunisato <ykunisato@psy.senshu-u.ac.jp>
-Description: Rmarkdown template for paper format at Japanese Psychological Association.
+Description: The package provides the Rmarkdown template for Japanese journals in psychology including the Japanese Journal of Psychology and so on. The package also provides function making a list of references.
+URL: https://github.com/ykunisato/jpaRmd
+BugReports: https://github.com/ykunisato/jpaRmd/issues
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

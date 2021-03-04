@@ -1,4 +1,4 @@
-#' Add old content of manuscript to crrection table
+#' @title Add old content of manuscript to crrection table
 #' @param old_text old content of manuscript
 #' @export
 old_m <- function(old_text) {
@@ -21,7 +21,7 @@ new_m <- function(new_text) {
 }
 
 
-#' Make crrection table
+#' @title Make crrection table
 #' @param old_manuscript vector of old content of manuscript
 #' @param new_manuscript vector of new content of manuscript
 #' @importFrom knitr kable
