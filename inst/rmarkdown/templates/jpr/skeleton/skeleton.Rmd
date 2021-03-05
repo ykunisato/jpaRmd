@@ -240,6 +240,7 @@ summary_bfi <- bfi %>%
           Openness = O1 + O2 + O3 + O4 + O5) %>% 
    select(Extraversion,Neuroticism,Conscientiousness,Agreeableness,Openness) %>% 
    describe() %>% 
+   as_tibble() %>%
    select(-vars, -trimmed, -mad, -range, -se)
 
 # kableを使って表を作る（以下のようにやると結構きれいになります）
