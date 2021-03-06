@@ -9,21 +9,25 @@
 #' @importFrom humaniformat last_name
 #' @importFrom stringr str_sub
 #' @importFrom stringr str_to_upper
-#' @param dat elements of data.frame contains NAME
+#' @importFrom stringr str_detect
+#' @importFrom stringr str_replace
+#' @param df elements of data.frame contains NAME
 #' @export
-name_spliter <- function(dat) {
-  dat %>%
+name_spliter <- function(df) {
+  df %>%
     str_split(pattern = " and ") %>%
     unlist() %>%
     data.frame(Names = .) %>%
     rowwise() %>%
     mutate(authors_name_split = format_reverse(Names)) %>%
+    # Whether to exclude from this name-split function like the organization name
+    mutate(exFLG = if_else(str_detect(Names, pattern = "\\{"), TRUE, FALSE)) %>%
     mutate(
-      first_name = first_name(authors_name_split),
-      middle_name = middle_name(authors_name_split),
-      last_name = last_name(authors_name_split),
-      initial_first = str_sub(first_name, start = 1, end = 1) %>% str_to_upper(),
-      initial_middle = str_sub(middle_name, start = 1, end = 1) %>% str_to_upper()
+      first_name = if_else(exFLG, "", first_name(authors_name_split)),
+      middle_name = if_else(exFLG, "", middle_name(authors_name_split)),
+      last_name = if_else(exFLG, str_replace_all(Names, pattern = "\\{|\\}", ""), last_name(authors_name_split)),
+      initial_first = if_else(exFLG, str_sub(first_name, start = 1, end = 1) %>% str_to_upper(), ""),
+      initial_middle = if_else(exFLG, str_sub(middle_name, start = 1, end = 1) %>% str_to_upper(), "")
     ) %>%
     return()
 }
@@ -92,12 +96,12 @@ print_EName <- function(st, ampersand = T, switchFLG = FALSE) {
   st %>%
     rowwise() %>%
     mutate(
-      initial_first = paste0(initial_first, "."),
-      initial_middle = paste0(initial_middle, "."),
+      initial_first = if_else(exFLG, "", paste0(initial_first, ".")),
+      initial_middle = if_else(exFLG,"", paste0(initial_middle, ".")),
       initial_name = paste0(initial_first, if_else(initial_middle == "NA.", "", initial_middle)),
       pName = if_else(switchFLG,
-        paste(initial_name, last_name),
-        paste0(last_name, ", ", initial_name)
+          paste(initial_name, last_name),
+          paste0(last_name, ", ", initial_name)
       )
     ) -> tmp
 
@@ -277,7 +281,7 @@ print_English_article <- function(df, underline = F) {
   if (df$NUMBER != "") {
     Vol_and_Num.tmp <- paste0(Vol_and_Num.tmp, "(", df$NUMBER, ")")
   }
-  Vol_and_Num.tmp <- paste0(Vol_and_Num.tmp,",")
+  Vol_and_Num.tmp <- paste0(Vol_and_Num.tmp, ",")
   PAGES.tmp <- if (!is.na(df$PAGES)) {
     if (df$PAGES != "") {
       paste0(df$PAGES, ".")
@@ -311,7 +315,7 @@ print_Japanese_article <- function(df, underline = F) {
   if (df$NUMBER != "") {
     Vol_and_Num.tmp <- paste0(Vol_and_Num.tmp, "(", df$NUMBER, ")")
   }
-  Vol_and_Num.tmp <- paste0(Vol_and_Num.tmp,",")
+  Vol_and_Num.tmp <- paste0(Vol_and_Num.tmp, ",")
   PAGES.tmp <- if (!is.na(df$PAGES)) {
     if (df$PAGES != "") {
       paste0(df$PAGES, ".")

@@ -11,8 +11,8 @@ value_extractor <- function(string) {
     ### delete escape-sequence, \"
     str_replace_all(pattern = '\\\"', replacement = "") %>%
     ### delete curly-bracket
-    str_replace_all(pattern = "\\{", replacement = "") %>%
-    str_replace_all(pattern = "\\}", replacement = "") %>%
+    str_replace(pattern = "\\{", replacement = "") %>%
+    str_replace(pattern = "\\}", replacement = "") %>%
     str_trim()
   ### if the last character is , then delete
   for (i in 1:length(content)) {
