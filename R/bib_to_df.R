@@ -196,6 +196,7 @@ bib_to_DF <- function(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F
     TRANSAUTHOR = character(0L),
     TRANSWORK = character(0L),
     TRANSINFO = character(0L),
+    DOI = character(0L),
     stringsAsFactors = FALSE
   )
 
