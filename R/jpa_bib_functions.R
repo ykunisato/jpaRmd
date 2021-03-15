@@ -26,8 +26,8 @@ name_spliter <- function(df) {
       first_name = if_else(exFLG, "", first_name(authors_name_split)),
       middle_name = if_else(exFLG, "", middle_name(authors_name_split)),
       last_name = if_else(exFLG, str_replace_all(Names, pattern = "\\{|\\}", ""), last_name(authors_name_split)),
-      initial_first = if_else(exFLG, str_sub(first_name, start = 1, end = 1) %>% str_to_upper(), ""),
-      initial_middle = if_else(exFLG, str_sub(middle_name, start = 1, end = 1) %>% str_to_upper(), "")
+      initial_first = if_else(exFLG, "", str_sub(first_name, start = 1, end = 1) %>% str_to_upper()),
+      initial_middle = if_else(exFLG, "", str_sub(middle_name, start = 1, end = 1) %>% str_to_upper())
     ) %>%
     return()
 }
@@ -97,11 +97,11 @@ print_EName <- function(st, ampersand = T, switchFLG = FALSE) {
     rowwise() %>%
     mutate(
       initial_first = if_else(exFLG, "", paste0(initial_first, ".")),
-      initial_middle = if_else(exFLG,"", paste0(initial_middle, ".")),
+      initial_middle = if_else(exFLG, "", paste0(initial_middle, ".")),
       initial_name = paste0(initial_first, if_else(initial_middle == "NA.", "", initial_middle)),
       pName = if_else(switchFLG,
-          paste(initial_name, last_name),
-          paste0(last_name, ", ", initial_name)
+        paste(initial_name, last_name),
+        paste0(last_name, ", ", initial_name)
       )
     ) -> tmp
 
