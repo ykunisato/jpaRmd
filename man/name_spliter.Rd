@@ -4,10 +4,10 @@
 \alias{name_spliter}
 \title{Name spliter function}
 \usage{
-name_spliter(dat)
+name_spliter(df)
 }
 \arguments{
-\item{dat}{elements of data.frame contains NAME}
+\item{df}{elements of data.frame contains NAME}
 }
 \description{
 Name spliter function

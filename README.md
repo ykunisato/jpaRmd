@@ -4,7 +4,6 @@
 # jpaRmd
 
 <!-- badges: start -->
-
 <!-- badges: end -->
 
 jpaRmdは，日本心理学会の『心理学研究』への投稿用PDF原稿をRmarkdownで作成するためのテンプレートを提供するRパッケージです。[日本心理学会の「執筆・投稿の手びき(2015年版)」](https://psych.or.jp/manual/)に基づいています。また，認知行動療法学会の『認知行動療法』のテンプレートも用意しています。
@@ -20,9 +19,9 @@ jpaRmdは，日本心理学会の『心理学研究』への投稿用PDF原稿�
 
 ### 『心理学研究』
 
-RStudioで，「File」 -\> 「New File」 -\> 「R Markdown…」
-をクリックする。以下の画面がでてきたら，「From
-Template」から「Japanese Psychological Association
+RStudioで，「File」 -&gt; 「New File」 -&gt; 「R Markdown…」
+をクリックする。以下の画面がでてきたら，「From Template」から「Japanese
+Psychological Association
 format{jpaRmd}」を選びます。「Name:」は，デフォルトではUntitledになっていますが，適宜変更してください。以下では，paper\_Bという名前にしています。「OK」をクリックしてください。
 
 ![](fig/jjp2.png)
@@ -49,9 +48,9 @@ jpaRmdは，Bibファイルを使った引用が可能です。日本語文献�
 
 ### 『認知行動療法研究』
 
-RStudioで，「File」 -\> 「New File」 -\> 「R Markdown…」
-をクリックする。以下の画面がでてきたら，「From
-Template」から「Japanese Journal of Behavioral and Cognitive Therapies
+RStudioで，「File」 -&gt; 「New File」 -&gt; 「R Markdown…」
+をクリックする。以下の画面がでてきたら，「From Template」から「Japanese
+Journal of Behavioral and Cognitive Therapies
 format{jpaRmd}」を選びます。「Name:」は，デフォルトではUntitledになっていますが，適宜変更してください。以下では，paper\_Aという名前にしています。「OK」をクリックしてください。
 
 ![](fig/jjbct2.png)
@@ -73,33 +72,34 @@ Rmdファイルが自動的に開くと思います。以下のようにoutput:�
 Research
 Compendiumの関数も用意しています。以下のように，『心理学研究』用のset\_rc\_jpa()関数もしくは『認知行動療法研究』用のset\_rc\_jabct()関数を使って，引数にプロジェクト名をいれると（なおスペースは避けてください），Rmdファイルや解析，データを配置するフォルダなども準備されます。
 
-  - 『心理学研究』用Research Compendium
+-   『心理学研究』用Research Compendium
 
-<!-- end list -->
+<!-- -->
 
     library(jpaRmd)
     set_rc_jpa("rmarkdown_for_reproducibility")
 
-  - 『認知行動療法研究』用Research Compendium
+-   『認知行動療法研究』用Research Compendium
 
-<!-- end list -->
+<!-- -->
 
     library(jpaRmd)
     set_rc_jabct("rmarkdown_for_reproducibility")
 
 上記を実行すると“rmarkdown\_for\_reproducibility”という名前のディレクトリーの下に以下の下位ディレクトリーができます。paperディでクトリ内のpaper.Rmdを開いて，Knitを押してください。PDFが生成されます。
 
-  - analysis: 分析用ファイルを置く場所
-  - data：　データを置く場所
-  - function：　分析で使う汎用関数を定義したりした場合にそのファイルを置く場所
-  - materials：　研究で使ったマテリアルを置く場所
-  - paper：　論文原稿を置く場所
-  - README.md
+-   analysis: 分析用ファイルを置く場所
+-   data：　データを置く場所
+-   function：　分析で使う汎用関数を定義したりした場合にそのファイルを置く場所
+-   materials：　研究で使ったマテリアルを置く場所
+-   paper：　論文原稿を置く場所
+-   README.md
 
 ### 査読コメントに対するリプライと修正対照表
 
-査読コメントに対するリプライと修正対照表を作ることができます。RStudioで，「File」 -\> 「New File」 -\> 「R
-Markdown…」 をクリックする。以下の画面がでてきたら，「From Template」から「Reply to
+査読コメントに対するリプライと修正対照表を作ることができます。RStudioで，「File」
+-&gt; 「New File」 -&gt; 「R Markdown…」
+をクリックする。以下の画面がでてきたら，「From Template」から「Reply to
 Reviewer{jpaRmd}」を選びます。「OK」をクリックしてください。
 
 ![](fig/reply1.png)
