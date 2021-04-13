@@ -228,25 +228,25 @@ bib_to_DF <- function(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F
   bib.df <- bib.df %>%
     ## In the case which the same author has some papers in the same year, assign an alphabet
     ### sorting Order; in JPA, the sorting follows the reading order of Japanese-YOMI or English-AUTHOR
-    mutate(sortRecord = if_else(is.na(YOMI), .data$AUTHOR, YOMI)) %>%
+    mutate(sortRecord = if_else(is.na(.data$YOMI), .data$AUTHOR, .data$YOMI)) %>%
     ## str(YAER) is character, make Numeric one
-    mutate(YEARn = as.numeric(YEAR)) %>%
+    mutate(YEARn = as.numeric(.data$YEAR)) %>%
     ## sort by Author and Year
-    arrange(sortRecord, YEARn) %>%
+    arrange(sortRecord, .data$YEARn) %>%
     ## group by Author and Year
-    group_by(sortRecord, YEARn) %>%
+    group_by(sortRecord, .data$YEARn) %>%
     ## count the papers with group
     mutate(n = n()) %>%
     mutate(num = row_number()) %>%
     ## Add a string if it needs
     mutate(addletter = if_else(n > 1, letters[num], "")) %>%
     ### Retrun
-    mutate(YEAR = paste0(YEAR, addletter)) %>%
+    mutate(YEAR = paste0(.data$YEAR, addletter)) %>%
     ### Language type check
     mutate(langFLG = !str_detect(paste0(.data$AUTHOR, TITLE, JTITLE, JOURNAL), pattern = "\\p{Hiragana}|\\p{Katakana}|\\p{Han}")) %>%
     ### delete unnecessary variables
     ungroup() %>%
-    select(-c(sortRecord, YEARn, n, num, addletter))
+    select(-c(sortRecord, .data$YEARn, n, num, addletter))
 
   ## List and Citation Name
   bib.df <- bib.df %>%
@@ -254,7 +254,7 @@ bib_to_DF <- function(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F
     ################################## bib list
     mutate(
       ListName = if_else(langFLG, print_EName(AUTHORs, ampersand = list_ampersand), print_JName(AUTHORs)),
-      ListYear = paste0("(", YEAR, ").")
+      ListYear = paste0("(", .data$YEAR, ").")
     ) %>%
     mutate(dplFLG = 0) %>%
     # make items for List
