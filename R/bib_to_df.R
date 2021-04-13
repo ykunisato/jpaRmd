@@ -211,10 +211,10 @@ bib_to_DF <- function(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F
     ## Split name into First,Middle,Last Name
     mutate(
       AUTHORs = map(.data$AUTHOR, ~ name_spliter(.x)),
-      EDITORs = map(EDITOR, ~ name_spliter(.x)),
-      JAUTHORs = map(JAUTHOR, ~ name_spliter(.x)),
-      JKANYAKUs = map(JKANYAKU, ~ name_spliter(.x)),
-      TRANSAUTHORs = map(TRANSAUTHOR, ~ name_spliter(.x))
+      EDITORs = map(.data$EDITOR, ~ name_spliter(.x)),
+      JAUTHORs = map(.data$JAUTHOR, ~ name_spliter(.x)),
+      JKANYAKUs = map(.data$JKANYAKU, ~ name_spliter(.x)),
+      TRANSAUTHORs = map(.data$TRANSAUTHOR, ~ name_spliter(.x))
     )
 
   ## Filtering to only actually cited
