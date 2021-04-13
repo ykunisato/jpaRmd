@@ -1,8 +1,10 @@
 #' @title Name spliter function
+#' @importFrom rlang .data
 #' @importFrom magrittr %>%
 #' @importFrom stringr str_split
 #' @importFrom dplyr mutate
 #' @importFrom dplyr rowwise
+#' @importFrom dplyr rename
 #' @importFrom humaniformat format_reverse
 #' @importFrom humaniformat first_name
 #' @importFrom humaniformat middle_name
@@ -17,17 +19,18 @@ name_spliter <- function(df) {
   df %>%
     str_split(pattern = " and ") %>%
     unlist() %>%
-    data.frame(Names = .) %>%
+    as.data.frame() %>% 
+    rename(Names = 1) %>%
     rowwise() %>%
-    mutate(authors_name_split = format_reverse(Names)) %>%
+    mutate(authors_name_split = format_reverse(.data$Names)) %>%
     # Whether to exclude from this name-split function like the organization name
-    mutate(exFLG = if_else(str_detect(Names, pattern = "\\{"), TRUE, FALSE)) %>%
+    mutate(exFLG = if_else(str_detect(.data$Names, pattern = "\\{"), TRUE, FALSE)) %>%
     mutate(
-      first_name = if_else(exFLG, "", first_name(authors_name_split)),
-      middle_name = if_else(exFLG, "", middle_name(authors_name_split)),
-      last_name = if_else(exFLG, str_replace_all(Names, pattern = "\\{|\\}", ""), last_name(authors_name_split)),
-      initial_first = if_else(exFLG, "", str_sub(first_name, start = 1, end = 1) %>% str_to_upper()),
-      initial_middle = if_else(exFLG, "", str_sub(middle_name, start = 1, end = 1) %>% str_to_upper())
+      first_name = if_else(.data$exFLG, "", first_name(.data$authors_name_split)),
+      middle_name = if_else(.data$exFLG, "", middle_name(.data$authors_name_split)),
+      last_name = if_else(.data$exFLG, str_replace_all(.data$Names, pattern = "\\{|\\}", ""), last_name(.data$authors_name_split)),
+      initial_first = if_else(.data$exFLG, "", str_sub(.data$first_name, start = 1, end = 1) %>% str_to_upper()),
+      initial_middle = if_else(.data$exFLG, "", str_sub(.data$middle_name, start = 1, end = 1) %>% str_to_upper())
     ) %>%
     return()
 }
@@ -98,12 +101,12 @@ print_EName <- function(st, ampersand = T, switchFLG = FALSE) {
   st %>%
     rowwise() %>%
     mutate(
-      initial_first = if_else(exFLG, "", paste0(initial_first, ".")),
-      initial_middle = if_else(exFLG, "", paste0(initial_middle, ".")),
-      initial_name = paste0(initial_first, if_else(initial_middle == "NA.", "", initial_middle)),
+      initial_first = if_else(.data$exFLG, "", paste0(.data$initial_first, ".")),
+      initial_middle = if_else(.data$exFLG, "", paste0(.data$initial_middle, ".")),
+      initial_name = paste0(.data$initial_first, if_else(.data$initial_middle == "NA.", "", .data$initial_middle)),
       pName = if_else(switchFLG,
-        paste(initial_name, last_name),
-        paste0(last_name, ", ", initial_name)
+        paste(.data$initial_name, .data$last_name),
+        paste0(.data$last_name, ", ", .data$initial_name)
       )
     ) -> tmp
 
