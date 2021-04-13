@@ -46,7 +46,7 @@ inLineCitation <- function(st, bib.df) {
       mutate(ListYear = str_extract(.data$ListYear, "[a-z0-9]{4,5}")) %>%
       mutate(citeName = if_else(.data$count > 0, .data$citeName2, .data$citeName1)) %>%
       mutate(citation = paste0(.data$citeName, ",\\ ", .data$ListYear))
-    KEY = tmp.df$KEY
+    KEY <- tmp.df$KEY
     word <- tmp.df$citation %>% paste0(collapse = "; ")
     word <- paste0("(", word, ")")
     ### reform for regular expression

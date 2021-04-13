@@ -19,7 +19,7 @@ name_spliter <- function(df) {
   df %>%
     str_split(pattern = " and ") %>%
     unlist() %>%
-    as.data.frame() %>% 
+    as.data.frame() %>%
     rename(Names = 1) %>%
     rowwise() %>%
     mutate(authors_name_split = format_reverse(.data$Names)) %>%
