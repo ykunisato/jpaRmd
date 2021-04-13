@@ -1,4 +1,5 @@
 #' @title bib_to_DF
+#' @importFrom rlang .data
 #' @importFrom magrittr %>%
 #' @importFrom tibble as_tibble
 #' @importFrom tibble rowid_to_column
@@ -49,7 +50,7 @@ bib_to_DF <- function(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F
   # reference pick-up
   refAll <- readLines(Rmd_file, warn = F) %>%
     as_tibble() %>%
-    mutate(refs = str_extract(.$value, "\\@.*")) %>%
+    mutate(refs = str_extract(.data$value, "\\@.*")) %>%
     na.omit()
 
   # readBib file as tibble
@@ -203,21 +204,21 @@ bib_to_DF <- function(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F
   bib.df <- bind_rows(c(list(empty), items)) %>%
     as_tibble() %>%
     rowid_to_column("ID") %>%
-    group_by(ID)
+    group_by(.data$ID)
   bib.df$BIBTEXKEY <- unlist(keys)
 
   bib.df <- bib.df %>%
     ## Split name into First,Middle,Last Name
     mutate(
-      AUTHORs = map(AUTHOR, ~ name_spliter(.x)),
-      EDITORs = map(EDITOR, ~ name_spliter(.x)),
-      JAUTHORs = map(JAUTHOR, ~ name_spliter(.x)),
-      JKANYAKUs = map(JKANYAKU, ~ name_spliter(.x)),
-      TRANSAUTHORs = map(TRANSAUTHOR, ~ name_spliter(.x))
+      AUTHORs = map(.data$AUTHOR, ~ name_spliter(.x)),
+      EDITORs = map(.data$EDITOR, ~ name_spliter(.x)),
+      JAUTHORs = map(.data$JAUTHOR, ~ name_spliter(.x)),
+      JKANYAKUs = map(.data$JKANYAKU, ~ name_spliter(.x)),
+      TRANSAUTHORs = map(.data$TRANSAUTHOR, ~ name_spliter(.x))
     )
 
   ## Filtering to only actually cited
-  refKey <- bib.df$BIBTEXKEY %>% paste0("@", .)
+  refKey <- paste0("@", bib.df$BIBTEXKEY)
   refFLG <- vector(length = length(refKey))
   for (i in 1:NROW(refAll)) {
     refFLG <- refFLG | refAll[i, ]$refs %>% str_detect(pattern = refKey)
@@ -227,55 +228,55 @@ bib_to_DF <- function(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F
   bib.df <- bib.df %>%
     ## In the case which the same author has some papers in the same year, assign an alphabet
     ### sorting Order; in JPA, the sorting follows the reading order of Japanese-YOMI or English-AUTHOR
-    mutate(sortRecord = if_else(is.na(YOMI), AUTHOR, YOMI)) %>%
+    mutate(sortRecord = if_else(is.na(.data$YOMI), .data$AUTHOR, .data$YOMI)) %>%
     ## str(YAER) is character, make Numeric one
-    mutate(YEARn = as.numeric(YEAR)) %>%
+    mutate(YEARn = as.numeric(.data$YEAR)) %>%
     ## sort by Author and Year
-    arrange(sortRecord, YEARn) %>%
+    arrange(.data$sortRecord, .data$YEARn) %>%
     ## group by Author and Year
-    group_by(sortRecord, YEARn) %>%
+    group_by(.data$sortRecord, .data$YEARn) %>%
     ## count the papers with group
     mutate(n = n()) %>%
     mutate(num = row_number()) %>%
     ## Add a string if it needs
-    mutate(addletter = if_else(n > 1, letters[num], "")) %>%
+    mutate(addletter = if_else(n > 1, letters[.data$num], "")) %>%
     ### Retrun
-    mutate(YEAR = paste0(YEAR, addletter)) %>%
+    mutate(YEAR = paste0(.data$YEAR, .data$addletter)) %>%
     ### Language type check
-    mutate(langFLG = !str_detect(paste0(AUTHOR, TITLE, JTITLE, JOURNAL), pattern = "\\p{Hiragana}|\\p{Katakana}|\\p{Han}")) %>%
+    mutate(langFLG = !str_detect(paste0(.data$AUTHOR, .data$TITLE, .data$JTITLE, .data$JOURNAL), pattern = "\\p{Hiragana}|\\p{Katakana}|\\p{Han}")) %>%
     ### delete unnecessary variables
     ungroup() %>%
-    select(-c(sortRecord, YEARn, n, num, addletter))
+    select(-c(.data$sortRecord, .data$YEARn, n, .data$num, .data$addletter))
 
   ## List and Citation Name
   bib.df <- bib.df %>%
     rowwise() %>%
     ################################## bib list
     mutate(
-      ListName = if_else(langFLG, print_EName(AUTHORs, ampersand = list_ampersand), print_JName(AUTHORs)),
-      ListYear = paste0("(", YEAR, ").")
+      ListName = if_else(.data$langFLG, print_EName(.data$AUTHORs, ampersand = list_ampersand), print_JName(.data$AUTHORs)),
+      ListYear = paste0("(", .data$YEAR, ").")
     ) %>%
     mutate(dplFLG = 0) %>%
     # make items for List
-    group_by(ID) %>%
+    group_by(.data$ID) %>%
     nest() %>%
     mutate(
-      pBib = purrr::map2(.x = data, .y = underline, .f = ~ pBibMaker(.x, .y)),
-      prefix = purrr::map(.x = data, .f = ~ prefixMaker(.x))
+      pBib = purrr::map2(.x = .data$data, .y = underline, .f = ~ pBibMaker(.x, .y)),
+      prefix = purrr::map(.x = .data$data, .f = ~ prefixMaker(.x))
     ) %>%
     ################################### inline citation
     # make items for citating
-    mutate(cite.tmp = purrr::map2(.x = data, .y = cite_ampersand, .f = ~ citationMaker(.x, .y))) %>%
+    mutate(cite.tmp = purrr::map2(.x = .data$data, .y = cite_ampersand, .f = ~ citationMaker(.x, .y))) %>%
     # Differnt Authors, but same family name,same year --for the case of confusion
-    unnest(cols = c(data, pBib, prefix, cite.tmp)) %>%
-    group_by(citeCheckFLG) %>%
+    unnest(cols = c(.data$data, .data$pBib, .data$prefix, .data$cite.tmp)) %>%
+    group_by(.data$citeCheckFLG) %>%
     mutate(dplFLG = n()) %>%
-    ungroup(citeCheckFLG) %>%
-    select(-citeName1, -citeName2, -citeCheckFLG) %>%
-    group_by(ID) %>%
+    ungroup(.data$citeCheckFLG) %>%
+    select(-.data$citeName1, -.data$citeName2, -.data$citeCheckFLG) %>%
+    group_by(.data$ID) %>%
     nest() %>%
-    mutate(cite = purrr::map2(.x = data, .y = cite_ampersand, .f = ~ citationMaker(.x, .y))) %>%
-    unnest(cols = c(data, cite)) %>%
-    select(-citeCheckFLG)
+    mutate(cite = purrr::map2(.x = .data$data, .y = cite_ampersand, .f = ~ citationMaker(.x, .y))) %>%
+    unnest(cols = c(.data$data, .data$cite)) %>%
+    select(-.data$citeCheckFLG)
   return(bib.df)
 }

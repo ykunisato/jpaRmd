@@ -1,4 +1,5 @@
 #' @title inLine Citation
+#' @importFrom rlang .data
 #' @importFrom dplyr mutate
 #' @importFrom dplyr select
 #' @importFrom dplyr if_else
@@ -37,15 +38,15 @@ inLineCitation <- function(st, bib.df) {
       str_extract_all(pattern = "@[a-zA-Z0-9-_\\.\\p{Hiragana}\\p{Katakana}\\p{Han}]*", simplify = T) %>%
       t() %>%
       as.data.frame() %>%
-      mutate(KEY = str_replace(V1, pattern = "@", replacement = "")) %>%
+      mutate(KEY = str_replace(.data$V1, pattern = "@", replacement = "")) %>%
       ### join with bib.df
       left_join(bib.df, by = c("KEY" = "BIBTEXKEY")) %>%
       ### get the citation name
-      select(V1, KEY, citeName1, citeName2, ListYear, count) %>%
-      mutate(ListYear = str_extract(ListYear, "[a-z0-9]{4,5}")) %>%
-      mutate(citeName = if_else(count > 0, citeName2, citeName1)) %>%
-      mutate(citation = paste0(citeName, ",\\ ", ListYear))
-    KEY = tmp.df$KEY
+      select(.data$V1, KEY, .data$citeName1, .data$citeName2, .data$ListYear, .data$count) %>%
+      mutate(ListYear = str_extract(.data$ListYear, "[a-z0-9]{4,5}")) %>%
+      mutate(citeName = if_else(.data$count > 0, .data$citeName2, .data$citeName1)) %>%
+      mutate(citation = paste0(.data$citeName, ",\\ ", .data$ListYear))
+    KEY <- tmp.df$KEY
     word <- tmp.df$citation %>% paste0(collapse = "; ")
     word <- paste0("(", word, ")")
     ### reform for regular expression
@@ -56,7 +57,7 @@ inLineCitation <- function(st, bib.df) {
     ### citation in the line
     KEY <- str_replace(item, pattern = "@", replacement = "")
     ref.df <- bib.df[bib.df$BIBTEXKEY == KEY, ] %>%
-      mutate(ListYear = str_sub(ListYear, 1, str_length(ListYear) - 1))
+      mutate(ListYear = str_sub(.data$ListYear, 1, str_length(.data$ListYear) - 1))
     if (bib.df[bib.df$BIBTEXKEY == KEY, ]$count == 0) {
       word <- paste0(ref.df$citeName1, ref.df$ListYear)
     } else {

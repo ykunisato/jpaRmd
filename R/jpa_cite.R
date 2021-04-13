@@ -208,7 +208,7 @@ jpr_cite <- function(Rmd_file, Bib_file) {
       writeLines(st, Ftmp3)
       ## include reference
       if (refFLG) {
-        writeLines("\n", Ftm3p)
+        writeLines("\n", Ftmp3)
         for (i in 1:NROW(bib.df)) {
           writeLines(bib.df[i, ]$pBib, Ftmp3)
           writeLines("\n", Ftmp3)

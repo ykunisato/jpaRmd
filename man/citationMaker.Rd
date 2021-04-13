@@ -8,6 +8,8 @@ citationMaker(df, ampersand = T)
 }
 \arguments{
 \item{df}{Bib data frame}
+
+\item{ampersand}{it TRUE, combine last author with ampersand else "and"}
 }
 \description{
 citationMaker function

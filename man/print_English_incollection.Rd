@@ -8,6 +8,8 @@ print_English_incollection(df, underline = F)
 }
 \arguments{
 \item{df}{Strings of Bib info}
+
+\item{underline}{check flag for underline}
 }
 \description{
 Print bib info function(in English collection)
