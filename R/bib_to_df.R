@@ -1,4 +1,5 @@
 #' @title bib_to_DF
+#' @importFrom rlang .data
 #' @importFrom magrittr %>%
 #' @importFrom tibble as_tibble
 #' @importFrom tibble rowid_to_column
@@ -49,7 +50,7 @@ bib_to_DF <- function(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F
   # reference pick-up
   refAll <- readLines(Rmd_file, warn = F) %>%
     as_tibble() %>%
-    mutate(refs = str_extract(.$value, "\\@.*")) %>%
+    mutate(refs = str_extract(.data$value, "\\@.*")) %>%
     na.omit()
 
   # readBib file as tibble
@@ -217,7 +218,7 @@ bib_to_DF <- function(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F
     )
 
   ## Filtering to only actually cited
-  refKey <- bib.df$BIBTEXKEY %>% paste0("@", .)
+  refKey <- paste0("@", bib.df$BIBTEXKEY)
   refFLG <- vector(length = length(refKey))
   for (i in 1:NROW(refAll)) {
     refFLG <- refFLG | refAll[i, ]$refs %>% str_detect(pattern = refKey)
@@ -257,7 +258,7 @@ bib_to_DF <- function(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F
     ) %>%
     mutate(dplFLG = 0) %>%
     # make items for List
-    group_by(ID) %>%
+    group_by(ID) %>% 
     nest() %>%
     mutate(
       pBib = purrr::map2(.x = data, .y = underline, .f = ~ pBibMaker(.x, .y)),
@@ -272,7 +273,7 @@ bib_to_DF <- function(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F
     mutate(dplFLG = n()) %>%
     ungroup(citeCheckFLG) %>%
     select(-citeName1, -citeName2, -citeCheckFLG) %>%
-    group_by(ID) %>%
+    group_by(ID) %>% 
     nest() %>%
     mutate(cite = purrr::map2(.x = data, .y = cite_ampersand, .f = ~ citationMaker(.x, .y))) %>%
     unnest(cols = c(data, cite)) %>%
