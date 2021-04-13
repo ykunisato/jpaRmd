@@ -210,7 +210,7 @@ bib_to_DF <- function(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F
   bib.df <- bib.df %>%
     ## Split name into First,Middle,Last Name
     mutate(
-      AUTHORs = map(AUTHOR, ~ name_spliter(.x)),
+      AUTHORs = map(.data$AUTHOR, ~ name_spliter(.x)),
       EDITORs = map(EDITOR, ~ name_spliter(.x)),
       JAUTHORs = map(JAUTHOR, ~ name_spliter(.x)),
       JKANYAKUs = map(JKANYAKU, ~ name_spliter(.x)),
@@ -228,7 +228,7 @@ bib_to_DF <- function(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F
   bib.df <- bib.df %>%
     ## In the case which the same author has some papers in the same year, assign an alphabet
     ### sorting Order; in JPA, the sorting follows the reading order of Japanese-YOMI or English-AUTHOR
-    mutate(sortRecord = if_else(is.na(YOMI), AUTHOR, YOMI)) %>%
+    mutate(sortRecord = if_else(is.na(YOMI), .data$AUTHOR, YOMI)) %>%
     ## str(YAER) is character, make Numeric one
     mutate(YEARn = as.numeric(YEAR)) %>%
     ## sort by Author and Year
@@ -243,7 +243,7 @@ bib_to_DF <- function(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F
     ### Retrun
     mutate(YEAR = paste0(YEAR, addletter)) %>%
     ### Language type check
-    mutate(langFLG = !str_detect(paste0(AUTHOR, TITLE, JTITLE, JOURNAL), pattern = "\\p{Hiragana}|\\p{Katakana}|\\p{Han}")) %>%
+    mutate(langFLG = !str_detect(paste0(.data$AUTHOR, TITLE, JTITLE, JOURNAL), pattern = "\\p{Hiragana}|\\p{Katakana}|\\p{Han}")) %>%
     ### delete unnecessary variables
     ungroup() %>%
     select(-c(sortRecord, YEARn, n, num, addletter))
