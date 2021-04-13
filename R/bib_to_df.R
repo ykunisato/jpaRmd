@@ -204,7 +204,7 @@ bib_to_DF <- function(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F
   bib.df <- bind_rows(c(list(empty), items)) %>%
     as_tibble() %>%
     rowid_to_column("ID") %>%
-    group_by(ID)
+    group_by(.data$ID)
   bib.df$BIBTEXKEY <- unlist(keys)
 
   bib.df <- bib.df %>%
@@ -258,7 +258,7 @@ bib_to_DF <- function(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F
     ) %>%
     mutate(dplFLG = 0) %>%
     # make items for List
-    group_by(ID) %>% 
+    group_by(.data$ID) %>% 
     nest() %>%
     mutate(
       pBib = purrr::map2(.x = data, .y = underline, .f = ~ pBibMaker(.x, .y)),
@@ -273,7 +273,7 @@ bib_to_DF <- function(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F
     mutate(dplFLG = n()) %>%
     ungroup(citeCheckFLG) %>%
     select(-citeName1, -citeName2, -citeCheckFLG) %>%
-    group_by(ID) %>% 
+    group_by(.data$ID) %>% 
     nest() %>%
     mutate(cite = purrr::map2(.x = data, .y = cite_ampersand, .f = ~ citationMaker(.x, .y))) %>%
     unnest(cols = c(data, cite)) %>%
