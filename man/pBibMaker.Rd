@@ -8,6 +8,8 @@ pBibMaker(df, underline)
 }
 \arguments{
 \item{df}{Bib data frame}
+
+\item{underline}{check flag for underline}
 }
 \description{
 pBibMaker function

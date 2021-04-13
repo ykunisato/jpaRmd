@@ -36,6 +36,7 @@ name_spliter <- function(df) {
 #' @title pBibMaker function
 #' @importFrom dplyr if_else
 #' @param df Bib data frame
+#' @param underline check flag for underline
 #' @export
 pBibMaker <- function(df, underline) {
   tmp <- case_when(
@@ -71,6 +72,7 @@ prefixMaker <- function(df) {
 
 #' @title citationMaker function
 #' @param df Bib data frame
+#' @param ampersand it TRUE, combine last author with ampersand else "and"
 #' @export
 citationMaker <- function(df, ampersand = T) {
   if (df$langFLG) {
@@ -177,6 +179,7 @@ print_JName <- function(st) {
 
 #' @title Print bib info function(English book)
 #' @param df Strings of Bib info
+#' @param underline check flag for underline
 #' @export
 print_English_book <- function(df, underline = F) {
   name.tmp <- df$ListName
@@ -262,6 +265,7 @@ print_Japanese_book <- function(df) {
 
 #' @title Print bib info function(English article)
 #' @param df Strings of Bib info
+#' @param underline check flag for underline
 #' @export
 print_English_article <- function(df, underline = F) {
   # (author's name), (year of publication), (title), (journal title), (number of copies), (page citations)
@@ -297,6 +301,7 @@ print_English_article <- function(df, underline = F) {
 
 #' @title Print bib info function(Jaopanese article)
 #' @param df Strings of Bib info
+#' @param underline check flag for underline
 #' @export
 print_Japanese_article <- function(df, underline = F) {
   # (Author's name), (Year of publication), (Title), (Title), (Number of copies), (Citation page)
@@ -332,6 +337,7 @@ print_Japanese_article <- function(df, underline = F) {
 #' @title Print bib info function(in English collection)
 #' @importFrom dplyr if_else
 #' @param df Strings of Bib info
+#' @param underline check flag for underline
 #' @export
 print_English_incollection <- function(df, underline = F) {
   if (underline) {
@@ -381,6 +387,7 @@ print_Japanese_inproceedings <- function(df) {
 #' @title in-Line Cittion(in English)
 #' @importFrom dplyr select
 #' @param df Bib.df File from jpa_cite
+#' @param ampersand it TRUE, combine last author with ampersand else "and"
 #' @export
 inLineCite_ENG <- function(df, ampersand) {
   # depends on the number of authors

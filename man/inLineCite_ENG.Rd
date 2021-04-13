@@ -8,6 +8,8 @@ inLineCite_ENG(df, ampersand)
 }
 \arguments{
 \item{df}{Bib.df File from jpa_cite}
+
+\item{ampersand}{it TRUE, combine last author with ampersand else "and"}
 }
 \description{
 in-Line Cittion(in English)

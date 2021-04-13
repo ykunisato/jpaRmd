@@ -8,6 +8,8 @@ print_English_book(df, underline = F)
 }
 \arguments{
 \item{df}{Strings of Bib info}
+
+\item{underline}{check flag for underline}
 }
 \description{
 Print bib info function(English book)
