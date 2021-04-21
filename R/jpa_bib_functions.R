@@ -408,23 +408,28 @@ inLineCite_ENG <- function(df, ampersand) {
   NR <- NROW(tmp_name)
   if (NR > 1) {
     ### multi-Authors
-    citeName1 <- ""
-    for (i in 1:(NR - 1)) {
-      if (dplCheck > 1) {
-        tmp1 <- paste0(tmp_name[i, ]$initial_first, ".", tmp_name[i, ]$last_name, ", ")
-      } else {
-        tmp1 <- paste0(tmp_name[i, ]$last_name, ", ")
+    if(NR < 5){
+      citeName1 <- ""
+      for (i in 1:(NR - 1)) {
+        if (dplCheck > 1) {
+          tmp1 <- paste0(tmp_name[i, ]$initial_first, ".", tmp_name[i, ]$last_name, ", ")
+        } else {
+          tmp1 <- paste0(tmp_name[i, ]$last_name, ", ")
+        }
+        citeName1 <- paste0(citeName1, tmp1)
       }
+      ### Last Author
+      tmp1 <- paste0(tmp_connecter, tmp_name[NR, ]$last_name)
+      if (dplCheck > 1) {
+        tmp1 <- paste0(tmp_connecter, tmp_name[NR, ]$initial_first, ".", tmp_name[NR, ]$last_name)
+      }
+      ### combine All Authors
       citeName1 <- paste0(citeName1, tmp1)
+    }else{
+      ## over 5 authors
+      citeName1 <- paste0(tmp_name[1,]$last_name,"\\ et al.")
     }
-    ### Last Author
-    tmp1 <- paste0(tmp_connecter, tmp_name[NR, ]$last_name)
-    if (dplCheck > 1) {
-      tmp1 <- paste0(tmp_connecter, tmp_name[NR, ]$initial_first, ".", tmp_name[NR, ]$last_name)
-    }
-    ### combine All Authors
-    citeName1 <- paste0(citeName1, tmp1)
-  } else {
+  }else{
     ### Single Author
     citeName1 <- tmp_name[1, ]$last_name
     if (dplCheck > 1) {
@@ -469,20 +474,25 @@ inLineCite_JPN <- function(df) {
   if (NR > 1) {
     ### multi-Authors
     citeName1 <- ""
-    for (i in 1:(NR - 1)) {
+    if(NR < 5){
+      for (i in 1:(NR - 1)) {
+        if (dplCheck > 1) {
+          tmp1 <- paste0(tmp_name[i, ]$last_name, tmp_name[i, ]$first_name, stri_unescape_unicode("\\u30fb"))
+        } else {
+          tmp1 <- paste0(tmp_name[i, ]$last_name, stri_unescape_unicode("\\u30fb"))
+        }
+        citeName1 <- paste0(citeName1, tmp1)
+      }
+      ### Last Author
+      tmp1 <- paste0(tmp_name[NR, ]$last_name)
       if (dplCheck > 1) {
-        tmp1 <- paste0(tmp_name[i, ]$last_name, tmp_name[i, ]$first_name, stri_unescape_unicode("\\u30fb"))
-      } else {
-        tmp1 <- paste0(tmp_name[i, ]$last_name, stri_unescape_unicode("\\u30fb"))
+        tmp1 <- paste0(tmp_name[NR, ]$last_name, tmp_name[NR, ]$first_name)
       }
       citeName1 <- paste0(citeName1, tmp1)
+    }else{
+      ## over 6 authors
+      citeName1 <- paste0(tmp_name[1,]$last_name,stri_unescape_unicode("\\u4ed6"))
     }
-    ### Last Author
-    tmp1 <- paste0(tmp_name[NR, ]$last_name)
-    if (dplCheck > 1) {
-      tmp1 <- paste0(tmp_name[NR, ]$last_name, tmp_name[NR, ]$first_name)
-    }
-    citeName1 <- paste0(citeName1, tmp1)
   } else {
     ### single-Author
     citeName1 <- tmp_name[1, ]$last_name
