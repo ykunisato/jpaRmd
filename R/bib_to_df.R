@@ -229,6 +229,8 @@ bib_to_DF <- function(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F
     ## In the case which the same author has some papers in the same year, assign an alphabet
     ### sorting Order; in JPA, the sorting follows the reading order of Japanese-YOMI or English-AUTHOR
     mutate(sortRecord = if_else(is.na(.data$YOMI), .data$AUTHOR, .data$YOMI)) %>%
+    ## cut curly brackets of the organization-name
+    mutate(sortRecord = str_replace(.data$sortRecord, pattern = "\\{", replacement = "")) %>%
     ## str(YAER) is character, make Numeric one
     mutate(YEARn = as.numeric(.data$YEAR)) %>%
     ## sort by Author and Year
