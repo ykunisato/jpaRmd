@@ -18,7 +18,7 @@ render_jjp <- function(Rmd_file, Bib_file) {
     toc_depth = 3,
     highlight = "tango"
   )
-  format_pdf$inherits <- "pdf_document"
+  format_pdf$inherits <- "rmarkdown_output_format"
   output_file <- strsplit(Rmd_file, ".Rmd")[[1]]
   render(tmp_rmd, format_pdf, output_file)
 }
@@ -43,7 +43,7 @@ render_jjbct <- function(Rmd_file, Bib_file) {
     toc_depth = 3,
     highlight = "tango"
   )
-  format_pdf$inherits <- "pdf_document"
+  format_pdf$inherits <- "rmarkdown_output_format"
   output_file <- strsplit(Rmd_file, ".Rmd")[[1]]
   render(tmp_rmd, format_pdf, output_file)
 }
@@ -72,7 +72,7 @@ render_jpr <- function(Rmd_file, Bib_file) {
     toc_depth = 3,
     highlight = "tango"
   )
-  format_pdf$inherits <- "pdf_document"
+  format_pdf$inherits <- "rmarkdown_output_format"
   output_file1 <- paste0(strsplit(Rmd_file, ".Rmd")[[1]], "_authorInfo")
   output_file2 <- paste0(strsplit(Rmd_file, ".Rmd")[[1]])
   output_file3 <- paste0(strsplit(Rmd_file, ".Rmd")[[1]], "_abst_authorInfo")

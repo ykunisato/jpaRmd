@@ -1,6 +1,3 @@
-
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
 # jpaRmd
 
 <!-- badges: start -->
@@ -12,8 +9,10 @@ jpaRmdは，日本心理学会の『心理学研究』への投稿用PDF原稿�
 
 以下のコマンドをRコンソールに打ち込んで，Github経由でインストールしてください(remotesがない方はinstall.packages()でインストールください)。
 
-    # install.packages("remotes")
-    remotes::install_github("ykunisato/jpaRmd")
+``` r
+# install.packages("remotes")
+remotes::install_github("ykunisato/jpaRmd")
+```
 
 ## 使用法
 
@@ -74,17 +73,21 @@ Compendiumの関数も用意しています。以下のように，『心理学�
 
 -   『心理学研究』用Research Compendium
 
-<!-- -->
 
-    library(jpaRmd)
-    set_rc_jpa("rmarkdown_for_reproducibility")
+
+``` r
+library(jpaRmd)
+set_rc_jpa("rmarkdown_for_reproducibility")
+``` 
 
 -   『認知行動療法研究』用Research Compendium
 
-<!-- -->
 
-    library(jpaRmd)
-    set_rc_jabct("rmarkdown_for_reproducibility")
+``` r
+library(jpaRmd)
+set_rc_jabct("rmarkdown_for_reproducibility")
+``` 
+
 
 上記を実行すると“rmarkdown\_for\_reproducibility”という名前のディレクトリーの下に以下の下位ディレクトリーができます。paperディでクトリ内のpaper.Rmdを開いて，Knitを押してください。PDFが生成されます。
 
