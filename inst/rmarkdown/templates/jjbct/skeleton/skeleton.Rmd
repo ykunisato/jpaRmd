@@ -187,9 +187,12 @@ kable(summary_bfi,
       caption = "Descriptive Statistics of bfi",
       digits = 2,
       col.names = c("n","Mean","SD","Median","Min","Max","Skewness","kurtosis")) %>%
-  kable_styling(latex_options = c("striped", "hold_position"),full_width = F) %>%
-  add_footnote(c("Note. SD=standard deviation"))
+  kable_styling(latex_options = c("striped", "hold_position"),full_width = F) 
 ```
+
+\begin{center}
+Note. SD=standard deviation
+\end{center}
 
 \clearpage 
 # 図
