@@ -98,6 +98,6 @@ reply <- function() {
     toc_depth = 3,
     highlight = "tango"
   )
-  format_pdf$inherits <- "pdf_document"
+  format_pdf$inherits <- "rmarkdown_output_format"
   format_pdf
 }
