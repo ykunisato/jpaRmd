@@ -3,7 +3,7 @@ suppress-bibliography: yes
 output:
   jpaRmd::render_jjbct:
     Rmd_file: Untitled.Rmd
-    Bib_file: references.bib
+    Bib_file: reference.bib
 ---
 
 <!-- 
