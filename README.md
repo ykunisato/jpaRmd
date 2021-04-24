@@ -74,3 +74,5 @@ Reviewer{jpaRmd}」を選びます。「OK」をクリックしてください�
 
 
 詳しい使い方は，[jpaRmdで再現可能な査読対応をしちゃおう！](https://cpp-laboratory.hatenablog.com/entry/2020/12/19/054240)を参照ください。
+
+[本パッケージのウェブサイト](https://ykunisato.github.io/jpaRmd/)
