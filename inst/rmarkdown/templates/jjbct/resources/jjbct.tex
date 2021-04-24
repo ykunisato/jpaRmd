@@ -388,6 +388,10 @@ $endif$
 \usepackage{makecell}
 \usepackage{xcolor}
 
+\usepackage{silence}
+\WarningFilter{geometry}{Over-specification}
+\WarningFilter{xeCJK}{Unknown CJK}
+
 \begin{document}
 \pagestyle{empty}
 $if(has-frontmatter)$
