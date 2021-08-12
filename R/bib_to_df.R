@@ -75,7 +75,10 @@ bib_to_DF <- function(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F
     }
     ## paste to previous liens
     if (i != flg) {
-      bib[[flg]] <- paste(bib[[flg]], bib[[i]])
+      ### except only closing bracket
+      if(bib[[i]]!="}"){
+        bib[[flg]] <- paste(bib[[flg]], bib[[i]])
+      }
     }
   }
   ## ommit the line which have no keys
