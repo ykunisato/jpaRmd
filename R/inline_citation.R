@@ -42,10 +42,11 @@ inLineCitation <- function(st, bib.df) {
       ### join with bib.df
       left_join(bib.df, by = c("KEY" = "BIBTEXKEY")) %>%
       ### get the citation name
-      select(.data$V1, KEY, .data$citeName1, .data$citeName2, .data$ListYear, .data$count) %>%
+      select(.data$V1, KEY, .data$citeName1, .data$citeName2, .data$ListYear, .data$count,.data$langFLG) %>%
       mutate(ListYear = str_extract(.data$ListYear, "[a-z0-9]{4,5}")) %>%
-      mutate(citeName = if_else(.data$count > 0, .data$citeName2, .data$citeName1)) %>%
-      mutate(citation = paste0(.data$citeName, ",\\ ", .data$ListYear))
+      mutate(citeName = if_else(.data$count > 0, .data$citeName2, .data$citeName1)) %>% 
+      mutate(citation = if_else(.data$langFLG!="Tr",paste0(.data$citeName, ",\\ ", .data$ListYear),
+                                paste0(.data$citeName, "\\ ", .data$ListYear)))
     KEY <- tmp.df$KEY
     word <- tmp.df$citation %>% paste0(collapse = "; ")
     word <- paste0("(", word, ")")
@@ -53,7 +54,6 @@ inLineCitation <- function(st, bib.df) {
     item <- str_replace(item, pattern = "\\[", replacement = "\\\\[") %>%
       str_replace(pattern = "\\]", replacement = "\\\\]")
   } else {
-
     ### citation in the line
     KEY <- str_replace(item, pattern = "@", replacement = "")
     ref.df <- bib.df[bib.df$BIBTEXKEY == KEY, ] %>%

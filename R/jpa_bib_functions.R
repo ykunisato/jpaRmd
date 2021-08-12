@@ -262,7 +262,7 @@ print_Japanese_book <- function(df) {
       Jname <- paste0(Jname, postfix)
     }
     GenchoKanaJ <- print_JName(df$GENCHOKANAs)
-    J.part <- paste(GenchoKanaJ, Jname, "(", df$JYEAR, ").", df$JTITLE, "\\ ", df$JPUBLISHER)
+    J.part <- paste0(GenchoKanaJ, Jname, "(", df$JYEAR, ").", df$JTITLE, "\\ ", df$JPUBLISHER)
     pBib <- paste0(E.part, "(", J.part, ")")
   } else {
     pBib <- paste(name.tmp, df$ListYear, df$TITLE, "\\ ", df$PUBLISHER)
@@ -653,8 +653,8 @@ inLineCite_TR <- function(df, ampersand) {
     postfix <- stri_unescape_unicode("\\u8a33")
   }
 
-  citeName1 <- paste(citeName1, df$YEAR, TransName1, postfix)
-  citeName2 <- paste(citeName2, df$YEAR, TransName2, postfix)
+  citeName1 <- paste(citeName1,",", df$YEAR, TransName1, postfix)
+  citeName2 <- paste(citeName2,",", df$YEAR, TransName2, postfix)
   citeCheckFLG <- paste0(citeName1, "-", df$YEAR)
   return(data.frame(citeName1, citeName2, citeCheckFLG))
 }
