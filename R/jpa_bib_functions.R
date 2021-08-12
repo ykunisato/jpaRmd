@@ -43,16 +43,16 @@ name_spliter <- function(df) {
 #' @export
 pBibMaker <- function(df, underline) {
   tmp <- case_when(
-    df$CATEGORY == "BOOK" ~ if_else(df$langFLG, print_English_book(df, underline),
+    df$CATEGORY == "BOOK" ~ if_else(df$langFLG != "J", print_English_book(df, underline),
       print_Japanese_book(df)
     ),
-    df$CATEGORY == "ARTICLE" ~ if_else(df$langFLG, print_English_article(df, underline),
+    df$CATEGORY == "ARTICLE" ~ if_else(df$langFLG != "J", print_English_article(df, underline),
       print_Japanese_article(df, underline)
     ),
-    df$CATEGORY == "INCOLLECTION" ~ if_else(df$langFLG, print_English_incollection(df, underline),
+    df$CATEGORY == "INCOLLECTION" ~ if_else(df$langFLG != "J", print_English_incollection(df, underline),
       print_Japanese_incollection(df)
     ),
-    df$CATEGORY == "INPROCEEDINGS" ~ if_else(df$langFLG, print_English_inproceedings(df),
+    df$CATEGORY == "INPROCEEDINGS" ~ if_else(df$langFLG != "J", print_English_inproceedings(df),
       print_Japanese_inproceedings(df)
     )
   )
@@ -78,10 +78,14 @@ prefixMaker <- function(df) {
 #' @param ampersand it TRUE, combine last author with ampersand else "and"
 #' @export
 citationMaker <- function(df, ampersand = T) {
-  if (df$langFLG) {
+  if (df$langFLG == "E") {
     tmp <- inLineCite_ENG(df, ampersand)
   } else {
-    tmp <- inLineCite_JPN(df)
+    if (df$langFLG == "J") {
+      tmp <- inLineCite_JPN(df)
+    } else {
+      tmp <- inLineCite_TR(df, ampersand)
+    }
   }
   return(tmp)
 }
@@ -106,7 +110,7 @@ print_EName <- function(st, ampersand = T, switchFLG = FALSE) {
       initial_name = paste0(.data$initial_first, if_else(.data$initial_middle == "NA.", "", .data$initial_middle)),
       pName = if_else(switchFLG,
         paste(.data$initial_name, .data$last_name),
-        if_else(.data$exFLG,paste0(.data$last_name),paste0(.data$last_name, ", ", .data$initial_name))
+        if_else(.data$exFLG, paste0(.data$last_name), paste0(.data$last_name, ", ", .data$initial_name))
       )
     ) -> tmp
 
@@ -257,7 +261,8 @@ print_Japanese_book <- function(df) {
       postfix <- stri_unescape_unicode("(\\u8a33)")
       Jname <- paste0(Jname, postfix)
     }
-    J.part <- paste(df$GENCHOKANA, Jname, "(", df$JYEAR, ").", df$JTITLE, "\\ ", df$JPUBLISHER)
+    GenchoKanaJ <- print_JName(df$GENCHOKANAs)
+    J.part <- paste(GenchoKanaJ, Jname, "(", df$JYEAR, ").", df$JTITLE, "\\ ", df$JPUBLISHER)
     pBib <- paste0(E.part, "(", J.part, ")")
   } else {
     pBib <- paste(name.tmp, df$ListYear, df$TITLE, "\\ ", df$PUBLISHER)
@@ -517,6 +522,139 @@ inLineCite_JPN <- function(df) {
   if (NROW(tmp_name) > 2) {
     citeName2 <- paste0(citeName2, stri_unescape_unicode("\\u4ed6"))
   }
+  citeCheckFLG <- paste0(citeName1, "-", df$YEAR)
+  return(data.frame(citeName1, citeName2, citeCheckFLG))
+}
+
+
+#' @title in-Line Cittion(Japanese Transration book)
+#' @importFrom dplyr select
+#' @param df Bib.df File from jpa_cite
+#' @export
+inLineCite_TR <- function(df, ampersand) {
+  ############ E part
+  # depends on the number of authors
+  tmp_name <- as.data.frame(df$AUTHORs)
+  # ampersand
+  if (ampersand) {
+    tmp_connecter <- " \\& "
+  } else {
+    tmp_connecter <- "\\ and\\ "
+  }
+  ### duplicated cheker
+  dplCheck <- df$dplFLG
+
+  ## First time
+  NR <- NROW(tmp_name)
+  if (NR > 1) {
+    ### multi-Authors
+    if (NR < 5) {
+      citeName1 <- ""
+      for (i in 1:(NR - 1)) {
+        if (dplCheck > 1) {
+          tmp1 <- paste0(tmp_name[i, ]$initial_first, ".", tmp_name[i, ]$last_name, ", ")
+        } else {
+          tmp1 <- paste0(tmp_name[i, ]$last_name, ", ")
+        }
+        citeName1 <- paste0(citeName1, tmp1)
+      }
+      ### Last Author
+      tmp1 <- paste0(tmp_connecter, tmp_name[NR, ]$last_name)
+      if (dplCheck > 1) {
+        tmp1 <- paste0(tmp_connecter, tmp_name[NR, ]$initial_first, ".", tmp_name[NR, ]$last_name)
+      }
+      ### combine All Authors
+      citeName1 <- paste0(citeName1, tmp1)
+    } else {
+      ## over 5 authors
+      citeName1 <- paste0(tmp_name[1, ]$last_name, "\\ et al.")
+    }
+  } else {
+    ### Single Author
+    citeName1 <- tmp_name[1, ]$last_name
+    if (dplCheck > 1) {
+      citeName1 <- paste0(tmp_name[1, ]$initial_first, ".", tmp_name[1, ]$last_name)
+    }
+  }
+
+  ## Second time and after
+  ### Single AUthor
+  citeName2 <- tmp_name[1, ]$last_name
+  if (dplCheck > 1) {
+    citeName2 <- paste0(tmp_name[1, ]$initial_first, ".", tmp_name[1, ]$last_name)
+  }
+  ### Two AUthors
+  if (NROW(tmp_name) == 2) {
+    citeName2 <- paste0(citeName2, tmp_connecter, tmp_name[2, ]$last_name)
+    if (dplCheck > 1) {
+      citeName2 <- paste0(citeName2, tmp_connecter, tmp_name[2, ]$initial_first, ".", tmp_name[2, ]$last_name)
+    }
+  }
+  ### More than 2 Authors
+  if (NROW(tmp_name) > 2) {
+    citeName2 <- paste0(citeName2, "\\ et al.")
+  }
+
+  ############ J part
+  tmp_name <- as.data.frame(df$JKANYAKUs)
+  NR <- NROW(tmp_name)
+  ## First time
+  if (NR > 1) {
+    ### multi-Authors
+    if (NR < 5) {
+      TransName1 <- ""
+      for (i in 1:(NR - 1)) {
+        if (dplCheck > 1) {
+          tmp1 <- paste0(tmp_name[i, ]$last_name, tmp_name[i, ]$first_name, stri_unescape_unicode("\\u30fb"))
+        } else {
+          tmp1 <- paste0(tmp_name[i, ]$last_name, stri_unescape_unicode("\\u30fb"))
+        }
+        TransName1 <- paste0(TransName1, tmp1)
+      }
+      ### Last Author
+      tmp1 <- paste0(tmp_name[NR, ]$last_name)
+      if (dplCheck > 1) {
+        tmp1 <- paste0(tmp_name[NR, ]$last_name, tmp_name[NR, ]$first_name)
+      }
+      TransName1 <- paste0(TransName1, tmp1)
+    } else {
+      ## over 6 authors
+      TransName1 <- paste0(tmp_name[1, ]$last_name, stri_unescape_unicode("\\u4ed6"))
+    }
+  } else {
+    ### single-Author
+    TransName1 <- tmp_name[1, ]$last_name
+    if (dplCheck > 1) {
+      TransName1 <- paste0(tmp_name[1, ]$last_name, tmp_name[1, ]$first_name)
+    }
+  }
+  ## Second time, and after
+  TransName2 <- tmp_name[1, ]$last_name
+  if (dplCheck > 1) {
+    TransName2 <- paste0(tmp_name[1, ]$last_name, tmp_name[1, ]$first_name)
+  }
+  if (NROW(tmp_name) == 2) {
+    TransName2 <- paste0(citeName2, stri_unescape_unicode("\\u30fb"), tmp_name[2, ]$last_name)
+    if (dplCheck > 1) {
+      TransName2 <- paste0(
+        TransName2, stri_unescape_unicode("\\u30fb"),
+        paste0(tmp_name[2, ]$last_name, tmp_name[2, ]$first_name)
+      )
+    }
+  }
+  if (NROW(tmp_name) > 2) {
+    TransName2 <- paste0(citeName2, stri_unescape_unicode("\\u4ed6"))
+  }
+
+  ## YAKU or KAN-Yaku
+  if (!is.na(df$JKANYAKU)) {
+    postfix <- stri_unescape_unicode("\\u76e3\\u8a33")
+  } else {
+    postfix <- stri_unescape_unicode("\\u8a33")
+  }
+
+  citeName1 <- paste(citeName1, df$YEAR, TransName1, postfix)
+  citeName2 <- paste(citeName2, df$YEAR, TransName2, postfix)
   citeCheckFLG <- paste0(citeName1, "-", df$YEAR)
   return(data.frame(citeName1, citeName2, citeCheckFLG))
 }

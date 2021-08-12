@@ -76,7 +76,7 @@ bib_to_DF <- function(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F
     ## paste to previous liens
     if (i != flg) {
       ### except only closing bracket
-      if(bib[[i]]!="}"){
+      if (bib[[i]] != "}") {
         bib[[flg]] <- paste(bib[[flg]], bib[[i]])
       }
     }
@@ -198,6 +198,7 @@ bib_to_DF <- function(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F
     JAUTHOR = character(0L),
     JKANYAKU = character(0L),
     TRANSAUTHOR = character(0L),
+    GENCHOKANA = character(0L),
     TRANSWORK = character(0L),
     TRANSINFO = character(0L),
     DOI = character(0L),
@@ -217,6 +218,7 @@ bib_to_DF <- function(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F
       EDITORs = map(.data$EDITOR, ~ name_spliter(.x)),
       JAUTHORs = map(.data$JAUTHOR, ~ name_spliter(.x)),
       JKANYAKUs = map(.data$JKANYAKU, ~ name_spliter(.x)),
+      GENCHOKANAs = map(.data$GENCHOKANA, ~ name_spliter(.x)),
       TRANSAUTHORs = map(.data$TRANSAUTHOR, ~ name_spliter(.x))
     )
 
@@ -250,7 +252,9 @@ bib_to_DF <- function(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F
       ### Retrun
       mutate(YEAR = paste0(.data$YEAR, .data$addletter)) %>%
       ### Language type check
-      mutate(langFLG = !str_detect(paste0(.data$AUTHOR, .data$TITLE, .data$JTITLE, .data$JOURNAL), pattern = "\\p{Hiragana}|\\p{Katakana}|\\p{Han}")) %>%
+      mutate(langFLG = if_else(str_detect(paste0(AUTHOR, TITLE, JOURNAL), pattern = "\\p{Hiragana}|\\p{Katakana}|\\p{Han}"), "J",
+        if_else(!is.na(JTITLE), "Tr", "E")
+      )) %>%
       ### delete unnecessary variables
       ungroup() %>%
       select(-c(.data$sortRecord, .data$YEARn, n, .data$num, .data$addletter))
@@ -260,7 +264,7 @@ bib_to_DF <- function(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F
       rowwise() %>%
       ################################## bib list
       mutate(
-        ListName = if_else(.data$langFLG, print_EName(.data$AUTHORs, ampersand = list_ampersand), print_JName(.data$AUTHORs)),
+        ListName = if_else(langFLG == "J", print_JName(.data$AUTHORs), print_EName(.data$AUTHORs, ampersand = list_ampersand)),
         ListYear = paste0("(", .data$YEAR, ").")
       ) %>%
       mutate(dplFLG = 0) %>%
