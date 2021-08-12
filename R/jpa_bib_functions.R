@@ -43,16 +43,16 @@ name_spliter <- function(df) {
 #' @export
 pBibMaker <- function(df, underline) {
   tmp <- case_when(
-    df$CATEGORY == "BOOK" ~ if_else(df$langFLG != "J", print_English_book(df, underline),
+    df$CATEGORY == "BOOK" ~ if_else(df$langFLG == "E", print_English_book(df, underline),
       print_Japanese_book(df)
     ),
-    df$CATEGORY == "ARTICLE" ~ if_else(df$langFLG != "J", print_English_article(df, underline),
+    df$CATEGORY == "ARTICLE" ~ if_else(df$langFLG == "E", print_English_article(df, underline),
       print_Japanese_article(df, underline)
     ),
-    df$CATEGORY == "INCOLLECTION" ~ if_else(df$langFLG != "J", print_English_incollection(df, underline),
+    df$CATEGORY == "INCOLLECTION" ~ if_else(df$langFLG == "E", print_English_incollection(df, underline),
       print_Japanese_incollection(df)
     ),
-    df$CATEGORY == "INPROCEEDINGS" ~ if_else(df$langFLG != "J", print_English_inproceedings(df),
+    df$CATEGORY == "INPROCEEDINGS" ~ if_else(df$langFLG == "E", print_English_inproceedings(df),
       print_Japanese_inproceedings(df)
     )
   )
