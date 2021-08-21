@@ -6,5 +6,5 @@ authors:
   - family-names: Kosugi
     given-names: Koji
 title: jpaRmd:rmarkdown templates for Japanese journals in psychology
-version: 0.5.
+version: 0.5.3
 repository: https://github.com/ykunisato/jpaRmd
