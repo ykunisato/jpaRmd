@@ -1,5 +1,7 @@
 # jpaRmd
 
+![inst/jpaRmd.png]
+
 <!-- badges: start -->
 <!-- badges: end -->
 
