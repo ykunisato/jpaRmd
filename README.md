@@ -1,6 +1,6 @@
 # jpaRmd
 
-![inst/jpaRmd.png]
+<img src="inst/jpaRmd.png" align="right" alt="jpaRmd" width="180" />
 
 <!-- badges: start -->
 <!-- badges: end -->
