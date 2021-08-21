@@ -1,0 +1,10 @@
+cff-version: 0.5.0
+message: If you use this package, please cite it as below.
+authors:
+  - family-names: Kunisato
+    given-names: Yoshihiko
+  - family-names: Kosugi
+    given-names: Koji
+title: jpaRmd: rmarkdown templates for Japanese journals in psychology
+version: 0.5.0
+repository: https://github.com/ykunisato/jpaRmd
