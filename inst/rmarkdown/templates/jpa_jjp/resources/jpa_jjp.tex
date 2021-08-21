@@ -4,7 +4,8 @@
 \renewcommand{\figurename}{Figure}
 \renewcommand{\tablename}{Table}
 %横大見出しの後アキ削除
-\newcommand{\subsection}{\@startsection{subsection}{2}{0pt}{\baselineskip}{0pt}{\normalfont\large\bfseries\gtfamily}}
+\usepackage{sectionFontSize}
+\newcommand{\subsection}{\@startsection{subsection}{2}{0pt}{\baselineskip}{0pt}{\normalsize\bf}}
 
 % table format
 \usepackage{caption}
