@@ -5,7 +5,10 @@
 \renewcommand{\tablename}{Table}
 %横大見出しの後アキ削除
 \usepackage{sectionFontSize}
+\makeatletter
 \newcommand{\section}{\@startsection{subsection}{2}{0pt}{\baselineskip}{0pt}{\normalsize\bf}}
+\makeatother
+
 
 % table format
 \usepackage{caption}
