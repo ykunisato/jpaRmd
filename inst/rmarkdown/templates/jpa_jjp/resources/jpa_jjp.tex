@@ -394,8 +394,8 @@ $endif$
 %横大見出しの後アキ削除
 \usepackage{sectionFontSize}
 \makeatletter
-\newcommand{\section}{\@startsection{section}{1}{0pt}{\baselineskip}{\baselineskip}{\normalsize\bf}}
-\newcommand{\subsection}{\@startsection{subsection}{2}{0pt}{\baselineskip}{0pt}{\normalsize\bf}}
+\renewcommand{\section}{\@startsection{section}{1}{0pt}{\baselineskip}{\baselineskip}{\normalsize\bf}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0pt}{\baselineskip}{0pt}{\normalsize\bf}}
 \makeatother
 
 \begin{document}
