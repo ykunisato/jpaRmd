@@ -3,6 +3,9 @@
 \geometry{left = 5.4cm, right = 5.4cm, top = 4.0cm, bottom = 3.5cm}
 \renewcommand{\figurename}{Figure}
 \renewcommand{\tablename}{Table}
+%横大見出しの後アキ削除
+\renewcommand{\section}{\@startsection{subsection}{2}{0mm}{8mm}{0mm}{\normalfont\fontsize{32Q}{32H}\bfseries}}
+
 % table format
 \usepackage{caption}
 \captionsetup[table]{labelsep=newline}
@@ -389,11 +392,6 @@ $endif$
 \usepackage[normalem]{ulem}
 \usepackage{makecell}
 \usepackage{xcolor}
-
-%横大見出しの後アキ削除
-\makeatletter
-\renewcommand{\section}{\@startsection{subsection}{2}{0mm}{8mm}{0mm}{\normalfont\fontsize{32Q}{32H}\bfseries}}
-\makeatother
 
 \begin{document}
 \pagestyle{empty}
