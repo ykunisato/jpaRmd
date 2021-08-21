@@ -390,6 +390,11 @@ $endif$
 \usepackage{makecell}
 \usepackage{xcolor}
 
+%横大見出しの後アキ削除
+\makeatletter
+\renewcommand{\section}{\@startsection{subsection}{1}{0mm}{8mm}{0mm}}
+\makeatother
+
 \begin{document}
 \pagestyle{empty}
 $if(has-frontmatter)$
