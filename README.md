@@ -22,21 +22,30 @@ remotes::install_github("ykunisato/jpaRmd")
 
 RStudioで，「File」->「New File」->「R Markdown…」をクリックして，「From Template」から「Japanese Psychological Association format{jpaRmd}」を選ぶ。「Name:」は，デフォルトではUntitledになっていますが，適宜変更してください。最後に，「OK」をクリックしてください。
 
-Rmdファイルが自動的に開くと思います。output:のjpaRmd::render_jjp()内のRmd_fileが“Untitled.Rmd”のままになっているかと思います。これは，Rmdファイル名と同じにしないといけないので，変更します。knitをクリックして，しばらくすると，フォルダ内にいくつかファイルが作られます。その中のPDFファイルを開くと，『心理学研究』に合ったフォーマットになっているかと思います。
+Rmdファイルが自動的に開くと思います。上から７行目のRmd_file:が“Untitled.Rmd”のままになっているかと思います。これは，Rmdファイル名と同じにしないといけないので，変更します。これができたら，一度，「knit」をクリックしてください。
 
-
-### 引用文献についての注意
-
-jpaRmdは，Bibファイルを使った引用が可能です。日本語文献の場合は，準備にいくつかルールがあります（文字コードはUTF-8，yomiを追加など）。[jpa\_citeに合ったBibファイルの作り方](https://qiita.com/kosugitti/items/63140ead7942d4e9b1d7)を参照いただいて，Bibファイルをご準備ください。
+しばらくすると，フォルダ内にいくつかファイルが作られます。その中のPDFファイルを開くと，『心理学研究』に合ったフォーマットになっているかと思います。
 
 ### 『認知行動療法研究』
 
 RStudioで，「File」->「New File」->「R Markdown…」をクリックする。以下の画面がでてきたら，「From Template」から「Japanese　Journal of Behavioral and Cognitive Therapies format{jpaRmd}」を選ぶ。「Name:」は，デフォルトではUntitledになっていますが，適宜変更ください。最後に「OK」をクリックしてください。Rmdファイルが自動的に開くと思います。
 
-output:のjpaRmd::render_jjbct()内のRmd_fileが“Untitled.Rmd”のままになっています。これは，Rmdファイル名と同じにしないといけないので，変更します。これができたら，一度，「knit」をクリックしてください。
+Rmdファイルが自動的に開くと思います。上から５行目のRmd_file:が“Untitled.Rmd”のままになっているかと思います。これは，Rmdファイル名と同じにしないといけないので，変更します。これができたら，一度，「knit」をクリックしてください。
 
 しばらくすると，フォルダ内にいくつかファイルが作られます。PDFファイルを開くと，『認知行動療法研究』に合ったフォーマットになっているかと思います。
 
+### 『心理学評論』
+
+RStudioで，「File」->「New File」->「R Markdown…」をクリックする。以下の画面がでてきたら，「From Template」から「Japanese Psychological Review format{jpaRmd}」を選ぶ。「Name:」は，デフォルトではUntitledになっていますが，適宜変更ください。最後に「OK」をクリックしてください。Rmdファイルが自動的に開くと思います。
+
+上から５行目のRmd_file:が“Untitled.Rmd”のままになっています。これは，Rmdファイル名と同じにしないといけないので，変更します。これができたら，一度，「knit」をクリックしてください。
+
+しばらくすると，フォルダ内にいくつかファイルが作られます。PDFファイルを開くと，『心理学評論』に合ったフォーマットになっているかと思います（著者名なしと要約なし，著者名なし要約あり，著者名あり要約なし，著者名あり要約ありの４種類が出力される）。
+
+
+### 引用文献についての注意
+
+jpaRmdは，Bibファイルを使った引用が可能です。日本語文献の場合は，準備にいくつかルールがあります（文字コードはUTF-8，yomiを追加など）。[jpa\_citeに合ったBibファイルの作り方](https://qiita.com/kosugitti/items/63140ead7942d4e9b1d7)を参照いただいて，Bibファイルをご準備ください。
 
 ### Research Compendium
 
