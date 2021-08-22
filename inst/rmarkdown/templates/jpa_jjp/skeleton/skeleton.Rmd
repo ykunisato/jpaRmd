@@ -32,7 +32,7 @@ Can we write a paper of the Japanses Journal of psychology with RMarkdown? To so
 <!--
 Keywords:最大5語まで記載できる。
 -->
-**Keywords**: RMarkdown, Reproducibility, The Japanese Journal of Psychology
+**Keywords**: R Markdown, Reproducibility, The Japanese Journal of Psychology
 
 \clearpage
 
@@ -41,8 +41,9 @@ Abstractの日本語訳:英文アブストラクトを日本語訳したもの�
 -->
 # Abstractの日本語訳
 
+ R Markdownで日本の『心理学研究』の論文を書くことはできるであろうか？この謎を解くために，私たちはアマゾンの奥深くへと向かいました。長い旅路の果てに，RMarkdownに関するいくつかの素晴らしいドキュメントの発掘に成功し，ついに「Yes，we can」と言い切ることができるまでになりました。... さて，こんな感じでアブストラクトを書きます。
 
-**Keywordsの日本語訳**
+**Keywordsの日本語訳** R Markdown, 再現可能性，　心理学研究
 
 <!--　このRmdファイル内で使用するRパッケージを以下に追加してください-->
 <!--　また，最後にこのファイルのファイル名，引用文献リストの入っているbibファイル名を入れてください-->
@@ -151,7 +152,8 @@ gender <- data.frame(table(bfi$gender)) %>%
 
 
 ## 統計解析
-<!-- 統計解析については必要に応じて記載ください（心理学研究では書いてない論文も多いですが，それは好ましくないように思います）。Rパッケージなどのオープンソースソフトウェアは無料ですが，だからこそ，その公開した方の科学への貢献に感謝し，適切に引用しましょう。-->
+
+　統計解析については必要に応じて記載ください（心理学研究では書いてない論文も多いですが，それは好ましくないように思います）。Rパッケージなどのオープンソースソフトウェアは無料ですが，だからこそ，その公開した方の科学への貢献に感謝し，適切に引用しましょう。
 
 
 ## 倫理的配慮
@@ -192,7 +194,7 @@ cor_result <- cor.test(summary_bfi_fig$Extraversion,summary_bfi_fig$Neuroticism)
 著者情報を含む場合は，投稿時には具体的な機関名等を伏せるよう注意する
 -->
 
-利益相反に関する記述を本文末に追加する。
+　利益相反に関する記述を本文末に追加する。
 
 
 \clearpage 
