@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rmarkdown template for Japanese journals in psychology • jpaRmd</title>
+<title>Rmarkdown templates for Japanese journals in psychology • jpaRmd</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="bootstrap-toc.css">
 <script src="bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
-<script src="pkgdown.js"></script><meta property="og:title" content="Rmarkdown template for Japanese journals in psychology">
+<script src="pkgdown.js"></script><meta property="og:title" content="Rmarkdown templates for Japanese journals in psychology">
 <meta property="og:description" content="The package provides the Rmarkdown template for Japanese journals in psychology including the Japanese Journal of Psychology and so on. The package also provides function making a list of references.">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">jpaRmd</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.4</span>
       </span>
     </div>
 
@@ -90,6 +90,7 @@
 <div id="jparmd" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#jparmd" class="anchor"></a>jpaRmd</h1></div>
+<p><img src="inst/jpaRmd.png" align="right" alt="jpaRmd" width="180"></p>
 <!-- badges: start -->
 <!-- badges: end -->
 <p>jpaRmdは，日本心理学会の『心理学研究』への投稿用PDF原稿をRmarkdownで作成するためのテンプレートを提供するRパッケージです。<a href="https://psych.or.jp/manual/">日本心理学会の「執筆・投稿の手びき(2015年版)」</a>に基づいています。また，認知行動療法学会の『認知行動療法』のテンプレートも用意しています。</p>
@@ -108,19 +109,27 @@
 <h3 class="hasAnchor">
 <a href="#%E5%BF%83%E7%90%86%E5%AD%A6%E7%A0%94%E7%A9%B6" class="anchor"></a>『心理学研究』</h3>
 <p>RStudioで，「File」-&gt;「New File」-&gt;「R Markdown…」をクリックして，「From Template」から「Japanese Psychological Association format{jpaRmd}」を選ぶ。「Name:」は，デフォルトではUntitledになっていますが，適宜変更してください。最後に，「OK」をクリックしてください。</p>
-<p>Rmdファイルが自動的に開くと思います。output:のjpaRmd::render_jjp()内のRmd_fileが“Untitled.Rmd”のままになっているかと思います。これは，Rmdファイル名と同じにしないといけないので，変更します。knitをクリックして，しばらくすると，フォルダ内にいくつかファイルが作られます。その中のPDFファイルを開くと，『心理学研究』に合ったフォーマットになっているかと思います。</p>
-</div>
-<div id="引用文献についての注意" class="section level3">
-<h3 class="hasAnchor">
-<a href="#%E5%BC%95%E7%94%A8%E6%96%87%E7%8C%AE%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%E3%81%AE%E6%B3%A8%E6%84%8F" class="anchor"></a>引用文献についての注意</h3>
-<p>jpaRmdは，Bibファイルを使った引用が可能です。日本語文献の場合は，準備にいくつかルールがあります（文字コードはUTF-8，yomiを追加など）。<a href="https://qiita.com/kosugitti/items/63140ead7942d4e9b1d7">jpa_citeに合ったBibファイルの作り方</a>を参照いただいて，Bibファイルをご準備ください。</p>
+<p>Rmdファイルが自動的に開くと思います。上から７行目のRmd_<a href="file:%E3%81%8C%E2%80%9CUntitled.Rmd%E2%80%9D%E3%81%AE%E3%81%BE%E3%81%BE%E3%81%AB%E3%81%AA%E3%81%A3%E3%81%A6%E3%81%84%E3%82%8B%E3%81%8B%E3%81%A8%E6%80%9D%E3%81%84%E3%81%BE%E3%81%99%E3%80%82%E3%81%93%E3%82%8C%E3%81%AF%EF%BC%8CRmd%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E5%90%8D%E3%81%A8%E5%90%8C%E3%81%98%E3%81%AB%E3%81%97%E3%81%AA%E3%81%84%E3%81%A8%E3%81%84%E3%81%91%E3%81%AA%E3%81%84%E3%81%AE%E3%81%A7%EF%BC%8C%E5%A4%89%E6%9B%B4%E3%81%97%E3%81%BE%E3%81%99%E3%80%82%E3%81%93%E3%82%8C%E3%81%8C%E3%81%A7%E3%81%8D%E3%81%9F%E3%82%89%EF%BC%8C%E4%B8%80%E5%BA%A6" class="uri">file:が“Untitled.Rmd”のままになっているかと思います。これは，Rmdファイル名と同じにしないといけないので，変更します。これができたら，一度</a>，「knit」をクリックしてください。</p>
+<p>しばらくすると，フォルダ内にいくつかファイルが作られます。その中のPDFファイルを開くと，『心理学研究』に合ったフォーマットになっているかと思います。</p>
 </div>
 <div id="認知行動療法研究" class="section level3">
 <h3 class="hasAnchor">
 <a href="#%E8%AA%8D%E7%9F%A5%E8%A1%8C%E5%8B%95%E7%99%82%E6%B3%95%E7%A0%94%E7%A9%B6" class="anchor"></a>『認知行動療法研究』</h3>
 <p>RStudioで，「File」-&gt;「New File」-&gt;「R Markdown…」をクリックする。以下の画面がでてきたら，「From Template」から「Japanese　Journal of Behavioral and Cognitive Therapies format{jpaRmd}」を選ぶ。「Name:」は，デフォルトではUntitledになっていますが，適宜変更ください。最後に「OK」をクリックしてください。Rmdファイルが自動的に開くと思います。</p>
-<p>output:のjpaRmd::render_jjbct()内のRmd_fileが“Untitled.Rmd”のままになっています。これは，Rmdファイル名と同じにしないといけないので，変更します。これができたら，一度，「knit」をクリックしてください。</p>
+<p>Rmdファイルが自動的に開くと思います。上から５行目のRmd_<a href="file:%E3%81%8C%E2%80%9CUntitled.Rmd%E2%80%9D%E3%81%AE%E3%81%BE%E3%81%BE%E3%81%AB%E3%81%AA%E3%81%A3%E3%81%A6%E3%81%84%E3%82%8B%E3%81%8B%E3%81%A8%E6%80%9D%E3%81%84%E3%81%BE%E3%81%99%E3%80%82%E3%81%93%E3%82%8C%E3%81%AF%EF%BC%8CRmd%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E5%90%8D%E3%81%A8%E5%90%8C%E3%81%98%E3%81%AB%E3%81%97%E3%81%AA%E3%81%84%E3%81%A8%E3%81%84%E3%81%91%E3%81%AA%E3%81%84%E3%81%AE%E3%81%A7%EF%BC%8C%E5%A4%89%E6%9B%B4%E3%81%97%E3%81%BE%E3%81%99%E3%80%82%E3%81%93%E3%82%8C%E3%81%8C%E3%81%A7%E3%81%8D%E3%81%9F%E3%82%89%EF%BC%8C%E4%B8%80%E5%BA%A6" class="uri">file:が“Untitled.Rmd”のままになっているかと思います。これは，Rmdファイル名と同じにしないといけないので，変更します。これができたら，一度</a>，「knit」をクリックしてください。</p>
 <p>しばらくすると，フォルダ内にいくつかファイルが作られます。PDFファイルを開くと，『認知行動療法研究』に合ったフォーマットになっているかと思います。</p>
+</div>
+<div id="心理学評論" class="section level3">
+<h3 class="hasAnchor">
+<a href="#%E5%BF%83%E7%90%86%E5%AD%A6%E8%A9%95%E8%AB%96" class="anchor"></a>『心理学評論』</h3>
+<p>RStudioで，「File」-&gt;「New File」-&gt;「R Markdown…」をクリックする。以下の画面がでてきたら，「From Template」から「Japanese Psychological Review format{jpaRmd}」を選ぶ。「Name:」は，デフォルトではUntitledになっていますが，適宜変更ください。最後に「OK」をクリックしてください。Rmdファイルが自動的に開くと思います。</p>
+<p>上から５行目のRmd_<a href="file:%E3%81%8C%E2%80%9CUntitled.Rmd%E2%80%9D%E3%81%AE%E3%81%BE%E3%81%BE%E3%81%AB%E3%81%AA%E3%81%A3%E3%81%A6%E3%81%84%E3%81%BE%E3%81%99%E3%80%82%E3%81%93%E3%82%8C%E3%81%AF%EF%BC%8CRmd%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E5%90%8D%E3%81%A8%E5%90%8C%E3%81%98%E3%81%AB%E3%81%97%E3%81%AA%E3%81%84%E3%81%A8%E3%81%84%E3%81%91%E3%81%AA%E3%81%84%E3%81%AE%E3%81%A7%EF%BC%8C%E5%A4%89%E6%9B%B4%E3%81%97%E3%81%BE%E3%81%99%E3%80%82%E3%81%93%E3%82%8C%E3%81%8C%E3%81%A7%E3%81%8D%E3%81%9F%E3%82%89%EF%BC%8C%E4%B8%80%E5%BA%A6" class="uri">file:が“Untitled.Rmd”のままになっています。これは，Rmdファイル名と同じにしないといけないので，変更します。これができたら，一度</a>，「knit」をクリックしてください。</p>
+<p>しばらくすると，フォルダ内にいくつかファイルが作られます。PDFファイルを開くと，『心理学評論』に合ったフォーマットになっているかと思います（著者名なしと要約なし，著者名なし要約あり，著者名あり要約なし，著者名あり要約ありの４種類が出力される）。</p>
+</div>
+<div id="引用文献についての注意" class="section level3">
+<h3 class="hasAnchor">
+<a href="#%E5%BC%95%E7%94%A8%E6%96%87%E7%8C%AE%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%E3%81%AE%E6%B3%A8%E6%84%8F" class="anchor"></a>引用文献についての注意</h3>
+<p>jpaRmdは，Bibファイルを使った引用が可能です。日本語文献の場合は，準備にいくつかルールがあります（文字コードはUTF-8，yomiを追加など）。<a href="https://qiita.com/kosugitti/items/63140ead7942d4e9b1d7">jpa_citeに合ったBibファイルの作り方</a>を参照いただいて，Bibファイルをご準備ください。</p>
 </div>
 <div id="research-compendium" class="section level3">
 <h3 class="hasAnchor">
@@ -153,6 +162,7 @@
 <a href="#%E6%9F%BB%E8%AA%AD%E3%82%B3%E3%83%A1%E3%83%B3%E3%83%88%E3%81%AB%E5%AF%BE%E3%81%99%E3%82%8B%E3%83%AA%E3%83%97%E3%83%A9%E3%82%A4%E3%81%A8%E4%BF%AE%E6%AD%A3%E5%AF%BE%E7%85%A7%E8%A1%A8" class="anchor"></a>査読コメントに対するリプライと修正対照表</h3>
 <p>査読コメントに対するリプライと修正対照表を作ることができます。RStudioで，「File」 -&gt; 「New File」 -&gt;「R Markdown…」 をクリックする。以下の画面がでてきたら，「From Template」から「Reply to Reviewer{jpaRmd}」を選びます。「OK」をクリックしてください。</p>
 <p>詳しい使い方は，<a href="https://cpp-laboratory.hatenablog.com/entry/2020/12/19/054240">jpaRmdで再現可能な査読対応をしちゃおう！</a>を参照ください。</p>
+<p><a href="https://ykunisato.github.io/jpaRmd/">本パッケージのウェブサイト</a></p>
 </div>
 </div>
 </div>
