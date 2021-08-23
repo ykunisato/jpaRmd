@@ -10,8 +10,7 @@ render_jjp <- function(Rmd_file, Bib_file) {
   template_tex_file <- system.file("rmarkdown/templates/jpa_jjp/resources/jpa_jjp.tex",
     package = "jpaRmd"
   )
-  base <- pdf_document_format(
-    "jjp",
+  base <- pdf_document(
     latex_engine = "xelatex",
     template = template_tex_file,
     keep_tex = TRUE,
@@ -19,6 +18,7 @@ render_jjp <- function(Rmd_file, Bib_file) {
     toc_depth = 3,
     highlight = "tango"
   )
+  base$inherits <- "pdf_document"
   output_file <- strsplit(Rmd_file, ".Rmd")[[1]]
   render(tmp_rmd, base, output_file)
 }
