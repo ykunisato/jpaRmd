@@ -10,7 +10,8 @@ render_jjp <- function(Rmd_file, Bib_file) {
   template_tex_file <- system.file("rmarkdown/templates/jpa_jjp/resources/jpa_jjp.tex",
     package = "jpaRmd"
   )
-  base <- pdf_document(
+  base <- pdf_document_format(
+    "jjp",
     latex_engine = "xelatex",
     template = template_tex_file,
     keep_tex = TRUE,
