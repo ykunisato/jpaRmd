@@ -21,13 +21,18 @@
 #'
 inLineCitation <- function(st, bib.df) {
   item <- st %>% str_extract(pattern = "@[\\[a-zA-Z0-9-_\\.\\p{Hiragana}\\p{Katakana}\\p{Han}]*")
+  ### citation cheker
+  checksum <- bib.df$BIBTEXKEY %in% str_replace(item,pattern = "@",replacement = "") %>% sum
+  if(checksum == 0 ){
+    stop(paste("Citation key",item," does not exsist on your bib file."))
+  }
+  
   loc <- st %>% str_locate(item)
   loc <- loc[1] - 1
   tp <- FALSE
   if (loc > 0) {
     tp <- str_sub(st, loc, loc) %>% str_detect(pattern = "\\[")
   }
-
   tmp.df <- data.frame()
   if (tp) {
     ### citation on the end of line
