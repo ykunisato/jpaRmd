@@ -24,7 +24,7 @@ inLineCitation <- function(st, bib.df) {
   ### citation cheker
   checksum <- bib.df$BIBTEXKEY %in% str_replace(item,pattern = "@",replacement = "") %>% sum
   if(checksum == 0 ){
-    stop(paste("引用",item,"がbibファイルにありません"))
+    stop(paste("Citation key",item," does not exsist on your bib file."))
   }
   
   loc <- st %>% str_locate(item)
