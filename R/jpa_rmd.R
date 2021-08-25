@@ -10,7 +10,7 @@ render_jjp <- function(Rmd_file, Bib_file) {
   template_tex_file <- system.file("rmarkdown/templates/jpa_jjp/resources/jpa_jjp.tex",
     package = "jpaRmd"
   )
-  format_pdf <- pdf_document(
+  base <- pdf_document(
     latex_engine = "xelatex",
     template = template_tex_file,
     keep_tex = TRUE,
@@ -18,9 +18,9 @@ render_jjp <- function(Rmd_file, Bib_file) {
     toc_depth = 3,
     highlight = "tango"
   )
-  format_pdf$inherits <- "rmarkdown_output_format"
+  base$inherits <- "pdf_document"
   output_file <- strsplit(Rmd_file, ".Rmd")[[1]]
-  render(tmp_rmd, format_pdf, output_file)
+  render(tmp_rmd, base, output_file)
 }
 
 #' @title render function for paper of Japanese Journal of Behavioral and Cognitive Therapies
