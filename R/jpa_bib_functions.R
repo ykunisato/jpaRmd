@@ -357,7 +357,7 @@ print_English_incollection <- function(df, underline = F) {
   postfix <- if_else(NROW(df$EDITOR) > 1, "(Eds.),", "(Ed.),")
   inbook.tmp1 <- paste0(prefix, print_EName(df$EDITORs, switchFLG = TRUE), postfix)
   edition.tmp <- if_else(!is.na(df$EDITION), paste0(df$EDITION, " ed., "), "")
-  inbook.tmp2 <- paste0(eff, df$BOOKTITLE, "} (", edition.tmp, " pp.", df$PAGES, ").")
+  inbook.tmp2 <- paste0(eff, df$BOOKTITLE, "} (", edition.tmp, "pp.", df$PAGES, ").")
 
   pBib <- paste(df$ListName, df$ListYear, df$TITLE, inbook.tmp1, inbook.tmp2, df$ADDRESS, ":", df$PUBLISHER, ".")
   return(pBib)
