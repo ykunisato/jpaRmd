@@ -36,6 +36,8 @@ inLineCitation <- function(st, bib.df) {
   tmp.df <- data.frame()
   if (tp) {
     ### citation on the end of line
+    ### retake citation
+    item <- st %>% str_extract(pattern = "\\[@.*?\\]")
     ##### citaton data frame
     tmp.df <- item %>%
       str_extract_all(pattern = "@[a-zA-Z0-9-_\\.\\p{Hiragana}\\p{Katakana}\\p{Han}]*", simplify = T) %>%
