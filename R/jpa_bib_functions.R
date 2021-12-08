@@ -415,13 +415,22 @@ inLineCite_ENG <- function(df, ampersand) {
     ### multi-Authors
     if (NR < 5) {
       citeName1 <- ""
-      for (i in 1:(NR - 1)) {
+      if (NR == 2) {
         if (dplCheck > 1) {
-          tmp1 <- paste0(tmp_name[i, ]$initial_first, ".", tmp_name[i, ]$last_name, ", ")
+          tmp1 <- paste0(tmp_name[1, ]$initial_first, ".", tmp_name[1, ]$last_name, ", ")
         } else {
-          tmp1 <- paste0(tmp_name[i, ]$last_name, ", ")
+          tmp1 <- paste0(tmp_name[1, ]$last_name)
         }
         citeName1 <- paste0(citeName1, tmp1)
+      } else {
+        for (i in 1:(NR - 1)) {
+          if (dplCheck > 1) {
+            tmp1 <- paste0(tmp_name[i, ]$initial_first, ".", tmp_name[i, ]$last_name, ", ")
+          } else {
+            tmp1 <- paste0(tmp_name[i, ]$last_name, ", ")
+          }
+          citeName1 <- paste0(citeName1, tmp1)
+        }
       }
       ### Last Author
       tmp1 <- paste0(tmp_connecter, tmp_name[NR, ]$last_name)
@@ -550,13 +559,22 @@ inLineCite_TR <- function(df, ampersand) {
     ### multi-Authors
     if (NR < 5) {
       citeName1 <- ""
-      for (i in 1:(NR - 1)) {
+      if (NR == 2) {
         if (dplCheck > 1) {
-          tmp1 <- paste0(tmp_name[i, ]$initial_first, ".", tmp_name[i, ]$last_name, ", ")
+          tmp1 <- paste0(tmp_name[1, ]$initial_first, ".", tmp_name[1, ]$last_name, ", ")
         } else {
-          tmp1 <- paste0(tmp_name[i, ]$last_name, ", ")
+          tmp1 <- paste0(tmp_name[1, ]$last_name)
         }
         citeName1 <- paste0(citeName1, tmp1)
+      } else {
+        for (i in 1:(NR - 1)) {
+          if (dplCheck > 1) {
+            tmp1 <- paste0(tmp_name[i, ]$initial_first, ".", tmp_name[i, ]$last_name, ", ")
+          } else {
+            tmp1 <- paste0(tmp_name[i, ]$last_name, ", ")
+          }
+          citeName1 <- paste0(citeName1, tmp1)
+        }
       }
       ### Last Author
       tmp1 <- paste0(tmp_connecter, tmp_name[NR, ]$last_name)
@@ -653,8 +671,8 @@ inLineCite_TR <- function(df, ampersand) {
     postfix <- stri_unescape_unicode("\\u8a33")
   }
 
-  citeName1 <- paste(citeName1,",", df$YEAR, TransName1, postfix)
-  citeName2 <- paste(citeName2,",", df$YEAR, TransName2, postfix)
+  citeName1 <- paste0(citeName1, "(", df$YEAR, " ", TransName1, postfix)
+  citeName2 <- paste0(citeName2, "(", df$YEAR, " ", TransName2, postfix)
   citeCheckFLG <- paste0(citeName1, "-", df$YEAR)
   return(data.frame(citeName1, citeName2, citeCheckFLG))
 }
