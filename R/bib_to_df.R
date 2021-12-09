@@ -195,6 +195,7 @@ bib_to_DF <- function(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F
     YEAR = character(0L),
     YOMI = character(0L),
     JTITLE = character(0L),
+    JYEAR = character(0L),
     JAUTHOR = character(0L),
     JKANYAKU = character(0L),
     TRANSAUTHOR = character(0L),
