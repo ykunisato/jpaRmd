@@ -53,6 +53,8 @@ inLineCitation <- function(st, bib.df) {
       mutate(citation = if_else(.data$langFLG!="Tr",paste0(.data$citeName, ",\\ ", .data$ListYear),
                                 paste0(.data$citeName, "\\ ", .data$JYEAR)))
     KEY <- tmp.df$KEY
+    ## Tranlated book 
+    tmp.df$citation <- str_replace(tmp.df$citation,pattern="\\(",replacement="\\ ")
     word <- tmp.df$citation %>% paste0(collapse = "; ")
     word <- paste0("(", word, ")")
     ### reform for regular expression

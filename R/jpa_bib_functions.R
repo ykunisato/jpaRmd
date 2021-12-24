@@ -614,7 +614,13 @@ inLineCite_TR <- function(df, ampersand) {
   }
 
   ############ J part
-  tmp_name <- as.data.frame(df$JKANYAKUs)
+  ## KANYAKU or YAKU
+  if (is.na(df$JKANYAKU)) {
+    tmp_name <- df$JAUTHORs
+  } else {
+    tmp_name <- df$JKANYAKUs
+  }
+  tmp_name <- as.data.frame(tmp_name)
   NR <- NROW(tmp_name)
   ## First time
   if (NR > 1) {
@@ -647,12 +653,12 @@ inLineCite_TR <- function(df, ampersand) {
     }
   }
   ## Second time, and after
-  TransName2 <- tmp_name[1, ]$last_name
+  TransName2 <- ""
   if (dplCheck > 1) {
     TransName2 <- paste0(tmp_name[1, ]$last_name, tmp_name[1, ]$first_name)
   }
   if (NROW(tmp_name) == 2) {
-    TransName2 <- paste0(citeName2, stri_unescape_unicode("\\u30fb"), tmp_name[2, ]$last_name)
+    TransName2 <- paste0(tmp_name[1, ]$last_name, stri_unescape_unicode("\\u30fb"), tmp_name[2, ]$last_name)
     if (dplCheck > 1) {
       TransName2 <- paste0(
         TransName2, stri_unescape_unicode("\\u30fb"),
