@@ -295,3 +295,4 @@ bib_to_DF <- function(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F
     bib.df <- NULL
   }
 }
+
