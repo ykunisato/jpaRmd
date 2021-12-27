@@ -266,33 +266,45 @@ bib_to_DF <- function(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F
       ################################## bib list
       mutate(
         ListName = if_else(langFLG == "J", print_JName(.data$AUTHORs), print_EName(.data$AUTHORs, ampersand = list_ampersand)),
-        ListYear = paste0("(", .data$YEAR, ").")
       ) %>%
-      mutate(dplFLG = 0) %>%
+      ## Duplicate check
+      group_by(ListName, YEAR) %>%
+      mutate(dplFLG = n(), add_one = 1, postfix_id = cumsum(add_one)) %>%
+      select(-(add_one)) %>%
+      mutate(ListYear = ifelse(dplFLG > 1, paste0("(", .data$YEAR, letters[postfix_id], ")."), paste0("(", .data$YEAR, ")."))) %>%
+      ungroup() %>%
+      ## prepare for confusion
+      mutate(confusionCase = 0) %>%
       # make items for List
       group_by(.data$ID) %>%
       nest() %>%
       mutate(
-        pBib = purrr::map2(.x = .data$data, .y = underline, .f = ~ pBibMaker(.x, .y)),
+        pBib = purrr::map2(.x = .data$data, .y = underline, .f = ~ pBibMaker(.x, .y)) %>% unlist(),
         prefix = purrr::map(.x = .data$data, .f = ~ prefixMaker(.x))
       ) %>%
       ################################### inline citation
       # make items for citating
-      mutate(cite.tmp = purrr::map2(.x = .data$data, .y = cite_ampersand, .f = ~ citationMaker(.x, .y))) %>%
-      # Differnt Authors, but same family name,same year --for the case of confusion
-      unnest(cols = c(.data$data, .data$pBib, .data$prefix, .data$cite.tmp)) %>%
-      group_by(.data$citeCheckFLG) %>%
-      mutate(dplFLG = n()) %>%
-      ungroup(.data$citeCheckFLG) %>%
-      select(-.data$citeName1, -.data$citeName2, -.data$citeCheckFLG) %>%
-      group_by(.data$ID) %>%
-      nest() %>%
       mutate(cite = purrr::map2(.x = .data$data, .y = cite_ampersand, .f = ~ citationMaker(.x, .y))) %>%
       unnest(cols = c(.data$data, .data$cite)) %>%
-      select(-.data$citeCheckFLG)
+      ## check for confusion Case
+      group_by(citeCheckFLG) %>%
+      mutate(confusionCase = n()) %>%
+      ungroup()
+
+    #### Case for risk of confusion due to the citation of a reference
+    ###   by a different author with the same surname and the same year
+    if(NROW(bib.df[bib.df$confusionCase > 1, ])!=0){
+      bib.df[bib.df$confusionCase > 1, ]<-
+      bib.df[bib.df$confusionCase > 1, ] %>%
+      select(-citeName1, -citeName2, -citeCheckFLG) %>%
+      group_by(ID) %>%
+      nest() %>%
+      mutate(cite = purrr::map2(.x = .data$data, .y = cite_ampersand, .f = ~ citationMaker(.x, .y))) %>%
+      unnest(cols = c(.data$data, .data$cite)) %>% ungroup()
+    } 
+
     return(bib.df)
   } else {
     bib.df <- NULL
   }
 }
-
