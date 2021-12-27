@@ -407,62 +407,44 @@ inLineCite_ENG <- function(df, ampersand) {
     tmp_connecter <- "\\ and\\ "
   }
   ### duplicated cheker
-  dplCheck <- df$dplFLG
-
+  confCheck <- df$confusionCase
   ## First time
+  if (confCheck > 1) {
+    citeName1 <- paste0(tmp_name[1, ]$last_name, tmp_name[1, ]$first_initial)
+  } else {
+    citeName1 <- tmp_name[1, ]$last_name
+  }
   NR <- NROW(tmp_name)
   if (NR > 1) {
     ### multi-Authors
+    citeName1 <- paste0(citeName1,", ")
     if (NR < 5) {
-      citeName1 <- ""
-      if (NR == 2) {
-        if (dplCheck > 1) {
-          tmp1 <- paste0(tmp_name[1, ]$initial_first, ".", tmp_name[1, ]$last_name, ", ")
-        } else {
-          tmp1 <- paste0(tmp_name[1, ]$last_name)
-        }
-        citeName1 <- paste0(citeName1, tmp1)
-      } else {
-        for (i in 1:(NR - 1)) {
-          if (dplCheck > 1) {
-            tmp1 <- paste0(tmp_name[i, ]$initial_first, ".", tmp_name[i, ]$last_name, ", ")
-          } else {
-            tmp1 <- paste0(tmp_name[i, ]$last_name, ", ")
-          }
+      if (NR > 2) {
+        for (i in 2:(NR - 1)) {
+          tmp1 <- paste0(tmp_name[i, ]$last_name, ", ")
           citeName1 <- paste0(citeName1, tmp1)
         }
       }
       ### Last Author
       tmp1 <- paste0(tmp_connecter, tmp_name[NR, ]$last_name)
-      if (dplCheck > 1) {
-        tmp1 <- paste0(tmp_connecter, tmp_name[NR, ]$initial_first, ".", tmp_name[NR, ]$last_name)
-      }
       ### combine All Authors
       citeName1 <- paste0(citeName1, tmp1)
     } else {
       ## over 5 authors
       citeName1 <- paste0(tmp_name[1, ]$last_name, "\\ et al.")
     }
-  } else {
-    ### Single Author
-    citeName1 <- tmp_name[1, ]$last_name
-    if (dplCheck > 1) {
-      citeName1 <- paste0(tmp_name[1, ]$initial_first, ".", tmp_name[1, ]$last_name)
-    }
   }
 
   ## Second time and after
   ### Single AUthor
-  citeName2 <- tmp_name[1, ]$last_name
-  if (dplCheck > 1) {
-    citeName2 <- paste0(tmp_name[1, ]$initial_first, ".", tmp_name[1, ]$last_name)
+  if (confCheck > 1) {
+    citeName2 <- paste0(tmp_name[1, ]$last_name, tmp_name[1, ]$first_initial)
+  } else {
+    citeName2 <- tmp_name[1, ]$last_name
   }
   ### Two AUthors
   if (NROW(tmp_name) == 2) {
     citeName2 <- paste0(citeName2, tmp_connecter, tmp_name[2, ]$last_name)
-    if (dplCheck > 1) {
-      citeName2 <- paste0(citeName2, tmp_connecter, tmp_name[2, ]$initial_first, ".", tmp_name[2, ]$last_name)
-    }
   }
   ### More than 2 Authors
   if (NROW(tmp_name) > 2) {
@@ -470,7 +452,7 @@ inLineCite_ENG <- function(df, ampersand) {
   }
 
 
-  citeCheckFLG <- paste0(citeName1, "-", df$YEAR)
+  citeCheckFLG <- paste0(citeName1, "-", df$ListYear)
   return(data.frame(citeName1, citeName2, citeCheckFLG))
 }
 
@@ -481,57 +463,46 @@ inLineCite_ENG <- function(df, ampersand) {
 inLineCite_JPN <- function(df) {
   # depends on number of Authors
   tmp_name <- as.data.frame(df$AUTHORs)
-  ### duplicated cheker
-  dplCheck <- df$dplFLG
+  ### confusion check
+  confCheck <- df$confusionCase
   NR <- NROW(tmp_name)
   ## First time
+  if (confCheck > 1) {
+    citeName1 <- paste0(tmp_name[1, ]$last_name, tmp_name[1, ]$first_name)
+  } else {
+    citeName1 <- tmp_name[1, ]$last_name
+  }
   if (NR > 1) {
+    citeName1 <- paste0(citeName1,stri_unescape_unicode("\\u30fb"))
     ### multi-Authors
     if (NR < 5) {
-      citeName1 <- ""
-      for (i in 1:(NR - 1)) {
-        if (dplCheck > 1) {
-          tmp1 <- paste0(tmp_name[i, ]$last_name, tmp_name[i, ]$first_name, stri_unescape_unicode("\\u30fb"))
-        } else {
+      if (NR != 2) {
+        for (i in 2:(NR - 1)) {
           tmp1 <- paste0(tmp_name[i, ]$last_name, stri_unescape_unicode("\\u30fb"))
+          citeName1 <- paste0(citeName1, tmp1)
         }
-        citeName1 <- paste0(citeName1, tmp1)
       }
       ### Last Author
       tmp1 <- paste0(tmp_name[NR, ]$last_name)
-      if (dplCheck > 1) {
-        tmp1 <- paste0(tmp_name[NR, ]$last_name, tmp_name[NR, ]$first_name)
-      }
       citeName1 <- paste0(citeName1, tmp1)
     } else {
       ## over 6 authors
       citeName1 <- paste0(tmp_name[1, ]$last_name, stri_unescape_unicode("\\u4ed6"))
     }
-  } else {
-    ### single-Author
-    citeName1 <- tmp_name[1, ]$last_name
-    if (dplCheck > 1) {
-      citeName1 <- paste0(tmp_name[1, ]$last_name, tmp_name[1, ]$first_name)
-    }
   }
   ## Second time, and after
-  citeName2 <- tmp_name[1, ]$last_name
-  if (dplCheck > 1) {
+  if (confCheck > 1) {
     citeName2 <- paste0(tmp_name[1, ]$last_name, tmp_name[1, ]$first_name)
+  } else {
+    citeName2 <- tmp_name[1, ]$last_name
   }
   if (NROW(tmp_name) == 2) {
     citeName2 <- paste0(citeName2, stri_unescape_unicode("\\u30fb"), tmp_name[2, ]$last_name)
-    if (dplCheck > 1) {
-      citeName2 <- paste0(
-        citeName2, stri_unescape_unicode("\\u30fb"),
-        paste0(tmp_name[2, ]$last_name, tmp_name[2, ]$first_name)
-      )
-    }
   }
   if (NROW(tmp_name) > 2) {
     citeName2 <- paste0(citeName2, stri_unescape_unicode("\\u4ed6"))
   }
-  citeCheckFLG <- paste0(citeName1, "-", df$YEAR)
+  citeCheckFLG <- paste0(citeName1, "-", df$ListYear)
   return(data.frame(citeName1, citeName2, citeCheckFLG))
 }
 
@@ -551,62 +522,44 @@ inLineCite_TR <- function(df, ampersand) {
     tmp_connecter <- "\\ and\\ "
   }
   ### duplicated cheker
-  dplCheck <- df$dplFLG
+  confCheck <- df$confusionCase
 
   ## First time
+  if (confCheck > 1) {
+    citeName1 <- paste0(tmp_name[1, ]$last_name, tmp_name[1, ]$first_initial)
+  } else {
+    citeName1 <- tmp_name[1, ]$last_name
+  }
   NR <- NROW(tmp_name)
   if (NR > 1) {
+    citeName1 <- paste0(citeName1,",")
     ### multi-Authors
     if (NR < 5) {
-      citeName1 <- ""
-      if (NR == 2) {
-        if (dplCheck > 1) {
-          tmp1 <- paste0(tmp_name[1, ]$initial_first, ".", tmp_name[1, ]$last_name, ", ")
-        } else {
-          tmp1 <- paste0(tmp_name[1, ]$last_name)
-        }
-        citeName1 <- paste0(citeName1, tmp1)
-      } else {
-        for (i in 1:(NR - 1)) {
-          if (dplCheck > 1) {
-            tmp1 <- paste0(tmp_name[i, ]$initial_first, ".", tmp_name[i, ]$last_name, ", ")
-          } else {
-            tmp1 <- paste0(tmp_name[i, ]$last_name, ", ")
-          }
+      if(NR!=2){
+        for (i in 2:(NR - 1)) {
+          tmp1 <- paste0(tmp_name[i, ]$last_name, ", ")
           citeName1 <- paste0(citeName1, tmp1)
         }
       }
       ### Last Author
       tmp1 <- paste0(tmp_connecter, tmp_name[NR, ]$last_name)
-      if (dplCheck > 1) {
-        tmp1 <- paste0(tmp_connecter, tmp_name[NR, ]$initial_first, ".", tmp_name[NR, ]$last_name)
-      }
       ### combine All Authors
       citeName1 <- paste0(citeName1, tmp1)
     } else {
       ## over 5 authors
       citeName1 <- paste0(tmp_name[1, ]$last_name, "\\ et al.")
     }
-  } else {
-    ### Single Author
-    citeName1 <- tmp_name[1, ]$last_name
-    if (dplCheck > 1) {
-      citeName1 <- paste0(tmp_name[1, ]$initial_first, ".", tmp_name[1, ]$last_name)
-    }
   }
-
   ## Second time and after
   ### Single AUthor
-  citeName2 <- tmp_name[1, ]$last_name
-  if (dplCheck > 1) {
-    citeName2 <- paste0(tmp_name[1, ]$initial_first, ".", tmp_name[1, ]$last_name)
+  if (confCheck > 1) {
+    citeName2 <- paste0(tmp_name[1, ]$last_name, tmp_name[1, ]$first_initial)
+  } else {
+    citeName2 <- tmp_name[1, ]$last_name
   }
   ### Two AUthors
   if (NROW(tmp_name) == 2) {
     citeName2 <- paste0(citeName2, tmp_connecter, tmp_name[2, ]$last_name)
-    if (dplCheck > 1) {
-      citeName2 <- paste0(citeName2, tmp_connecter, tmp_name[2, ]$initial_first, ".", tmp_name[2, ]$last_name)
-    }
   }
   ### More than 2 Authors
   if (NROW(tmp_name) > 2) {
@@ -628,18 +581,11 @@ inLineCite_TR <- function(df, ampersand) {
     if (NR < 5) {
       TransName1 <- ""
       for (i in 1:(NR - 1)) {
-        if (dplCheck > 1) {
-          tmp1 <- paste0(tmp_name[i, ]$last_name, tmp_name[i, ]$first_name, stri_unescape_unicode("\\u30fb"))
-        } else {
-          tmp1 <- paste0(tmp_name[i, ]$last_name, stri_unescape_unicode("\\u30fb"))
-        }
-        TransName1 <- paste0(TransName1, tmp1)
+        tmp1 <- paste0(tmp_name[i, ]$last_name, stri_unescape_unicode("\\u30fb"))
       }
+      TransName1 <- paste0(TransName1, tmp1)
       ### Last Author
       tmp1 <- paste0(tmp_name[NR, ]$last_name)
-      if (dplCheck > 1) {
-        tmp1 <- paste0(tmp_name[NR, ]$last_name, tmp_name[NR, ]$first_name)
-      }
       TransName1 <- paste0(TransName1, tmp1)
     } else {
       ## over 6 authors
@@ -648,23 +594,11 @@ inLineCite_TR <- function(df, ampersand) {
   } else {
     ### single-Author
     TransName1 <- tmp_name[1, ]$last_name
-    if (dplCheck > 1) {
-      TransName1 <- paste0(tmp_name[1, ]$last_name, tmp_name[1, ]$first_name)
-    }
   }
   ## Second time, and after
   TransName2 <- ""
-  if (dplCheck > 1) {
-    TransName2 <- paste0(tmp_name[1, ]$last_name, tmp_name[1, ]$first_name)
-  }
   if (NROW(tmp_name) == 2) {
     TransName2 <- paste0(tmp_name[1, ]$last_name, stri_unescape_unicode("\\u30fb"), tmp_name[2, ]$last_name)
-    if (dplCheck > 1) {
-      TransName2 <- paste0(
-        TransName2, stri_unescape_unicode("\\u30fb"),
-        paste0(tmp_name[2, ]$last_name, tmp_name[2, ]$first_name)
-      )
-    }
   }
   if (NROW(tmp_name) > 2) {
     TransName2 <- paste0(citeName2, stri_unescape_unicode("\\u4ed6"))
@@ -679,6 +613,6 @@ inLineCite_TR <- function(df, ampersand) {
 
   citeName1 <- paste0(citeName1, "(", df$YEAR, " ", TransName1, postfix)
   citeName2 <- paste0(citeName2, "(", df$YEAR, " ", TransName2, postfix)
-  citeCheckFLG <- paste0(citeName1, "-", df$YEAR)
+  citeCheckFLG <- paste0(citeName1, "-", df$ListYear)
   return(data.frame(citeName1, citeName2, citeCheckFLG))
 }

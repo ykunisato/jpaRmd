@@ -9,9 +9,10 @@
 #' @examples
 #' # bib_Checker(Rmd_file = "RmdFileName",Bib_file = "BibFileName")
 #' @export
-#' 
+#'
 bib_Checker <- function(Rmd_file = "RmdFileName", Bib_file = "BibFileName") {
   bib.df <- bib_to_DF(Rmd_file, Bib_file)
+  nErrors <- 0
   ## citation check
   ## get rmd file
   tmpfile <- readLines(Rmd_file, warn = F)
@@ -29,6 +30,7 @@ bib_Checker <- function(Rmd_file = "RmdFileName", Bib_file = "BibFileName") {
   if (length(citation[!corresp]) != 0) {
     print("The following citation is not in the Bib file")
     print(citation[!corresp])
+    nErrors <- nErrors + 1
   }
   ## NA check
   NR <- NROW(bib.df)
@@ -42,7 +44,11 @@ bib_Checker <- function(Rmd_file = "RmdFileName", Bib_file = "BibFileName") {
         str_replace_all(pattern = "\\{", replacement = "") %>%
         str_replace_all(pattern = "\\}", replacement = "")
       print(word)
+      nErrors <- nErrors + 1
     }
   }
-}
 
+  if (nErrors == 0) {
+    print("No errors were found.")
+  }
+}
