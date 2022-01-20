@@ -417,7 +417,7 @@ inLineCite_ENG <- function(df, ampersand) {
   NR <- NROW(tmp_name)
   if (NR > 1) {
     ### multi-Authors
-    citeName1 <- paste0(citeName1,", ")
+    citeName1 <- paste0(citeName1, ", ")
     if (NR < 5) {
       if (NR > 2) {
         for (i in 2:(NR - 1)) {
@@ -473,7 +473,7 @@ inLineCite_JPN <- function(df) {
     citeName1 <- tmp_name[1, ]$last_name
   }
   if (NR > 1) {
-    citeName1 <- paste0(citeName1,stri_unescape_unicode("\\u30fb"))
+    citeName1 <- paste0(citeName1, stri_unescape_unicode("\\u30fb"))
     ### multi-Authors
     if (NR < 5) {
       if (NR != 2) {
@@ -532,10 +532,10 @@ inLineCite_TR <- function(df, ampersand) {
   }
   NR <- NROW(tmp_name)
   if (NR > 1) {
-    citeName1 <- paste0(citeName1,",")
+    citeName1 <- paste0(citeName1, ",")
     ### multi-Authors
     if (NR < 5) {
-      if(NR!=2){
+      if (NR != 2) {
         for (i in 2:(NR - 1)) {
           tmp1 <- paste0(tmp_name[i, ]$last_name, ", ")
           citeName1 <- paste0(citeName1, tmp1)
@@ -597,6 +597,9 @@ inLineCite_TR <- function(df, ampersand) {
   }
   ## Second time, and after
   TransName2 <- ""
+  if (NROW(tmp_name) < 2) {
+    TransName2 <- tmp_name[1, ]$last_name
+  }
   if (NROW(tmp_name) == 2) {
     TransName2 <- paste0(tmp_name[1, ]$last_name, stri_unescape_unicode("\\u30fb"), tmp_name[2, ]$last_name)
   }
