@@ -54,7 +54,8 @@ pBibMaker <- function(df, underline) {
     ),
     df$CATEGORY == "INPROCEEDINGS" ~ if_else(df$langFLG == "E", print_English_inproceedings(df),
       print_Japanese_inproceedings(df)
-    )
+    ),
+    df$CATEGORY == "OTHERS" ~ print_exceptional_bib(df)
   )
   return(tmp)
 }
@@ -392,6 +393,15 @@ print_Japanese_inproceedings <- function(df) {
   return(pBib)
 }
 
+#' @title Print bib info function(Original Style references)
+#' @param df Strings of Bib info
+#' @export
+print_exceptional_bib <- function(df) {
+  pBib <- paste(df$ListName, df$ListYear, df$TITLE, df$INFO)
+  return(pBib)
+}
+
+# Citation ----------------------------------------------------------------
 #' @title in-Line Cittion(in English)
 #' @importFrom dplyr select
 #' @param df Bib.df File from jpa_cite
