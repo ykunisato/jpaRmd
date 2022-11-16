@@ -141,10 +141,11 @@ bib_to_DF <- function(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F
     }
   )
 
-  items <- mapply(function(x, y) {
-    rbind(x, c("CATEGORY", y))
-  },
-  x = items, y = fields, SIMPLIFY = FALSE
+  items <- mapply(
+    function(x, y) {
+      rbind(x, c("CATEGORY", y))
+    },
+    x = items, y = fields, SIMPLIFY = FALSE
   )
 
   items <- lapply(items, t)
@@ -203,6 +204,7 @@ bib_to_DF <- function(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F
     TRANSWORK = character(0L),
     TRANSINFO = character(0L),
     DOI = character(0L),
+    INFO = character(0L),
     stringsAsFactors = FALSE
   )
 
@@ -238,13 +240,13 @@ bib_to_DF <- function(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F
       ### sorting Order; in JPA, the sorting follows the reading order of Japanese-YOMI or English-AUTHOR
       mutate(sortRecord = if_else(is.na(.data$YOMI), .data$AUTHOR, .data$YOMI)) %>%
       ## cut curly brackets of the organization-name
-      mutate(sortRecord = str_replace(.data$sortRecord, pattern = "\\{", replacement = "")) %>%
+      mutate(sortRecord = str_replace(sortRecord, pattern = "\\{", replacement = "")) %>%
       ## str(YAER) is character, make Numeric one
-      mutate(YEARn = as.numeric(.data$YEAR)) %>%
+      mutate(YEARn = as.numeric(YEAR)) %>%
       ## sort by Author and Year
-      arrange(.data$sortRecord, .data$YEARn) %>%
+      arrange(.data$sortRecord, YEARn) %>%
       ## group by Author and Year
-      group_by(.data$sortRecord, .data$YEARn) %>%
+      group_by(.data$sortRecord, YEARn) %>%
       ## count the papers with group
       mutate(n = n()) %>%
       mutate(num = row_number()) %>%
@@ -293,19 +295,19 @@ bib_to_DF <- function(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F
 
     #### Case for risk of confusion due to the citation of a reference
     ###   by a different author with the same surname and the same year
-    if(NROW(bib.df[bib.df$confusionCase > 1, ])!=0){
-      bib.df[bib.df$confusionCase > 1, ]<-
-      bib.df[bib.df$confusionCase > 1, ] %>%
-      select(-citeName1, -citeName2, -citeCheckFLG) %>%
-      group_by(ID) %>%
-      nest() %>%
-      mutate(cite = purrr::map2(.x = .data$data, .y = cite_ampersand, .f = ~ citationMaker(.x, .y))) %>%
-      unnest(cols = c(.data$data, .data$cite)) %>% ungroup()
-    } 
+    if (NROW(bib.df[bib.df$confusionCase > 1, ]) != 0) {
+      bib.df[bib.df$confusionCase > 1, ] <-
+        bib.df[bib.df$confusionCase > 1, ] %>%
+        select(-citeName1, -citeName2, -citeCheckFLG) %>%
+        group_by(ID) %>%
+        nest() %>%
+        mutate(cite = purrr::map2(.x = .data$data, .y = cite_ampersand, .f = ~ citationMaker(.x, .y))) %>%
+        unnest(cols = c(.data$data, .data$cite)) %>%
+        ungroup()
+    }
 
     return(bib.df)
   } else {
     bib.df <- NULL
   }
 }
-

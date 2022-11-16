@@ -427,13 +427,15 @@ inLineCite_ENG <- function(df, ampersand) {
   NR <- NROW(tmp_name)
   if (NR > 1) {
     ### multi-Authors
-    citeName1 <- paste0(citeName1, ", ")
     if (NR < 5) {
       if (NR > 2) {
         for (i in 2:(NR - 1)) {
           tmp1 <- paste0(tmp_name[i, ]$last_name, ", ")
           citeName1 <- paste0(citeName1, tmp1)
         }
+      }
+      if (NR == 2) {
+        citeName1 <- citeName1
       }
       ### Last Author
       tmp1 <- paste0(tmp_connecter, tmp_name[NR, ]$last_name)
