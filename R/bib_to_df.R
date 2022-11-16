@@ -203,6 +203,7 @@ bib_to_DF <- function(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F
     TRANSWORK = character(0L),
     TRANSINFO = character(0L),
     DOI = character(0L),
+    INFO = character(0L),
     stringsAsFactors = FALSE
   )
 
@@ -238,13 +239,13 @@ bib_to_DF <- function(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F
       ### sorting Order; in JPA, the sorting follows the reading order of Japanese-YOMI or English-AUTHOR
       mutate(sortRecord = if_else(is.na(.data$YOMI), .data$AUTHOR, .data$YOMI)) %>%
       ## cut curly brackets of the organization-name
-      mutate(sortRecord = str_replace(.data$sortRecord, pattern = "\\{", replacement = "")) %>%
+      mutate(sortRecord = str_replace(sortRecord, pattern = "\\{", replacement = "")) %>%
       ## str(YAER) is character, make Numeric one
-      mutate(YEARn = as.numeric(.data$YEAR)) %>%
+      mutate(YEARn = as.numeric(YEAR)) %>%
       ## sort by Author and Year
-      arrange(.data$sortRecord, .data$YEARn) %>%
+      arrange(.data$sortRecord, YEARn) %>%
       ## group by Author and Year
-      group_by(.data$sortRecord, .data$YEARn) %>%
+      group_by(.data$sortRecord, YEARn) %>%
       ## count the papers with group
       mutate(n = n()) %>%
       mutate(num = row_number()) %>%

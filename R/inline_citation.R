@@ -47,7 +47,7 @@ inLineCitation <- function(st, bib.df) {
       ### join with bib.df
       left_join(bib.df, by = c("KEY" = "BIBTEXKEY")) %>%
       ### get the citation name
-      select(.data$V1, KEY, .data$citeName1, .data$citeName2, .data$ListYear, .data$count,.data$langFLG,.data$JYEAR) %>%
+      select(V1, KEY, citeName1, citeName2, ListYear, count,langFLG,JYEAR) %>%
       mutate(ListYear = str_extract(.data$ListYear, "[a-z0-9]{4,5}")) %>%
       mutate(citeName = if_else(.data$count > 0, .data$citeName2, .data$citeName1)) %>% 
       mutate(citation = if_else(.data$langFLG!="Tr",paste0(.data$citeName, ",\\ ", .data$ListYear),
