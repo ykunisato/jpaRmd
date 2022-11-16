@@ -434,7 +434,9 @@ inLineCite_ENG <- function(df, ampersand) {
           citeName1 <- paste0(citeName1, tmp1)
         }
       }
-      if(NR == 2){citeName1 <- citeName1}
+      if (NR == 2) {
+        citeName1 <- citeName1
+      }
       ### Last Author
       tmp1 <- paste0(tmp_connecter, tmp_name[NR, ]$last_name)
       ### combine All Authors

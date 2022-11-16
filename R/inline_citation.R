@@ -22,11 +22,11 @@
 inLineCitation <- function(st, bib.df) {
   item <- st %>% str_extract(pattern = "@[\\[a-zA-Z0-9-_\\.\\p{Hiragana}\\p{Katakana}\\p{Han}]*")
   ### citation cheker
-  checksum <- bib.df$BIBTEXKEY %in% str_replace(item,pattern = "@",replacement = "") %>% sum
-  if(checksum == 0 ){
-    stop(paste("Citation key",item," does not exsist on your bib file."))
+  checksum <- bib.df$BIBTEXKEY %in% str_replace(item, pattern = "@", replacement = "") %>% sum()
+  if (checksum == 0) {
+    stop(paste("Citation key", item, " does not exsist on your bib file."))
   }
-  
+
   loc <- st %>% str_locate(item)
   loc <- loc[1] - 1
   tp <- FALSE
@@ -47,14 +47,15 @@ inLineCitation <- function(st, bib.df) {
       ### join with bib.df
       left_join(bib.df, by = c("KEY" = "BIBTEXKEY")) %>%
       ### get the citation name
-      select(V1, KEY, citeName1, citeName2, ListYear, count,langFLG,JYEAR) %>%
+      select(V1, KEY, citeName1, citeName2, ListYear, count, langFLG, JYEAR) %>%
       mutate(ListYear = str_extract(.data$ListYear, "[a-z0-9]{4,5}")) %>%
-      mutate(citeName = if_else(.data$count > 0, .data$citeName2, .data$citeName1)) %>% 
-      mutate(citation = if_else(.data$langFLG!="Tr",paste0(.data$citeName, ",\\ ", .data$ListYear),
-                                paste0(.data$citeName, "\\ ", .data$JYEAR)))
+      mutate(citeName = if_else(.data$count > 0, .data$citeName2, .data$citeName1)) %>%
+      mutate(citation = if_else(.data$langFLG != "Tr", paste0(.data$citeName, ",\\ ", .data$ListYear),
+        paste0(.data$citeName, "\\ ", .data$JYEAR)
+      ))
     KEY <- tmp.df$KEY
-    ## Tranlated book 
-    tmp.df$citation <- str_replace(tmp.df$citation,pattern="\\(",replacement="\\ ")
+    ## Tranlated book
+    tmp.df$citation <- str_replace(tmp.df$citation, pattern = "\\(", replacement = "\\ ")
     word <- tmp.df$citation %>% paste0(collapse = "; ")
     word <- paste0("(", word, ")")
     ### reform for regular expression
@@ -66,8 +67,8 @@ inLineCitation <- function(st, bib.df) {
     ref.df <- bib.df[bib.df$BIBTEXKEY == KEY, ] %>%
       mutate(ListYear = str_sub(.data$ListYear, 1, str_length(.data$ListYear) - 1))
     ### translated book's printed Year
-    if(ref.df$langFLG == "Tr"){
-      ref.df$ListYear <- paste0(" ",ref.df$JYEAR,")")
+    if (ref.df$langFLG == "Tr") {
+      ref.df$ListYear <- paste0(" ", ref.df$JYEAR, ")")
     }
     ###
     if (bib.df[bib.df$BIBTEXKEY == KEY, ]$count == 0) {
