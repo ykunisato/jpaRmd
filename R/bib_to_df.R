@@ -37,7 +37,7 @@
 #' @examples
 #' # bib_to_DF(Rmd_file = "RmdFileName",Bib_file = "BibFileName")
 #' @export
-bib_to_DF <- function(Rmd_file, Bib_file, list_ampersand = F, cite_ampersand = F, underline = F) {
+bib_to_DF <- function(Rmd_file, Bib_file, list_ampersand = T, cite_ampersand = F, underline = F) {
   # check argument
   if (missing(Rmd_file)) {
     stop("Please set the name of RMarkdown file")
