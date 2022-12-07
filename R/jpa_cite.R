@@ -61,18 +61,24 @@ value_extractor <- function(string) {
 #' # jpa_cite(Rmd_file = "RmdFileName",Bib_file = "BibFileName")
 #' @export
 jpa_cite <- function(Rmd_file, Bib_file) {
-  bib.df <- bib_to_DF(Rmd_file, Bib_file, list_ampersand = T, cite_ampersand = F , underline = F)
+  bib.df <- bib_to_DF(Rmd_file, Bib_file, list_ampersand = T, cite_ampersand = F, underline = F)
   # Rewrite citation in the text. -------------------------------------------------------------------
   ## get original file
   tmpfile <- readLines(Rmd_file, warn = F)
   ## count how many times cited
-  bib.df$count <- 0
+  if (NROW(bib.df) != 0) {
+    bib.df$count <- 0
+  }
   ## open temporary file
   Ftmp <- file(paste0("tmp_", Rmd_file), "w")
   ## check the file in each line
   for (i in 1:length(tmpfile)) {
     st <- tmpfile[i]
     checkFLG <- str_detect(st, pattern = "@")
+    ## Not-Check comment out line
+    if (str_detect(st, pattern = "<!--.*-->")) {
+      checkFLG <- FALSE
+    }
     refFLG <- str_detect(st, pattern = "<insert_reference>")
     if (checkFLG) {
       # Replacement of main text
@@ -84,7 +90,7 @@ jpa_cite <- function(Rmd_file, Bib_file) {
     }
     writeLines(st, Ftmp)
     ## output reference
-    if (refFLG) {
+    if (refFLG && NROW(bib.df) != 0) {
       writeLines("\n", Ftmp)
       for (i in 1:NROW(bib.df)) {
         writeLines(bib.df[i, ]$pBib, Ftmp)
@@ -141,7 +147,9 @@ jpr_cite <- function(Rmd_file, Bib_file) {
   ## get original file
   tmpfile <- readLines(Rmd_file, warn = F)
   ## count how many times cited
-  bib.df$count <- 0
+  if (NROW(bib.df) != 0) {
+    bib.df$count <- 0
+  }
   ## open temporary file
   Ftmp <- file(paste0("tmp_author_", Rmd_file), "w")
   Ftmp2 <- file(paste0("tmp_", Rmd_file), "w")
@@ -151,6 +159,10 @@ jpr_cite <- function(Rmd_file, Bib_file) {
   for (i in 1:length(tmpfile)) {
     st <- tmpfile[i]
     checkFLG <- str_detect(st, pattern = "@")
+    ## Not-Check comment out line
+    if (str_detect(st, pattern = "<!--.*-->")) {
+      checkFLG <- FALSE
+    }
     refFLG <- str_detect(st, pattern = "<insert_reference>")
     if (checkFLG) {
       # Replacement of main text
@@ -181,7 +193,7 @@ jpr_cite <- function(Rmd_file, Bib_file) {
     # write paper with author info
     writeLines(st, Ftmp)
     ## include reference
-    if (refFLG) {
+    if (refFLG && NROW(bib.df) != 0) {
       writeLines("\n", Ftmp)
       for (i in 1:NROW(bib.df)) {
         writeLines(bib.df[i, ]$pBib, Ftmp)
