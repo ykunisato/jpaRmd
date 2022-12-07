@@ -51,6 +51,8 @@ bib_to_DF <- function(Rmd_file, Bib_file, list_ampersand = T, cite_ampersand = F
   refAll <- readLines(Rmd_file, warn = F) %>%
     as_tibble() %>%
     mutate(refs = str_extract(.data$value, "\\@.*")) %>%
+    # Omit commented-out LINE
+    mutate(refs = ifelse(str_detect(.data$value, "<!--.*-->"), NA, refs)) %>%
     na.omit()
 
   # readBib file as tibble
