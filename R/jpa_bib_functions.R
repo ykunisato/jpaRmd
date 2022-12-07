@@ -594,8 +594,8 @@ inLineCite_TR <- function(df, ampersand) {
       TransName1 <- ""
       for (i in 1:(NR - 1)) {
         tmp1 <- paste0(tmp_name[i, ]$last_name, stri_unescape_unicode("\\u30fb"))
+        TransName1 <- paste0(TransName1, tmp1)
       }
-      TransName1 <- paste0(TransName1, tmp1)
       ### Last Author
       tmp1 <- paste0(tmp_name[NR, ]$last_name)
       TransName1 <- paste0(TransName1, tmp1)
