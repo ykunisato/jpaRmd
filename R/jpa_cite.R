@@ -61,7 +61,7 @@ value_extractor <- function(string) {
 #' # jpa_cite(Rmd_file = "RmdFileName",Bib_file = "BibFileName")
 #' @export
 jpa_cite <- function(Rmd_file, Bib_file) {
-  bib.df <- bib_to_DF(Rmd_file, Bib_file, list_ampersand = T, cite_ampersand = F, underline = F)
+  bib.df <- bib_to_DF(Rmd_file, Bib_file, list_ampersand = T, cite_ampersand = T, underline = F)
   # Rewrite citation in the text. -------------------------------------------------------------------
   ## get original file
   tmpfile <- readLines(Rmd_file, warn = F)
