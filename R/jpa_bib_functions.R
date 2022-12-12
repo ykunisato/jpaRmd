@@ -108,7 +108,7 @@ print_EName <- function(st, ampersand = T, switchFLG = FALSE) {
     mutate(
       initial_first = if_else(.data$exFLG, "", paste0(.data$initial_first, ". ")),
       initial_middle = if_else(.data$exFLG, "", paste0(.data$initial_middle, ". ")),
-      initial_name = paste0(.data$initial_first, if_else(.data$initial_middle == "NA.", "", .data$initial_middle)),
+      initial_name = paste0(.data$initial_first, if_else(.data$initial_middle == "NA. ", "", .data$initial_middle)),
       pName = if_else(switchFLG,
         paste(.data$initial_name, .data$last_name),
         if_else(.data$exFLG, paste0(.data$last_name), paste0(.data$last_name, ", ", .data$initial_name))
