@@ -92,21 +92,22 @@ bib_to_DF <- function(Rmd_file, Bib_file, list_ampersand = T, cite_ampersand = F
   ## LineID to read stop
   to <- c(from[-1] - 1, length(bib))
   ## data list
-  ls <- mapply(
-    function(x, y) {
-      return(bib[x:y])
-    },
-    x = from,
-    y = to,
-    SIMPLIFY = T
-  )
+  ls <- list()
+  for(l in 1:length(from)){
+    ls[[l]] <- bib[from[l]:to[l]]
+  }
+  
   ## get reference KEY and fields,categories
+  citation_key_pattern <- "^@[^{]+\\{([^,]+)"
   keys <- lapply(
     ls,
     function(x) {
-      str_extract(x[1], "(?<=\\{)[^,]+")
+      matches <- regexec(citation_key_pattern, x[1])
+      matched_groups <- regmatches(x[1], matches)
+      return(matched_groups[[1]][2])
     }
   )
+  
   fields <- lapply(ls, function(x) {
     str_extract(x[1], "(?<=@)[^\\{]+") %>% str_to_upper()
   })
