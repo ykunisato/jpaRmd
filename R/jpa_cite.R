@@ -60,7 +60,7 @@ value_extractor <- function(string) {
 #' @examples
 #' # jpa_cite(Rmd_file = "RmdFileName",Bib_file = "BibFileName")
 #' @export
-jpa_cite <- function(Rmd_file, Bib_file, useEtAlFirst = T) {
+jpa_cite <- function(Rmd_file, Bib_file, use.et.al.first = T) {
   bib.df <- bib_to_DF(Rmd_file, Bib_file, list_ampersand = T, cite_ampersand = T, underline = F)
   # Rewrite citation in the text. -------------------------------------------------------------------
   ## get original file
@@ -69,7 +69,7 @@ jpa_cite <- function(Rmd_file, Bib_file, useEtAlFirst = T) {
   if (NROW(bib.df) != 0) {
     bib.df$count <- 0
     ## et al. notation from the beginning
-    if (useEtAlFirst = TRUE) {
+    if (use.et.al.first = TRUE) {
       bib.df$count <-1
     }
   }
