@@ -284,8 +284,8 @@ bib_to_DF <- function(Rmd_file, Bib_file, list_ampersand = T, cite_ampersand = F
       group_by(.data$ID) %>%
       nest() %>%
       mutate(
-        pBib = purrr::map2(.x = .data$data, .y = underline, .f = ~ pBibMaker(.x, .y)) %>% unlist(),
-        prefix = purrr::map(.x = .data$data, .f = ~ prefixMaker(.x))
+        pBib = purrr::map2(.x = data, .y = underline, .f = ~ pBibMaker(.x, .y)) %>% unlist(),
+        prefix = purrr::map(.x = data, .f = ~ prefixMaker(.x))
       ) %>%
       ################################### inline citation
       # make items for citating
