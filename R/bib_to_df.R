@@ -93,10 +93,10 @@ bib_to_DF <- function(Rmd_file, Bib_file, list_ampersand = T, cite_ampersand = F
   to <- c(from[-1] - 1, length(bib))
   ## data list
   ls <- list()
-  for(l in 1:length(from)){
+  for (l in 1:length(from)) {
     ls[[l]] <- bib[from[l]:to[l]]
   }
-  
+
   ## get reference KEY and fields,categories
   citation_key_pattern <- "^@[^{]+\\{([^,]+)"
   keys <- lapply(
@@ -107,7 +107,7 @@ bib_to_DF <- function(Rmd_file, Bib_file, list_ampersand = T, cite_ampersand = F
       return(matched_groups[[1]][2])
     }
   )
-  
+
   fields <- lapply(ls, function(x) {
     str_extract(x[1], "(?<=@)[^\\{]+") %>% str_to_upper()
   })
