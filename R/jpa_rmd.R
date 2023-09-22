@@ -54,8 +54,8 @@ render_jjbct <- function(Rmd_file, Bib_file, use.et.al.first = T) {
 #' @param Rmd_file file name of R Markdown file
 #' @param Bib_file file name of Bib file
 #' @export
-render_jpr <- function(Rmd_file, Bib_file, use.et.al.first = T) {
-  jpr_cite(Rmd_file, Bib_file, use.et.al.first)
+render_jpr <- function(Rmd_file, Bib_file) {
+  jpr_cite(Rmd_file, Bib_file)
   tmp_rmd1 <- paste0("tmp_author_", Rmd_file)
   tmp_rmd2 <- paste0("tmp_", Rmd_file)
   tmp_rmd3 <- paste0("tmp_abst_author_", Rmd_file)
