@@ -48,6 +48,8 @@ RStudioで，「File」->「New File」->「R Markdown…」をクリックす�
 
 jpaRmdは，Bibファイルを使った引用が可能です。日本語文献の場合は，準備にいくつかルールがあります（文字コードはUTF-8，yomiを追加など）。[jpa\_citeに合ったBibファイルの作り方](https://qiita.com/kosugitti/items/63140ead7942d4e9b1d7)を参照いただいて，Bibファイルをご準備ください。
 
+APAスタイル第7版に合わせて，初出であっても3名以上の共著を引用する際には"et al"を用いるように変更しました(Version 0.5.5から)。デフォルトでは3名以上の共著は初出から"et al"としますが，render_XXX関数においてuse.et.al.first = Fにすると初出の場合は３名以上でも"et al"としないようにもできます。
+
 ### Research Compendium
 
 Research

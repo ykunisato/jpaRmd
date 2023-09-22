@@ -69,7 +69,7 @@ jpa_cite <- function(Rmd_file, Bib_file, use.et.al.first = T) {
   if (NROW(bib.df) != 0) {
     bib.df$count <- 0
     ## et al. notation from the beginning
-    if (use.et.al.first = TRUE) {
+    if (use.et.al.first == TRUE) {
       bib.df$count <-1
     }
   }

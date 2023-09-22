@@ -1,7 +1,7 @@
 Package: jpaRmd
 Type: Package
 Title: Rmarkdown templates for Japanese journals in psychology
-Version: 0.5.4
+Version: 0.5.5
 Authors@R: c(person("Yoshihiko", "Kunisato", email = "ykunisato@psy.senshu-u.ac.jp", role = c("cre","aut","cph")), person("Koji", "Kosugi", email = "kosugi@psy.senshu-u.ac.jp", role = c("aut")))
 Author: Yoshihiko Kunisato [aut, cre, cph],Koji Kosugi [aut]
 Maintainer: Yoshihiko Kunisato <ykunisato@psy.senshu-u.ac.jp>

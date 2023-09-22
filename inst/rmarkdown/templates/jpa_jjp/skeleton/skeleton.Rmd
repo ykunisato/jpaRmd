@@ -6,6 +6,7 @@ output:
   jpaRmd::render_jjp:
     Rmd_file: Untitled.Rmd
     Bib_file: reference.bib
+    use.et.al.first: T
 ---
 
 <!-- 
