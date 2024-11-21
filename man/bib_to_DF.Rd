@@ -7,7 +7,7 @@
 bib_to_DF(
   Rmd_file,
   Bib_file,
-  list_ampersand = F,
+  list_ampersand = T,
   cite_ampersand = F,
   underline = F
 )

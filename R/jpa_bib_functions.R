@@ -217,15 +217,21 @@ print_English_book <- function(df, underline = F) {
   if (!is.na(df$VOLUME)) {
     title.tmp <- paste0(title.tmp, "(Vols.", df$VOLUME, ")")
   }
-  # vii) Transrations
-  trans.tmp <- ""
-  trans.info <- ""
-  if (!is.na(df$TRANSAUTHOR)) {
-    trans.tmp <- paste0("(", print_EName(df$TRANSAUTHORs, switchFLG = TRUE), ", ", df$TRANSWORK, ").")
-    trans.info <- paste0(" (", df$TRANSINFO, ")")
-  }
-  pBib <- paste0(name.tmp, df$ListYear, title.tmp, " ", trans.tmp, df$ADDRESS, ":", df$PUBLISHER, trans.info)
-  pBib <- paste0(pBib, ".")
+  # # vii) Transrations
+  # trans.tmp <- ""
+  # trans.info <- ""
+  # if (!is.na(df$TRANSAUTHOR)) {
+  #   trans.tmp <- paste0("(", print_JName(df$TRANSAUTHORs), ", ")
+  #   if(is.na(df$TRANSWORK)){
+  #     trans.tmp <- paste0(trans.tmp, df$TRANSWORK, ").")
+  #   }else{
+  #     trans.tmp <- paste0(trans.tmp,").")
+  #   }
+  #   if(!is.na(df$TRANSINFO)){
+  #     trans.info <- paste0(" (", df$TRANSINFO, ")")
+  #   }
+  # }
+  pBib <- paste0(name.tmp, df$ListYear, title.tmp, " ", df$ADDRESS, ":", df$PUBLISHER,".")
   return(pBib)
 }
 
@@ -257,6 +263,11 @@ print_Japanese_book <- function(df) {
       Jname <- print_JName(df$JKANYAKUs)
       postfix <- stri_unescape_unicode("(\\u76e3\\u8a33)")
       Jname <- paste0(Jname, postfix)
+      if(!is.na(df$TRANSAUTHORs)){
+        AddYakusha <- paste0(Jname,print_JName(df$TRANSAUTHORs))
+        postfix <- stri_unescape_unicode("(\\u8a33)")
+        Jname <- paste0(Jname,AddYakusha, postfix)
+      }
     } else {
       Jname <- print_JName(df$JAUTHORs)
       postfix <- stri_unescape_unicode("(\\u8a33)")
