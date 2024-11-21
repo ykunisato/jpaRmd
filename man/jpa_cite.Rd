@@ -4,7 +4,7 @@
 \alias{jpa_cite}
 \title{Add citation with JPA format}
 \usage{
-jpa_cite(Rmd_file, Bib_file)
+jpa_cite(Rmd_file, Bib_file, use.et.al.first = TRUE)
 }
 \arguments{
 \item{Rmd_file}{file name of R Markdown file}
